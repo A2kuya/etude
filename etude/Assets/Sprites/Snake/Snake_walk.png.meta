@@ -1,25 +1,19 @@
 fileFormatVersion: 2
-guid: 105bf0579a0961a4a97eb7bfef9b64b1
+guid: 0f4f4c4661b42624b98b1edd180d49cc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9003423962299339650
-    second: Woodcutter_attack1_0
+      213: 4244632862653080478
+    second: Snake_walk_0
   - first:
-      213: 2824886239409089999
-    second: Woodcutter_attack1_1
+      213: 7618024096981052368
+    second: Snake_walk_1
   - first:
-      213: -7861718794189056894
-    second: Woodcutter_attack1_2
+      213: -162743331725242369
+    second: Snake_walk_2
   - first:
-      213: 1167447168798534649
-    second: Woodcutter_attack1_3
-  - first:
-      213: -2488760612029165208
-    second: Woodcutter_attack1_4
-  - first:
-      213: 5327983651339067107
-    second: Woodcutter_attack1_5
+      213: 1000329635557161752
+    second: Snake_walk_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -133,127 +127,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Woodcutter_attack1_0
+      name: Snake_walk_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 19
         y: 0
-        width: 26
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 28
+        height: 15
+      alignment: 8
+      pivot: {x: 1, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7c68e4cb996d0380800000000000000
-      internalID: -9003423962299339650
+      spriteID: e93e26c7917f7ea30800000000000000
+      internalID: 4244632862653080478
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_attack1_1
+      name: Snake_walk_1
       rect:
         serializedVersion: 2
-        x: 49
+        x: 64
         y: 0
-        width: 26
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 30
+        height: 15
+      alignment: 8
+      pivot: {x: 1, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fcd2ede5113043720800000000000000
-      internalID: 2824886239409089999
+      spriteID: 0dbebeedd88a8b960800000000000000
+      internalID: 7618024096981052368
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_attack1_2
+      name: Snake_walk_2
       rect:
         serializedVersion: 2
-        x: 99
+        x: 111
         y: 0
-        width: 22
-        height: 38
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 31
+        height: 13
+      alignment: 8
+      pivot: {x: 1, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 284595ce86095e290800000000000000
-      internalID: -7861718794189056894
+      spriteID: fff04f25dc1ddbdf0800000000000000
+      internalID: -162743331725242369
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_attack1_3
+      name: Snake_walk_3
       rect:
         serializedVersion: 2
-        x: 151
+        x: 161
         y: 0
-        width: 32
-        height: 36
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 30
+        height: 13
+      alignment: 8
+      pivot: {x: 1, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9fba54eb30b933010800000000000000
-      internalID: 1167447168798534649
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Woodcutter_attack1_4
-      rect:
-        serializedVersion: 2
-        x: 199
-        y: 0
-        width: 38
-        height: 28
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 861940dc865267dd0800000000000000
-      internalID: -2488760612029165208
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Woodcutter_attack1_5
-      rect:
-        serializedVersion: 2
-        x: 247
-        y: 0
-        width: 24
-        height: 30
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3ee572be6ecc0f940800000000000000
-      internalID: 5327983651339067107
+      spriteID: 81b3ea9e082e1ed00800000000000000
+      internalID: 1000329635557161752
       vertices: []
       indices: 
       edges: []
