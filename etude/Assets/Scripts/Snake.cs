@@ -5,14 +5,17 @@ using UnityEngine;
 public class Snake : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
-    Rigidbody2D rigid;
     Animator ani;
     GameObject player;
+    public GameObject atkCollider;
+    public Transform pos;
+    public Vector2 boxSize;
     RaycastHit2D raycast;
     public int walkSpeed;
     public bool isLeft;
+    private bool isChase;
+    public bool canAtk;
     public LayerMask isLayer;
-    public bool isChase;
     public int detectDistance;
     public float playerDistance;
     public float range;
@@ -25,67 +28,85 @@ public class Snake : MonoBehaviour
     {
         ani = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        rigid = GetComponent<Rigidbody2D>();
         player = GameObject.Find("player");
+        canAtk = true;
         isChase = false;
         isLayer = LayerMask.GetMask("Player");
+        playerDistance = int.MaxValue;
         range = 3f;
-        cooltime = 5;
+        cooltime = 3f;
         curtime = 0;
     }
 
     private void FixedUpdate()
     {
-        
         RaycastHit2D rayhit = Physics2D.Raycast(transform.position, transform.right * -1, detectDistance, isLayer);
+
         if (rayhit.collider != null)
         {
             isChase = true;
         }
-        Move();
-        Attack();
-        
+
+        if (isChase && playerDistance <= detectDistance && playerDistance > range && canAtk)
+        {
+            ani.SetBool("isWalk", true);
+            Move();
+        }
+        else if (isChase && playerDistance <= range && canAtk)
+        {
+            Attack();
+        }
+        else if(isChase && !canAtk)
+        {
+            if(ani.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                canAtk = true;
+                Debug.Log("11111");
+            }
+        }
+        else if(playerDistance > detectDistance)
+        {
+            isChase = false;
+            ani.SetBool("isWalk", false);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         playerDistance = Vector3.Distance(transform.position, player.transform.position);
-        if (transform.position.x - player.transform.position.x < 0 && isChase)
+        if (isChase && transform.position.x - player.transform.position.x < 0 && canAtk)
         {
-            spriteRenderer.flipX = true;
+            isLeft = false;
+            transform.rotation = Quaternion.Euler(0, 180, 0);
         }
-        else
+        else if(isChase && canAtk)
         {
-            spriteRenderer.flipX = false;
+            isLeft = true;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+        manageCooltime();
     }
 
-    private void Move()
+    void Move()
     {
-        if (!isChase || playerDistance > detectDistance)
-        {
-            isChase = false;
-            ani.SetInteger("isWalk", 0);
-        }
-        else
-        {
-            Debug.Log("Ãß°Ý Áß");
-            ani.SetInteger("isWalk", walkSpeed);
-            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * walkSpeed);
-        }
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * walkSpeed);
     }
 
     void Attack()
     {
-        if(playerDistance < range && curtime <= 0f)
+        if (curtime <= 0f)
         {
+            canAtk = false;
             ani.SetTrigger("isAtk");
             curtime = cooltime;
         }
-        else
-        {
+    }
+
+
+    void manageCooltime()
+    {
+        if (curtime > 0f)
             curtime -= Time.deltaTime;
-        }
     }
 }
