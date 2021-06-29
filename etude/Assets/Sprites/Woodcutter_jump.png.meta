@@ -1,25 +1,25 @@
 fileFormatVersion: 2
-guid: 211d5d19b67874a458c77bc2aebe09b4
+guid: 4a17b115cb9f0f8499383377f5ed39bc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4256694055742476597
-    second: Snake_attack_0
+      213: -2413212632700456053
+    second: Woodcutter_jump_0
   - first:
-      213: -4095266479657946174
-    second: Snake_attack_1
+      213: 8823781164848244471
+    second: Woodcutter_jump_1
   - first:
-      213: 4577432701698735429
-    second: Snake_attack_2
+      213: 286939646350097702
+    second: Woodcutter_jump_2
   - first:
-      213: -7197187924093127169
-    second: Snake_attack_3
+      213: -4731055574854010329
+    second: Woodcutter_jump_3
   - first:
-      213: -2271358038329193522
-    second: Snake_attack_4
+      213: -3608701682692697620
+    second: Woodcutter_jump_4
   - first:
-      213: -471632426860085563
-    second: Snake_attack_5
+      213: 8190701147566263716
+    second: Woodcutter_jump_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -106,18 +106,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -133,127 +121,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Snake_attack_0
+      name: Woodcutter_jump_0
       rect:
         serializedVersion: 2
-        x: 19
+        x: 4
         y: 0
-        width: 28
-        height: 15
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bcee3f92f4f2de4c0800000000000000
-      internalID: -4256694055742476597
+      spriteID: b83776475eb828ed0800000000000000
+      internalID: -2413212632700456053
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_attack_1
+      name: Woodcutter_jump_1
       rect:
         serializedVersion: 2
-        x: 68
+        x: 52
         y: 0
-        width: 28
-        height: 14
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2c37c6b95d0ba27c0800000000000000
-      internalID: -4095266479657946174
+      spriteID: 7f6ef82183e547a70800000000000000
+      internalID: 8823781164848244471
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_attack_2
+      name: Woodcutter_jump_2
       rect:
         serializedVersion: 2
-        x: 116
+        x: 102
         y: 0
-        width: 27
-        height: 14
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 54d72083ace468f30800000000000000
-      internalID: 4577432701698735429
+      spriteID: 62d7cac861a6bf300800000000000000
+      internalID: 286939646350097702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_attack_3
+      name: Woodcutter_jump_3
       rect:
         serializedVersion: 2
-        x: 149
-        y: 0
-        width: 42
-        height: 14
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 148
+        y: 4
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ff5b2b227b37e1c90800000000000000
-      internalID: -7197187924093127169
+      spriteID: 72af138550ae75eb0800000000000000
+      internalID: -4731055574854010329
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_attack_4
+      name: Woodcutter_jump_4
       rect:
         serializedVersion: 2
         x: 195
-        y: 0
-        width: 45
-        height: 6
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        y: 3
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ecb09a7f5e38a70e0800000000000000
-      internalID: -2271358038329193522
+      spriteID: ce15fb670f05bedc0800000000000000
+      internalID: -3608701682692697620
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_attack_5
+      name: Woodcutter_jump_5
       rect:
         serializedVersion: 2
-        x: 250
+        x: 246
         y: 0
-        width: 37
-        height: 10
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5cef27c7ecc6479f0800000000000000
-      internalID: -471632426860085563
+      spriteID: 4ad421a2c473ba170800000000000000
+      internalID: 8190701147566263716
       vertices: []
       indices: 
       edges: []

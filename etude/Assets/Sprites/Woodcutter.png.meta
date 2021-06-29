@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 0f4f4c4661b42624b98b1edd180d49cc
+guid: f1b75b22cec9ff040b61b253f8eaaad9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4244632862653080478
-    second: Snake_walk_0
-  - first:
-      213: 7618024096981052368
-    second: Snake_walk_1
-  - first:
-      213: -162743331725242369
-    second: Snake_walk_2
-  - first:
-      213: 1000329635557161752
-    second: Snake_walk_3
+      213: -3849791415587609186
+    second: Woodcutter_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -100,18 +91,6 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -127,85 +106,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Snake_walk_0
+      name: Woodcutter_0
       rect:
         serializedVersion: 2
-        x: 19
+        x: 1
         y: 0
-        width: 28
-        height: 15
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 26
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e93e26c7917f7ea30800000000000000
-      internalID: 4244632862653080478
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Snake_walk_1
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 30
-        height: 15
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0dbebeedd88a8b960800000000000000
-      internalID: 7618024096981052368
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Snake_walk_2
-      rect:
-        serializedVersion: 2
-        x: 111
-        y: 0
-        width: 31
-        height: 13
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fff04f25dc1ddbdf0800000000000000
-      internalID: -162743331725242369
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Snake_walk_3
-      rect:
-        serializedVersion: 2
-        x: 161
-        y: 0
-        width: 30
-        height: 13
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 81b3ea9e082e1ed00800000000000000
-      internalID: 1000329635557161752
+      spriteID: e956d86ca1bc29ac0800000000000000
+      internalID: -3849791415587609186
       vertices: []
       indices: 
       edges: []
