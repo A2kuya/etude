@@ -5,17 +5,17 @@ using UnityEngine;
 public class Snake : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
-    Animator ani;
+    Animator anim;
+    Rigidbody2D rigid;
     GameObject player;
     public GameObject atkCollider;
-    public Transform pos;
-    public Vector2 boxSize;
     RaycastHit2D raycast;
-    public int walkSpeed;
+    public Vector2 walkSpeed;
     public bool isLeft;
     private bool isChase;
     public bool canAtk;
-    public LayerMask isLayer;
+    public LayerMask playerLayer;
+    public LayerMask obstacleLayer;
     public int detectDistance;
     public float playerDistance;
     public float range;
@@ -26,55 +26,59 @@ public class Snake : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ani = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GameObject.Find("player");
+        rigid = GetComponent<Rigidbody2D>();
+        player = GameObject.Find("Player");
         canAtk = true;
         isChase = false;
-        isLayer = LayerMask.GetMask("Player");
+        playerLayer = LayerMask.GetMask("Player");
+        obstacleLayer = LayerMask.GetMask("Obstacle");
         playerDistance = int.MaxValue;
         range = 3f;
         cooltime = 3f;
         curtime = 0;
+        atkCollider = transform.GetChild(0).gameObject;
+        atkCollider.SetActive(false);
     }
 
     private void FixedUpdate()
     {
-        RaycastHit2D rayhit = Physics2D.Raycast(transform.position, transform.right * -1, detectDistance, isLayer);
-
+        //적 탐지
+        RaycastHit2D rayhit = Physics2D.Raycast(transform.position, transform.right * -1, detectDistance, playerLayer);
         if (rayhit.collider != null)
         {
-            isChase = true;
+          isChase = true;
         }
-
+        //적 추격
         if (isChase && playerDistance <= detectDistance && playerDistance > range && canAtk)
         {
-            ani.SetBool("isWalk", true);
+            anim.SetBool("isWalk", true);
             Move();
         }
+        //공격
         else if (isChase && playerDistance <= range && canAtk)
         {
             Attack();
         }
         else if(isChase && !canAtk)
         {
-            if(ani.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-            {
-                canAtk = true;
-                Debug.Log("11111");
-            }
+            anim.SetBool("isWalk", false);
         }
+        //탐지범위 밖으로 이탈
         else if(playerDistance > detectDistance)
         {
             isChase = false;
-            ani.SetBool("isWalk", false);
+            anim.SetBool("isWalk", false);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        //플레이어와의 거리 계산
         playerDistance = Vector3.Distance(transform.position, player.transform.position);
+        //좌우 반전
         if (isChase && transform.position.x - player.transform.position.x < 0 && canAtk)
         {
             isLeft = false;
@@ -85,12 +89,23 @@ public class Snake : MonoBehaviour
             isLeft = true;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
+        //쿨타임 관리
         manageCooltime();
     }
 
     void Move()
     {
-        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * walkSpeed);
+        walkSpeed.x = isLeft ? Vector2.left.x*2 : Vector2.right.x*2;
+        RaycastHit2D raycast = Physics2D.Raycast(transform.position, transform.up*-1, 0.1f, obstacleLayer);
+        if (raycast.collider == null)
+        {
+            walkSpeed.y -= 9.8f * Time.fixedDeltaTime;
+        }
+        else
+        {
+            walkSpeed.y = 0;
+        }
+        rigid.velocity = walkSpeed;
     }
 
     void Attack()
@@ -98,7 +113,7 @@ public class Snake : MonoBehaviour
         if (curtime <= 0f)
         {
             canAtk = false;
-            ani.SetTrigger("isAtk");
+            anim.SetTrigger("isAtk");
             curtime = cooltime;
         }
     }
