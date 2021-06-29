@@ -19,13 +19,16 @@ public class PlayerController : MonoBehaviour
 
     public Animator animator;
 
-    private bool leftCanRun = false;
-    private float leftCheckRun = 0.2f;
-    private bool rightCanRun = false;
-    private float rightCheckRun = 0.2f;
+    bool leftCanRun = false;
+    float leftCheckRun = 0.2f;
+    bool rightCanRun = false;
+    float rightCheckRun = 0.2f;
+
+    Collider2D col;
 
     void Start()
     {
+        col = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
         isJumping = false;
@@ -47,6 +50,8 @@ public class PlayerController : MonoBehaviour
         }
         SetRun(KeyCode.LeftArrow, ref leftCanRun, ref leftCheckRun);
         SetRun(KeyCode.RightArrow, ref rightCanRun, ref rightCheckRun);
+
+        FloorCheck();
     }
 
     void FixedUpdate()
@@ -59,8 +64,6 @@ public class PlayerController : MonoBehaviour
     void Move()
     {
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), 0);
-        
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
         if (Input.GetAxisRaw("Horizontal") == 0)
         {
@@ -69,15 +72,14 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetAxisRaw("Horizontal") < 0)
         {
             animator.SetBool("isMoving", true);
-            sr.flipX = true;
+            gameObject.transform.rotation = Quaternion.Euler(0, 180, 0);
+            input.x *= -1;
         }
         else if (Input.GetAxisRaw("Horizontal") > 0)
         {
             animator.SetBool("isMoving", true);
-            sr.flipX = false;
+            gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-
-        
 
         transform.Translate(input.x * moveSpeed * Time.deltaTime, 0, 0);
     }
@@ -86,7 +88,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(key))
         {
             canRun = true; // 달리는 판정을 true로 바꿔준다.
-            print(leftCanRun);
         }
         if (canRun)
         {
@@ -97,17 +98,28 @@ public class PlayerController : MonoBehaviour
                 checkRun = 0.2f; // 그리고 checkRun의 시간은 0.5로 돌려준다.
             }
         }
-        if (Input.GetKey(key) && canRun == false)  // 만약 W키가 눌린 상태 + 달릴 수 없는 상태라면
-            moveSpeed = 8;
-        else if (Input.GetKey(key) && canRun == true) // 만약 W키가 눌린 상태 + 달릴 수 있는 상태라면
+        if (Input.GetKey(key) && canRun == false || Input.GetAxisRaw("Horizontal") == 0)
         {
-            moveSpeed = 16;
-            canRun = true;
-            checkRun = 0.1f;
+            moveSpeed = 8;
+            animator.SetBool("isRunning", false);
+        }
+        else if (Input.GetKey(key) && canRun == true)
+        {
+            if (!isJumping || (isJumping == true && moveSpeed == 16))
+            {
+                moveSpeed = 16;
+                leftCanRun = true;
+                rightCanRun = true;
+                leftCheckRun = 0.1f;
+                rightCheckRun = 0.1f;
+                animator.SetBool("isMoving", false);
+                animator.SetBool("isRunning", true);
+            }
         }
         if (Input.GetKeyUp(key))
         {
             moveSpeed = 8;
+            animator.SetBool("isRunning", false);
         }
     }
     void Jump()
@@ -126,8 +138,6 @@ public class PlayerController : MonoBehaviour
             jumpRequest = false;
             return;
         }
-        
-        
     }
     void GravityScaling()
     {
@@ -143,5 +153,12 @@ public class PlayerController : MonoBehaviour
         {
             rigid.gravityScale = 1f;
         }
+    }
+
+    void FloorCheck()
+    {
+        float extraHeightText = .01f;
+        RaycastHit2D raycastHit = Physics2D.Raycast(col.bounds.center, Vector2.down, col.bounds.extents.y);
+        Debug.DrawRay(col.bounds.center, Vector2.down * (col.bounds.extents.y + extraHeightText));
     }
 }

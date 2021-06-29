@@ -28,7 +28,7 @@ public class Snake : MonoBehaviour
     {
         ani = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GameObject.Find("player");
+        player = GameObject.Find("Player");
         canAtk = true;
         isChase = false;
         isLayer = LayerMask.GetMask("Player");
