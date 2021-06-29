@@ -28,12 +28,12 @@ public class Snake : MonoBehaviour
     {
         ani = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        player = GameObject.Find("player");
+        player = GameObject.Find("Player");
         canAtk = true;
         isChase = false;
         isLayer = LayerMask.GetMask("Player");
         playerDistance = int.MaxValue;
-        range = 3f;
+        range = 5f;
         cooltime = 3f;
         curtime = 0;
     }
