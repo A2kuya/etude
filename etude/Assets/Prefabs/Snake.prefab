@@ -69,8 +69,9 @@ GameObject:
   - component: {fileID: 6706169436573151696}
   - component: {fileID: 6706169436573151697}
   - component: {fileID: 6706169436573151726}
-  - component: {fileID: 6706169436573151698}
   - component: {fileID: 6706169436573151701}
+  - component: {fileID: 6706169436573151698}
+  - component: {fileID: 761418987760736302}
   m_Layer: 11
   m_Name: Snake
   m_TagString: Untagged
@@ -189,30 +190,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6706169436573151698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6706169436573151727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9bd08e2605af1074495946af3a43d891, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  atkCollider: {fileID: 0}
-  pos: {fileID: 0}
-  boxSize: {x: 0.8, y: 1.84}
-  walkSpeed: 2
-  isLeft: 1
-  canAtk: 0
-  isLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  detectDistance: 10
-  playerDistance: 0
-  range: 0
 --- !u!50 &6706169436573151701
 Rigidbody2D:
   serializedVersion: 4
@@ -234,3 +211,50 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6706169436573151698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706169436573151727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd08e2605af1074495946af3a43d891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  atkCollider: {fileID: 0}
+  walkSpeed: {x: 0, y: 0}
+  isLeft: 1
+  canAtk: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectDistance: 10
+  playerDistance: 0
+  range: 0
+--- !u!114 &761418987760736302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6706169436573151727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f4e7ae719194f47a1e2626e0708b23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 0
+  horizontalRayCount: 0
+  verticalRayCount: 0
+  horizontalRaySpacing: 0
+  verticalRaySpacing: 0
+  collider: {fileID: 0}
+  maxSlopeAngle: 80
+  playerInput: {x: 0, y: 0}

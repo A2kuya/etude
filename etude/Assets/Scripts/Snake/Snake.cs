@@ -40,6 +40,7 @@ public class Snake : MonoBehaviour
         curtime = 0;
         atkCollider = transform.GetChild(0).gameObject;
         atkCollider.SetActive(false);
+        walkSpeed = Vector2.zero;
     }
 
     private void FixedUpdate()
@@ -54,7 +55,6 @@ public class Snake : MonoBehaviour
         if (isChase && playerDistance <= detectDistance && playerDistance > range && canAtk)
         {
             anim.SetBool("isWalk", true);
-            Move();
         }
         //АјАн
         else if (isChase && playerDistance <= range && canAtk)
@@ -93,9 +93,10 @@ public class Snake : MonoBehaviour
         manageCooltime();
     }
 
-    void Move()
+    public void Move()
     {
         walkSpeed.x = isLeft ? Vector2.left.x*2 : Vector2.right.x*2;
+        Debug.Log(walkSpeed.x);
         RaycastHit2D raycast = Physics2D.Raycast(transform.position, transform.up*-1, 0.1f, obstacleLayer);
         if (raycast.collider == null)
         {
