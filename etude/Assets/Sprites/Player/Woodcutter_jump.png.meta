@@ -1,25 +1,25 @@
 fileFormatVersion: 2
-guid: 6758cdb6348e606438c34d3a81ec011e
+guid: 4a17b115cb9f0f8499383377f5ed39bc
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5813978275613618827
-    second: Woodcutter_run_0
+      213: -2413212632700456053
+    second: Woodcutter_jump_0
   - first:
-      213: 5075352570157942340
-    second: Woodcutter_run_1
+      213: 8823781164848244471
+    second: Woodcutter_jump_1
   - first:
-      213: -3096926251898366008
-    second: Woodcutter_run_2
+      213: 286939646350097702
+    second: Woodcutter_jump_2
   - first:
-      213: 5424381616083968578
-    second: Woodcutter_run_3
+      213: -4731055574854010329
+    second: Woodcutter_jump_3
   - first:
-      213: 2456337180829235208
-    second: Woodcutter_run_4
+      213: -3608701682692697620
+    second: Woodcutter_jump_4
   - first:
-      213: 7601648740098365761
-    second: Woodcutter_run_5
+      213: 8190701147566263716
+    second: Woodcutter_jump_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -121,13 +121,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Woodcutter_run_0
+      name: Woodcutter_jump_0
       rect:
         serializedVersion: 2
-        x: 3
+        x: 4
         y: 0
-        width: 29
-        height: 30
+        width: 26
+        height: 28
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,19 +135,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b82b9c910766fa050800000000000000
-      internalID: 5813978275613618827
+      spriteID: b83776475eb828ed0800000000000000
+      internalID: -2413212632700456053
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_run_1
+      name: Woodcutter_jump_1
       rect:
         serializedVersion: 2
-        x: 56
+        x: 52
         y: 0
-        width: 17
+        width: 26
         height: 29
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -156,19 +156,61 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 446412ea5464f6640800000000000000
-      internalID: 5075352570157942340
+      spriteID: 7f6ef82183e547a70800000000000000
+      internalID: 8823781164848244471
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_run_2
+      name: Woodcutter_jump_2
       rect:
         serializedVersion: 2
-        x: 97
+        x: 102
         y: 0
-        width: 30
+        width: 26
+        height: 31
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62d7cac861a6bf300800000000000000
+      internalID: 286939646350097702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Woodcutter_jump_3
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 4
+        width: 26
+        height: 31
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72af138550ae75eb0800000000000000
+      internalID: -4731055574854010329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Woodcutter_jump_4
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 3
+        width: 26
         height: 29
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -177,40 +219,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8c7140c6bf18505d0800000000000000
-      internalID: -3096926251898366008
+      spriteID: ce15fb670f05bedc0800000000000000
+      internalID: -3608701682692697620
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_run_3
+      name: Woodcutter_jump_5
       rect:
         serializedVersion: 2
-        x: 147
+        x: 246
         y: 0
-        width: 28
-        height: 30
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 24228d81756474b40800000000000000
-      internalID: 5424381616083968578
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Woodcutter_run_4
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 0
-        width: 17
+        width: 26
         height: 29
       alignment: 7
       pivot: {x: 0.5, y: 0}
@@ -219,29 +240,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80839e7d6a9a61220800000000000000
-      internalID: 2456337180829235208
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Woodcutter_run_5
-      rect:
-        serializedVersion: 2
-        x: 241
-        y: 0
-        width: 32
-        height: 29
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 149dbdcf04b7e7960800000000000000
-      internalID: 7601648740098365761
+      spriteID: 4ad421a2c473ba170800000000000000
+      internalID: 8190701147566263716
       vertices: []
       indices: 
       edges: []

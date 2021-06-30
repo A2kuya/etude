@@ -1,19 +1,25 @@
 fileFormatVersion: 2
-guid: 6251350680b410b4dacfb96db30e79a1
+guid: 5266b4f244a08814c956db4032933e31
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5487567821104667819
-    second: Woodcutter_idle_0
+      213: 1726379479680692150
+    second: Woodcutter_walk_0
   - first:
-      213: -6244929058173570829
-    second: Woodcutter_idle_1
+      213: -3717269026472878262
+    second: Woodcutter_walk_1
   - first:
-      213: -2387592051759440097
-    second: Woodcutter_idle_2
+      213: -8560856930978709819
+    second: Woodcutter_walk_2
   - first:
-      213: 1536802938262419634
-    second: Woodcutter_idle_3
+      213: 2675345393987631206
+    second: Woodcutter_walk_3
+  - first:
+      213: -629997865642183735
+    second: Woodcutter_walk_4
+  - first:
+      213: -8216488914924094264
+    second: Woodcutter_walk_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -115,85 +121,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Woodcutter_idle_0
+      name: Woodcutter_walk_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 7
         y: 0
-        width: 26
+        width: 17
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bacdec1ebd1c72c40800000000000000
-      internalID: 5487567821104667819
+      spriteID: 6bf24e17df455f710800000000000000
+      internalID: 1726379479680692150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_idle_1
+      name: Woodcutter_walk_1
       rect:
         serializedVersion: 2
-        x: 49
+        x: 56
         y: 0
-        width: 26
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 15
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3f0bc00db1e8559a0800000000000000
-      internalID: -6244929058173570829
+      spriteID: a4f958ee38b996cc0800000000000000
+      internalID: -3717269026472878262
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_idle_2
+      name: Woodcutter_walk_2
       rect:
         serializedVersion: 2
-        x: 96
+        x: 107
         y: 0
-        width: 26
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 14
+        height: 34
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f1f155ecda19dded0800000000000000
-      internalID: -2387592051759440097
+      spriteID: 5ceb2188af9b13980800000000000000
+      internalID: -8560856930978709819
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Woodcutter_idle_3
+      name: Woodcutter_walk_3
       rect:
         serializedVersion: 2
-        x: 144
+        x: 145
         y: 0
         width: 26
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2b878e84122d35510800000000000000
-      internalID: 1536802938262419634
+      spriteID: 6683c14167cb02520800000000000000
+      internalID: 2675345393987631206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Woodcutter_walk_4
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 16
+        height: 33
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c3b421774cc147f0800000000000000
+      internalID: -629997865642183735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Woodcutter_walk_5
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 0
+        width: 13
+        height: 34
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ccb30d5dda29fd80800000000000000
+      internalID: -8216488914924094264
       vertices: []
       indices: 
       edges: []
