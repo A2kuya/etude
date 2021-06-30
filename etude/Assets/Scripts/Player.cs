@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 	float gravity;
 	float maxJumpVelocity;
 	float minJumpVelocity;
-	public Vector3 velocity;
+	Vector3 velocity;
 	float velocityXSmoothing;
 
 	Controller2D controller;
@@ -32,24 +32,8 @@ public class Player : MonoBehaviour
 	bool wallSliding;
 	int wallDirX;
 
-	int hp;
-	int damage;
-
-	public Animator animator;
-
-	bool leftCanRun = false;
-	float leftCheckRun = 0.2f;
-	bool rightCanRun = false;
-	float rightCheckRun = 0.2f;
-
-	bool isJumping = false;
-	bool canMove = true;
-
-	public 
-
 	void Start()
 	{
-		animator = GetComponent<Animator>();
 		controller = GetComponent<Controller2D>();
 
 		gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -59,19 +43,10 @@ public class Player : MonoBehaviour
 
 	void Update()
 	{
-		MoveAnimator();
-		JumpAnimator();
 		CalculateVelocity();
+		HandleWallSliding();
 
-		if(animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.1f)
-        {
-			canMove = true;
-        }
-
-		if (canMove)
-		{
-			controller.Move(velocity * Time.deltaTime, directionalInput);
-		}
+		controller.Move(velocity * Time.deltaTime, directionalInput);
 
 		if (controller.collisions.above || controller.collisions.below)
 		{
@@ -84,11 +59,8 @@ public class Player : MonoBehaviour
 				velocity.y = 0;
 			}
 		}
-		
-		SetRun(KeyCode.LeftArrow, ref leftCanRun, ref leftCheckRun);
-		SetRun(KeyCode.RightArrow, ref rightCanRun, ref rightCheckRun);
 	}
-	
+
 	public void SetDirectionalInput(Vector2 input)
 	{
 		directionalInput = input;
@@ -139,13 +111,41 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public void Attack()
+
+	void HandleWallSliding()
 	{
-		if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack") && isJumping == false)
+		wallDirX = (controller.collisions.left) ? -1 : 1;
+		wallSliding = false;
+		if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0)
 		{
-			animator.SetTrigger("doAttack");
-			canMove = false;
+			wallSliding = true;
+
+			if (velocity.y < -wallSlideSpeedMax)
+			{
+				velocity.y = -wallSlideSpeedMax;
+			}
+
+			if (timeToWallUnstick > 0)
+			{
+				velocityXSmoothing = 0;
+				velocity.x = 0;
+
+				if (directionalInput.x != wallDirX && directionalInput.x != 0)
+				{
+					timeToWallUnstick -= Time.deltaTime;
+				}
+				else
+				{
+					timeToWallUnstick = wallStickTime;
+				}
+			}
+			else
+			{
+				timeToWallUnstick = wallStickTime;
+			}
+
 		}
+
 	}
 
 	void CalculateVelocity()
@@ -154,80 +154,4 @@ public class Player : MonoBehaviour
 		velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
 		velocity.y += gravity * Time.deltaTime;
 	}
-
-	void MoveAnimator()
-    {
-		SpriteRenderer sr = GetComponent<SpriteRenderer>();
-
-		if (Input.GetAxisRaw("Horizontal") == 0)
-		{
-			animator.SetBool("isMoving", false);
-		}
-		else if (Input.GetAxisRaw("Horizontal") < 0)
-		{
-			animator.SetBool("isMoving", true);
-			sr.flipX = true;
-		}
-		else if (Input.GetAxisRaw("Horizontal") > 0)
-		{
-			animator.SetBool("isMoving", true);
-			sr.flipX = false;
-		}
-	}
-
-	void SetRun(KeyCode key, ref bool canRun, ref float checkRun)
-	{
-		if (Input.GetKeyUp(key))
-		{
-			canRun = true; // 달리는 판정을 true로 바꿔준다.
-		}
-		if (canRun)
-		{
-			checkRun -= Time.deltaTime;
-			if (checkRun <= 0)
-			{
-				canRun = false;  // 달리는 판정을 false로 바꿔준다.
-				checkRun = 0.2f; // 그리고 checkRun의 시간은 0.2로 돌려준다.
-			}
-		}
-		if (Input.GetKey(key) && canRun == false || Input.GetAxisRaw("Horizontal") == 0)
-		{
-			moveSpeed = 8;
-			animator.SetBool("isRunning", false);
-		}
-		else if (Input.GetKey(key) && canRun == true)
-		{
-			moveSpeed = 16;
-			leftCanRun = true;
-			rightCanRun = true;
-			leftCheckRun = 0.1f;
-			rightCheckRun = 0.1f;
-			animator.SetBool("isMoving", false);
-			animator.SetBool("isRunning", true);
-		}
-		if (Input.GetKeyUp(key))
-		{
-			moveSpeed = 8;
-			animator.SetBool("isRunning", false);
-		}
-	}
-
-	void JumpAnimator()
-    {
-		if (velocity.y < 0)
-		{
-			animator.SetTrigger("doFalling");
-		}
-        else if (velocity.y > 0 && isJumping == false)
-        {
-			isJumping = true;
-            animator.SetTrigger("doJumping");
-			animator.SetBool("isJumping", true);
-		}
-		else if(velocity.y == 0 && isJumping == true)
-        {
-			isJumping = false;
-			animator.SetBool("isJumping", false);
-		}
-    }
 }
