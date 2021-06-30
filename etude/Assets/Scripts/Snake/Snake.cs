@@ -2,67 +2,111 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Snake : Enemy
+public class Snake : MonoBehaviour
 {
+    SpriteRenderer spriteRenderer;
+    Animator ani;
+    GameObject player;
+    public GameObject atkCollider;
+    public Transform pos;
+    public Vector2 boxSize;
     RaycastHit2D raycast;
+    public int walkSpeed;
+    public bool isLeft;
+    private bool isChase;
+    public bool canAtk;
+    public LayerMask isLayer;
+    public int detectDistance;
+    public float playerDistance;
+    public float range;
+    private float cooltime;
+    private float curtime;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        hp = 100;
-        damage = 10;
+        ani = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        player = GameObject.Find("Player");
+        canAtk = true;
+        isChase = false;
+        isLayer = LayerMask.GetMask("Player");
         playerDistance = int.MaxValue;
         range = 3f;
         cooltime = 3f;
         curtime = 0;
-        atkCollider.SetActive(false);
-        chaseDistance = 12f;
+    }
+
+    private void FixedUpdate()
+    {
+        RaycastHit2D rayhit = Physics2D.Raycast(transform.position, transform.right * -1, detectDistance, isLayer);
+
+        if (rayhit.collider != null)
+        {
+            isChase = true;
+        }
+
+        if (isChase && playerDistance <= detectDistance && playerDistance > range && canAtk)
+        {
+            ani.SetBool("isWalk", true);
+            Move();
+        }
+        else if (isChase && playerDistance <= range && canAtk)
+        {
+            Attack();
+        }
+        else if(isChase && !canAtk)
+        {
+            if(ani.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                canAtk = true;
+                Debug.Log("11111");
+            }
+        }
+        else if(playerDistance > detectDistance)
+        {
+            isChase = false;
+            ani.SetBool("isWalk", false);
+        }
     }
 
     // Update is called once per frame
     void Update()
-    {        
-        CaculateplayerDistance(); //플레이어와의 거리 및 방향 계산
-        ManageCoolTime();   //쿨타임 관리
-    }
-
-    override public bool Detect()
     {
-        RaycastHit2D rayhit = Physics2D.Raycast(transform.position + Vector3.up, transform.right * -1, detectDistance, playerLayer);
-        return rayhit.collider != null;
-    }
-
-    public override void Move()
-    {
-        velocity.x = speed * Time.fixedDeltaTime * -1;
-        controller.Move(velocity, dir);
-    }
-
-    public override void Attack()
-    {
-        if (curtime <= 0f && playerDistance < range)
+        playerDistance = Vector3.Distance(transform.position, player.transform.position);
+        if (isChase && transform.position.x - player.transform.position.x < 0 && canAtk)
         {
-            anim.SetTrigger("isAtk");
+            isLeft = false;
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+        else if(isChase && canAtk)
+        {
+            isLeft = true;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        manageCooltime();
+    }
+
+    void Move()
+    {
+        transform.position = Vector3.MoveTowards(transform.position, player.transform.position, Time.deltaTime * walkSpeed);
+    }
+
+    void Attack()
+    {
+        if (curtime <= 0f)
+        {
+            canAtk = false;
+            ani.SetTrigger("isAtk");
             curtime = cooltime;
         }
     }
 
-    public override bool Miss()
+
+    void manageCooltime()
     {
-        return playerDistance > chaseDistance;
+        if (curtime > 0f)
+            curtime -= Time.deltaTime;
     }
-
-    public bool InRange()
-    {
-        if(playerDistance < range)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-
 }
