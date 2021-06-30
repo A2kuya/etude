@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnakeWalk : StateMachineBehaviour
+public class SnakeIdle : StateMachineBehaviour
 {
     Snake snake;
-
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         snake = animator.GetComponent<Snake>();
@@ -13,17 +12,21 @@ public class SnakeWalk : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake.yFlip();
-        snake.Move();
-        snake.Attack();
-        if (snake.Miss() || snake.InRange())
+        if (snake.Detect())
         {
-            animator.SetBool("isWalk", false);
+            if (snake.InRange())
+            {
+                snake.Attack();
+            }
+            else
+                animator.SetBool("isWalk", true);
         }
+        if (snake.InRange())
+            snake.yFlip();
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+
     }
 }

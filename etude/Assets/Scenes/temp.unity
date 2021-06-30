@@ -675,6 +675,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6706169435033648463, guid: 1eaf654a58e62c441a8758c19d38c72f, type: 3}
+      propertyPath: m_Name
+      value: attack
+      objectReference: {fileID: 0}
     - target: {fileID: 6706169436573151698, guid: 1eaf654a58e62c441a8758c19d38c72f, type: 3}
       propertyPath: walkSpeed
       value: 100
