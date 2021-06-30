@@ -113,13 +113,8 @@ TextureImporter:
         y: 0
         width: 26
         height: 32
-<<<<<<< HEAD:etude/Assets/Sprites/Player/Woodcutter.png.meta
       alignment: 7
       pivot: {x: 0.5, y: 0}
-=======
-      alignment: 0
-      pivot: {x: 0, y: 0}
->>>>>>> dev:etude/Assets/Sprites/Woodcutter.png.meta
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
