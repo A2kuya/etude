@@ -10,6 +10,10 @@
 [Ll]ogs
 [Uu]ser[Ss]ettings
 *.log
+etude/Logs/AssetImportWorker0.log
+etude/Logs/AssetImportWorker0-prev.log
+etude/Logs/shadercompiler-UnityShaderCompiler.exe0.log
+etude/UserSettings/EditorUserSettings.asset
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
