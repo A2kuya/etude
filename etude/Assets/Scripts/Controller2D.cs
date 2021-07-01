@@ -119,7 +119,7 @@ public class Controller2D : RaycastController
 	void VerticalCollisions(ref Vector2 moveAmount)
 	{
 		float directionY = Mathf.Sign(moveAmount.y);
-		float rayLength = Mathf.Abs(moveAmount.y) + skinWidth;
+		float rayLength = Mathf.Abs(moveAmount.y) + skinWidth + 0.1f;
 
 		for (int i = 0; i < verticalRayCount; i++)
 		{
