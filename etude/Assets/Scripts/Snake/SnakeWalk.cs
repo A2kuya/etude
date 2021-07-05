@@ -9,21 +9,18 @@ public class SnakeWalk : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         snake = animator.GetComponent<Snake>();
+        snake.isMoving = true;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         snake.yFlip();
-        snake.Move();
+        snake.Movement();
         snake.Attack();
-        if (snake.Miss() || snake.InRange())
-        {
-            animator.SetBool("isWalk", false);
-        }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        snake.isMoving = false;
     }
 }
