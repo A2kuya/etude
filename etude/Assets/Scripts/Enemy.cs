@@ -3,61 +3,97 @@ using System.Collections.Generic;
 using UnityEngine;
 abstract public class Enemy : MonoBehaviour
 {
-    SpriteRenderer spriteRenderer;
+    protected SpriteRenderer spriteRenderer;
     protected Animator anim;
-    Rigidbody2D rigid;
-    GameObject player;
-    protected Controller2D controller;
+    protected Rigidbody2D rigid;
+    protected GameObject player;
+    //protected Controller2D controller;
     public GameObject atkCollider;
 
-    public int hp;  //Ã¼·Â¹Ù
-    public int damage; //µ¥¹ÌÁö
-    public bool isLeft; //¿ŞÂÊÀ» ¹Ù¶óº¸´ÂÁö
-    public LayerMask playerLayer;   //ÇÃ·¹ÀÌ¾î ·¹ÀÌ¾î
-    public LayerMask playerAttackLayer; //ÇÃ·¹ÀÌ¾î °ø°İ ·¹ÀÌ¾î
-    public LayerMask obstacleLayer; //ÁöÇü ·¹ÀÌ¾î
-    public int speed = 1;               //¼Óµµ °è¼ö
-    public Vector2 velocity = Vector2.zero;        //ÀÌµ¿ ¼Óµµ
-    public Vector2 dir = Vector2.zero;  //¹æÇâ
-    public int attackSpeed;         //°ø°İ ¼Óµµ
-    public float detectDistance;    //Å½Áö °Å¸®
-    public float chaseDistance;     //Ãß°İ °Å¸®
-    public float playerDistance;    //ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸®
-    public float range;             //°ø°İ ¹üÀ§
-    public float cooltime;         //°ø°İ ÄğÅ¸ÀÓ
-    public float curtime;          //ÁÙ¾îµå´Â °ø°İ ÄğÅ¸ÀÓ
-    protected float gravity;                  //Áß·Â
+    public int hp;  //ì²´ë ¥
+    public int stiffness = 0;   //ê²½ì§ë„
+    public int damage; //ë°ë¯¸ì§€
+    public bool isLeft; //ë°”ë¼ë³´ëŠ” ë°©í–¥
+    public LayerMask playerLayer;   //í”Œë ˆì´ì–´ ë ˆì´ì–´
+    public LayerMask playerAttackLayer; //í”Œë ˆì´ì–´ ê³µê²© ë ˆì´ì–´
+    public LayerMask obstacleLayer; //ì§€í˜• ë ˆì´ì–´
+    public int speed = 1;               //ì†ë„
+    public Vector2 velocity = Vector2.zero;        //ì†ë„ ë²¡í„°
+    public Vector2 dir = Vector2.zero;  //ë°©í–¥ ë²¡í„°
+    public int attackSpeed;         //ê³µê²© ì†ë„
+    public float detectDistance;    //ê°ì§€ ê±°ë¦¬
+    public float chaseDistance;     //ì¶”ê²© ê±°ë¦¬
+    public float playerDistance;    //í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬
+    public float range;             //ê³µê²© ë²”ìœ„
+    public bool isGround;
+    public bool isJump;
+    public bool isSlope;
+    public bool isMoving;
+    public float maxangle;
+    protected Vector2 perp;
+    public float angle;
+    protected Vector2 spriteSize;
 
-    void Awake()
-    {
-        controller = GetComponent<Controller2D>();
-        anim = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        rigid = GetComponent<Rigidbody2D>();
-        player = GameObject.Find("Player");
-        playerLayer = LayerMask.GetMask("Player");
-        playerAttackLayer = LayerMask.GetMask("PlayerAttackLayer");
-        obstacleLayer = LayerMask.GetMask("Obstacle");
-        controller = GetComponent<Controller2D>();
+    public struct AttackPattern{
+            public AttackPattern(float cur, float cool){
+                cooltime = cool;
+                curtime = cur;
+            }
+            public float cooltime;         //ê³µê²© ì¿¨íƒ€ì„
+            public float curtime;          //ì¿¨íƒ€ì„ ì‹œê°„
+    }
+    public List<AttackPattern> attackPattern;   //ê³µê²© íŒ¨í„´
+    abstract public void Movement();    //ì›€ì§ì„
+    abstract public void Attack();  //ê³µê²©
+    abstract public bool Detect();  //ê°ì§€
+    abstract public bool Miss();    //ë†“ì¹¨
+
+    
+    public void Move(bool left){
+        int dir = (left ? -1 : 1);
+        Debug.Log(perp.x + " " + perp.y);
+        if(isSlope && isGround && angle < maxangle)
+            rigid.velocity = perp * dir * speed * -1f;
+        else if(!isSlope && isGround)
+            rigid.velocity = new Vector2(dir * speed, 0);
+        else if(!isGround)
+            rigid.velocity = new Vector2(dir * speed, rigid.velocity.y);
     }
 
-    abstract public void Move();    //¿òÁ÷ÀÓ
-    abstract public void Attack();  //°ø°İ
-    abstract public bool Detect();  //Å½Áö
-    abstract public bool Miss();    //³õÄ¡´Â °Í
-
-    public void CaculateplayerDistance() {  //ÇÃ·¹ÀÌ¾î °Å¸®°è»ê ¹× ¹æÇâ ÆÇÁ¤
-        playerDistance = Vector2.Distance(transform.position, player.transform.position);
-        if(isLeft = (transform.position.x - player.transform.position.x > 0))
-        {
-            dir.x = Vector2.left.x;
+    virtual public void CheckObstacle(){
+        //ë°”ë‹¥ ì²´í¬
+        isGround = Physics2D.OverlapCircle(transform.position, 0.1f, obstacleLayer);
+        //ê²½ì‚¬ ì²´í¬
+        Vector2 frontPosition = new Vector2(transform.position.x, transform.position.y - spriteSize.x / 2 + 0.1f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1, obstacleLayer);
+        RaycastHit2D fronthit = Physics2D.Raycast(frontPosition, (isLeft ? Vector2.left : Vector2.right), 0.1f + spriteSize.x /2, obstacleLayer);
+        Debug.DrawRay(frontPosition, (isLeft ? Vector2.left : Vector2.right), Color.red);
+        Debug.DrawRay(transform.position, Vector2.down, Color.green);
+        if(fronthit){
+            CheckSlope(fronthit);
+        }else if(hit){
+            CheckSlope(hit);
         }
+    }
+
+    public void CheckSlope(RaycastHit2D hit){
+            perp = Vector2.Perpendicular(hit.normal).normalized;
+            angle = Vector2.Angle(hit.normal, Vector2.up);
+            isSlope = (angle != 0);
+    }
+
+    public void DontSlide(){
+        if(isSlope && !isMoving)
+            rigid.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         else
-        {
-            dir.x = Vector2.right.x;
-        }
+            rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
-    public void yFlip()  //ÁÂ¿ì ÇÃ¸³(¿ŞÂÊÀÌ Âü)
+
+    public void CaculateDistance() {  //ê±°ë¦¬ê³„ì‚° ë° ë°©í–¥ê³„ì‚°
+        playerDistance = Vector2.Distance(transform.position, player.transform.position);
+        isLeft = (transform.position.x - player.transform.position.x > 0);
+    }
+    public void yFlip()  //ì¢Œìš° ë°˜ì „
     {
         if (isLeft)
         {
@@ -68,28 +104,51 @@ abstract public class Enemy : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
-    public void ManageCoolTime()
+    public void ManageCoolTime()    //ì¿¨íƒ€ì„ ê´€ë¦¬
     {
-        if(curtime >= 0f)
-        {
-            curtime -= Time.deltaTime;
+        for(int i = 0; i < attackPattern.Count; i++){
+            if(attackPattern[i].curtime >= 0f)
+            {
+                attackPattern[i] = new AttackPattern(attackPattern[i].curtime - Time.deltaTime, attackPattern[i].cooltime);
+            }
         }
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, int stiffness, bool knockback = false)  //í”¼ê²©
     {
         hp -= damage;
+        this.stiffness -= stiffness;
+        if(!knockback);
+            rigid.AddForce(Vector2.zero);
+    }
+    public void TakeDamage(int damage, int stiffness, int knockback, Vector3 attackPosition)  //í”¼ê²©
+    {
+        hp -= damage;
+        this.stiffness -= stiffness;
+        Vector2 v = Vector2.up;
+        if(transform.position.x - attackPosition.x > 0)
+            v.x = -1;
+        else if(transform.position.x - attackPosition.x == 0)
+            if(isLeft) v.x = -1;
+            else v.x = 1;
+        else    v.x = 1;
+        rigid.AddForce(v);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.layer == playerAttackLayer)
         {
-            //°¨ÁöµÈ ¿ÀºêÁ§Æ®¿¡¼­ µ¥¹ÌÁö¸¦ ¹Ş¾Æ¿Í¼­ Ã³¸®
+            collision.gameObject.GetComponentInParent<Player>();    //íƒ€ê²© í•¨ìˆ˜ í˜¸ì¶œ
         }
     }
 
-    protected void CaculateVelocity()
-    {
-
+    public void GetSpriteSize(){
+        Vector2 worldSize = Vector3.zero;
+        spriteSize = spriteRenderer.sprite.rect.size;
+        Vector2 localSpriteSize = spriteSize / spriteRenderer.sprite.pixelsPerUnit;
+        worldSize = localSpriteSize;
+        worldSize.x *= transform.lossyScale.x;
+        worldSize.y *= transform.lossyScale.y;
+        spriteSize = worldSize;
     }
 }

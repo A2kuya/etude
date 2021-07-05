@@ -133,7 +133,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 9
   m_Sprite: {fileID: 283499142206199488, guid: 9c39dbecb41ca2543b33b9c230932921, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -223,29 +223,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd08e2605af1074495946af3a43d891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkCollider: {fileID: 0}
+  atkCollider: {fileID: 6706169435033648463}
   hp: 100
+  stiffness: 100
   damage: 10
   isLeft: 1
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   playerAttackLayer:
     serializedVersion: 2
     m_Bits: 0
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
-  speed: 1
+    m_Bits: 65536
+  speed: 3
   velocity: {x: 0, y: 0}
   dir: {x: 0, y: 0}
   attackSpeed: 0
   detectDistance: 10
-  chaseDistance: 12
+  chaseDistance: 20
   playerDistance: 0
   range: 3
-  cooltime: 3
-  curtime: 0
+  isGround: 0
+  isJump: 0
+  isSlope: 0
+  isMoving: 0
+  maxangle: 0
+  angle: 0
+  maxJumpHeight: 4
+  timeToJumpApex: 3
+  gravity: 0
 --- !u!114 &761418987760736302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,11 +268,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 65536
   horizontalRayCount: 0
   verticalRayCount: 0
   horizontalRaySpacing: 0
   verticalRaySpacing: 0
-  collider: {fileID: 0}
+  col: {fileID: 0}
   maxSlopeAngle: 80
   playerInput: {x: 0, y: 0}
