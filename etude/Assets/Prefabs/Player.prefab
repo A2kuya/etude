@@ -134,7 +134,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: -3849791415587609186, guid: f1b75b22cec9ff040b61b253f8eaaad9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -249,6 +249,7 @@ MonoBehaviour:
   maxJumpHeight: 5
   minJumpHeight: 1
   timeToJumpApex: 0.4
+  moveSpeed: 6
   wallJumpClimb: {x: 0, y: 0}
   wallJumpOff: {x: 0, y: 0}
   wallLeap: {x: 0, y: 0}
@@ -256,6 +257,8 @@ MonoBehaviour:
   wallStickTime: 0.25
   velocity: {x: 0, y: 0, z: 0}
   animator: {fileID: 0}
+  isAttacking: 0
+  attackPos: {fileID: 2700734650895415753}
 --- !u!114 &2700734651075719953
 MonoBehaviour:
   m_ObjectHideFlags: 0
