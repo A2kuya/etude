@@ -1,13 +1,25 @@
 fileFormatVersion: 2
-guid: ad5c9f0029f5c2c4882b00b80fdb6f93
+guid: 7c78e461bde2ec24ab0914bdf8ef94fa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9013273362597887021
-    second: Snake_hurt_0
+      213: -8478427711171593115
+    second: Hyena_death_0
   - first:
-      213: 1636013400089125610
-    second: Snake_hurt_1
+      213: 4094097513583266264
+    second: Hyena_death_1
+  - first:
+      213: -8494239873324995667
+    second: Hyena_death_2
+  - first:
+      213: -7052074958541673759
+    second: Hyena_death_3
+  - first:
+      213: -4013674126291260509
+    second: Hyena_death_4
+  - first:
+      213: -6475305636212064967
+    second: Hyena_death_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -121,13 +133,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Snake_hurt_0
+      name: Hyena_death_0
       rect:
         serializedVersion: 2
-        x: 20
+        x: 12
         y: 0
-        width: 27
-        height: 16
+        width: 35
+        height: 28
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,20 +147,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d3ccde81ab6ae280800000000000000
-      internalID: -9013273362597887021
+      spriteID: 56cf9c5dae2965a80800000000000000
+      internalID: -8478427711171593115
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_hurt_1
+      name: Hyena_death_1
       rect:
         serializedVersion: 2
-        x: 68
+        x: 63
         y: 0
-        width: 27
-        height: 15
+        width: 32
+        height: 29
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,8 +168,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae26718f48944b610800000000000000
-      internalID: 1636013400089125610
+      spriteID: 8d9c0f44ff721d830800000000000000
+      internalID: 4094097513583266264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_death_2
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 0
+        width: 37
+        height: 25
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dab2181f6d56e1a80800000000000000
+      internalID: -8494239873324995667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_death_3
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 0
+        width: 39
+        height: 20
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ea22be403ff12e90800000000000000
+      internalID: -7052074958541673759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_death_4
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 0
+        width: 41
+        height: 12
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3abab32c5a09c48c0800000000000000
+      internalID: -4013674126291260509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_death_5
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 0
+        width: 41
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93dbe7dd4d71326a0800000000000000
+      internalID: -6475305636212064967
       vertices: []
       indices: 
       edges: []

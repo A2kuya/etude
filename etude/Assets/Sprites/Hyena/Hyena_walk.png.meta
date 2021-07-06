@@ -1,13 +1,25 @@
 fileFormatVersion: 2
-guid: ad5c9f0029f5c2c4882b00b80fdb6f93
+guid: aa6f4d94191cd3a4e9ecc80545c4fe50
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9013273362597887021
-    second: Snake_hurt_0
+      213: 2471592659353179898
+    second: Hyena_walk_0
   - first:
-      213: 1636013400089125610
-    second: Snake_hurt_1
+      213: -2419008658184752302
+    second: Hyena_walk_1
+  - first:
+      213: 2507993390049796495
+    second: Hyena_walk_2
+  - first:
+      213: -956104591135857483
+    second: Hyena_walk_3
+  - first:
+      213: 2243268222033737985
+    second: Hyena_walk_4
+  - first:
+      213: 6630705575699186964
+    second: Hyena_walk_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -121,13 +133,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Snake_hurt_0
+      name: Hyena_walk_0
       rect:
         serializedVersion: 2
-        x: 20
+        x: 5
         y: 0
-        width: 27
-        height: 16
+        width: 41
+        height: 26
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,20 +147,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d3ccde81ab6ae280800000000000000
-      internalID: -9013273362597887021
+      spriteID: af6953abd6cdc4220800000000000000
+      internalID: 2471592659353179898
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_hurt_1
+      name: Hyena_walk_1
       rect:
         serializedVersion: 2
-        x: 68
+        x: 51
         y: 0
-        width: 27
-        height: 15
+        width: 44
+        height: 26
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,8 +168,92 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ae26718f48944b610800000000000000
-      internalID: 1636013400089125610
+      spriteID: 253bd4c1174fd6ed0800000000000000
+      internalID: -2419008658184752302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_walk_2
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 0
+        width: 45
+        height: 26
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8122f843be2ec220800000000000000
+      internalID: 2507993390049796495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_walk_3
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 0
+        width: 44
+        height: 26
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b42a35a0fb3bb2f0800000000000000
+      internalID: -956104591135857483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_walk_4
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 1
+        width: 44
+        height: 26
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1093e360090b12f10800000000000000
+      internalID: 2243268222033737985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_walk_5
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 0
+        width: 43
+        height: 27
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41580c1179ff40c50800000000000000
+      internalID: 6630705575699186964
       vertices: []
       indices: 
       edges: []
