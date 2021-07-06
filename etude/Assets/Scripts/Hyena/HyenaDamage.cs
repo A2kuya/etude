@@ -14,7 +14,7 @@ public class HyenaDamage : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.layer == 6){            
             Debug.Log("take damage");
-            other.gameObject.GetComponent<Player>().TakeDamage(10, transform);
+            //other.gameObject.GetComponent<Player>().TakeDamage(10, transform);
         }
     }
 }
