@@ -100,7 +100,6 @@ public class Player : MonoBehaviour
 			else
 			{
 				velocity.y = 0;
-				print(velocity.y);
 			}
 		}
 

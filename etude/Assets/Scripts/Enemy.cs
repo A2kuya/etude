@@ -51,7 +51,6 @@ abstract public class Enemy : MonoBehaviour
     
     public void Move(bool left){
         int dir = (left ? -1 : 1);
-        Debug.Log(perp.x + " " + perp.y);
         if(isSlope && isGround && angle < maxangle)
             rigid.velocity = perp * dir * speed * -1f;
         else if(!isSlope && isGround)
@@ -106,7 +105,8 @@ abstract public class Enemy : MonoBehaviour
     }
     public void ManageCoolTime()    //쿨타임 관리
     {
-        for(int i = 0; i < attackPattern.Count; i++){
+        for(int i = 0; i < attackPattern.Count; i++)
+        {
             if(attackPattern[i].curtime >= 0f)
             {
                 attackPattern[i] = new AttackPattern(attackPattern[i].curtime - Time.deltaTime, attackPattern[i].cooltime);
@@ -117,7 +117,7 @@ abstract public class Enemy : MonoBehaviour
     {
         hp -= damage;
         this.stiffness -= stiffness;
-        if(!knockback);
+        if(!knockback)
             rigid.AddForce(Vector2.zero);
     }
     public void TakeDamage(int damage, int stiffness, int knockback, Vector3 attackPosition)  //피격
