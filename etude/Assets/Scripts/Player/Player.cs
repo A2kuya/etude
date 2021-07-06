@@ -5,7 +5,6 @@ using System;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-
 	public float maxJumpHeight = 4;
 	public float minJumpHeight = 1;
 	public float timeToJumpApex = .4f;
@@ -53,7 +52,6 @@ public class Player : MonoBehaviour
 	float dashDistance = 10f;
 	float dashTime = 0.2f;
 	float startTime = 0f;
-	Vector3 startPos;
 	Vector2 moveAmount;
 
 	void Start()
@@ -74,6 +72,7 @@ public class Player : MonoBehaviour
 		JumpAnimator();
 		JumpAttackAnimator();
 		CalculateVelocity();
+		Attack();
 
 		if (isDashing)
 		{
@@ -89,8 +88,9 @@ public class Player : MonoBehaviour
 			}
 		}
 		if (canMove)
+		{
 			controller.Move(velocity * Time.deltaTime, directionalInput);
-
+		}
 		if (controller.collisions.above || controller.collisions.below)
 		{
 			if (controller.collisions.slidingDownMaxSlope)
@@ -100,7 +100,6 @@ public class Player : MonoBehaviour
 			else
 			{
 				velocity.y = 0;
-				print(velocity.y);
 			}
 		}
 
@@ -160,11 +159,9 @@ public class Player : MonoBehaviour
 
 	public void Attack()
 	{
-		if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack"))
+		if (Input.GetKeyDown(KeyCode.Z) && !isAttacking)
 		{
-			moveSpeed = 1f;
 			isAttacking = true;
-			animator.SetTrigger("doAttack");
 		}
 	}
 
@@ -176,23 +173,14 @@ public class Player : MonoBehaviour
 			canMove = false;
 			isDashing = true;
 			startTime = Time.time;
-			startPos = transform.position;
 		}
 	}
 
 	void JumpAttackAnimator()
     {
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack"))
+		if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_jump_attack"))
 		{
-			if (Math.Truncate(animator.GetCurrentAnimatorStateInfo(0).normalizedTime * 10) / 10 == 0.5f && (isJumping || velocity.y < 0))
-			{
-				velocity.y -= 2f;
-				animator.enabled = false;
-			}
-			if (isJumping == false)
-			{
-				animator.enabled = true;
-			}
+			velocity.y -= 0.5f;
 		}
 	}
 
@@ -274,9 +262,11 @@ public class Player : MonoBehaviour
     {
 		if (velocity.y < 0 && !isAttacking && !isDashing)
 		{
+			isJumping = true;
 			animator.SetTrigger("doFalling");
+			animator.SetBool("isJumping", true);
 		}
-        else if (velocity.y > 0 && isJumping == false)
+		else if (velocity.y > 0 && isJumping == false)
         {
 			isJumping = true;
             animator.SetTrigger("doJumping");
@@ -287,5 +277,5 @@ public class Player : MonoBehaviour
 			isJumping = false;
 			animator.SetBool("isJumping", false);
 		}
-    }
+	}
 }
