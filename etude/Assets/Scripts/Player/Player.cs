@@ -54,6 +54,13 @@ public class Player : MonoBehaviour
 	float startTime = 0f;
 	Vector2 moveAmount;
 
+	bool isLadder = false;
+	const float ladderCoolTime = 0.4f;
+	float coolTimeCheck = ladderCoolTime;
+	bool startCoolTime = false;
+	Collider2D ladderCol;
+	float var;
+
 	void Start()
 	{
 		animator = GetComponent<Animator>();
@@ -74,6 +81,67 @@ public class Player : MonoBehaviour
 		CalculateVelocity();
 		Attack();
 
+
+		var = Input.GetAxisRaw("Vertical");
+		if (isLadder)
+		{
+			animator.SetBool("isJumping", false);
+			animator.ResetTrigger("doFalling");
+			velocity.x = 0;
+			if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_climb") && var != 0)
+			{
+				animator.SetTrigger("doClimb");
+			}
+			if (var == 0 && !startCoolTime)
+			{
+				animator.SetFloat("climbSpeed", 0);
+			}
+			if (var != 0)
+			{
+				transform.position = new Vector3(ladderCol.transform.position.x, transform.position.y, transform.position.z);
+				animator.SetFloat("climbSpeed", 1);
+			}
+			if (Input.GetKeyDown(KeyCode.X))
+			{
+				velocity.x += 1;
+				velocity.y = maxJumpVelocity;
+
+				startCoolTime = true;
+				isLadder = false;
+				animator.SetBool("isClimbing", false);
+
+				isJumping = true;
+				animator.SetTrigger("doJumping");
+				animator.SetBool("isJumping", true);
+
+			}
+			if (Input.GetKeyDown(KeyCode.C))
+            {
+				startCoolTime = true;
+				isLadder = false;
+				animator.SetBool("isClimbing", false);
+			}
+			if (!startCoolTime)
+			{
+				gravity = 0;
+				velocity.y = var * 8;
+			}
+		}
+		else
+        {
+			gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+		}
+
+		if (startCoolTime)
+		{
+			coolTimeCheck -= Time.deltaTime;
+		}
+		if (coolTimeCheck <= 0)
+		{
+			startCoolTime = false;
+			coolTimeCheck = ladderCoolTime;
+		}
+
 		if (isDashing)
 		{
 			float progress = (Time.time - startTime) / dashTime;
@@ -91,17 +159,17 @@ public class Player : MonoBehaviour
 		{
 			controller.Move(velocity * Time.deltaTime, directionalInput);
 		}
-		if (controller.collisions.above || controller.collisions.below)
-		{
-			if (controller.collisions.slidingDownMaxSlope)
-			{
-				velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
-			}
-			else
-			{
-				velocity.y = 0;
-			}
-		}
+        if (controller.collisions.above || controller.collisions.below)
+        {
+            if (controller.collisions.slidingDownMaxSlope)
+            {
+                velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
+            }
+            else
+            {
+                velocity.y = 0;
+            }
+        }
 
 		SetRun(KeyCode.LeftArrow, ref leftCanRun, ref leftCheckRun);
 		SetRun(KeyCode.RightArrow, ref rightCanRun, ref rightCheckRun);
@@ -260,13 +328,13 @@ public class Player : MonoBehaviour
 
 	void JumpAnimator()
     {
-		if (velocity.y < 0 && !isAttacking && !isDashing)
+		if (velocity.y < 0 && !isAttacking && !isDashing && !isLadder)
 		{
 			isJumping = true;
 			animator.SetTrigger("doFalling");
 			animator.SetBool("isJumping", true);
 		}
-		else if (velocity.y > 0 && isJumping == false)
+		else if (velocity.y > 0 && isJumping == false && !isLadder)
         {
 			isJumping = true;
             animator.SetTrigger("doJumping");
@@ -276,6 +344,27 @@ public class Player : MonoBehaviour
         {
 			isJumping = false;
 			animator.SetBool("isJumping", false);
+		}
+	}
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+		if (collision.CompareTag("Ladder"))
+		{
+			if (var != 0 && coolTimeCheck == ladderCoolTime)
+			{
+				isLadder = true;
+				animator.SetBool("isClimbing", true);
+				ladderCol = collision;
+			}
+		}
+    }
+	private void OnTriggerExit2D(Collider2D collision)
+	{
+		if (collision.CompareTag("Ladder"))
+		{
+			isLadder = false;
+			animator.SetBool("isClimbing", false);
 		}
 	}
 }
