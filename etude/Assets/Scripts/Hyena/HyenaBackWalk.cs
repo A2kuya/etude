@@ -14,6 +14,7 @@ public class HyenaBackWalk : StateMachineBehaviour
     {
         hyena.yFlip(true);
         if(hyena.canDash && hyena.canAttack){
+            hyena.KeepDistance();
             hyena.isClose = false;
             hyena.isMoving = false;
             hyena.yFlip();
