@@ -2,30 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnakeWalk : StateMachineBehaviour
+public class HyenaAttack : StateMachineBehaviour
 {
-    Snake snake;
+    Hyena hyena;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake = animator.GetComponent<Snake>();
-        snake.isMoving = true;
+        hyena = animator.GetComponent<Hyena>();
+        hyena.Stop();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(!snake.Miss()){
-            snake.yFlip();
-            snake.Movement();
-            snake.Attack();
+        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.3f){
+            
+        }
+        else if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.7f){
+
         }
         else{
-            animator.SetBool("isWalk", false);
+            hyena.atkCollider.SetActive(true);
         }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake.isMoving = false;
+        
     }
 }

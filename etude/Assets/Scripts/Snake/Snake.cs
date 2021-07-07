@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Snake : Enemy
 {
-    RaycastHit2D raycast;
-	public float maxJumpHeight = 4;
-	public float timeToJumpApex = 3f;
-    public float gravity;       //중력
-
+    public int cooltime;
     // Start is called before the first frame update
     void Awake()
     {
@@ -19,61 +15,42 @@ public class Snake : Enemy
         playerLayer = LayerMask.GetMask("Player");
         playerAttackLayer = LayerMask.GetMask("PlayerAttackLayer");
         obstacleLayer = LayerMask.GetMask("Obstacle");
-        //controller = GetComponent<Controller2D>();
+        hpBar = Instantiate(prfHpBar, canvas.transform);
         atkCollider.SetActive(false);
         dir = Vector2.left;
-        hp = 100;
-        damage = 10;
-        range = 3f;
         attackPattern = new List<AttackPattern>();
-        attackPattern.Add(new AttackPattern(3, 0));
-        chaseDistance = 12f;
-        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        
+        attackPattern.Add(new AttackPattern(0, cooltime));
     }
 
     // Update is called once per frame
     void Update()
     {
+        CheckDead();
+        UpdateHpBar();
         GetSpriteSize();
-        DontSlide();
         CheckObstacle();
+        DontSlide();
         CaculateDistance(); //거리 계산 및 방향판정
         ManageCoolTime();   //쿨타임 관리
     }
 
-    override public bool Detect()
+    override public void Detect()
     {
         RaycastHit2D rayhit = Physics2D.Raycast(transform.position + Vector3.up, transform.right * -1, detectDistance, playerLayer);
-        return rayhit.collider != null;
+        if(rayhit.collider != null)
+            isChase = true;
     }
     public override void Movement()
     {
         Move(isLeft);
-
-
-        // velocity.y += gravity * Time.deltaTime;
-        // velocity.x = v.x * speed * Time.fixedDeltaTime * -1;
-        // dir.y = -1;
-        // controller.Move(velocity, dir);
-        // if (controller.collisions.above || controller.collisions.below)
-		// {
-		// 	if (controller.collisions.slidingDownMaxSlope)
-		// 	{
-		// 		velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
-		// 	}
-		// 	else
-		// 	{
-		// 		velocity.y = 0;
-		// 	}
-		// }        
     }
     public override void Attack()
     {
         if (attackPattern[0].curtime <= 0f && InRange())
         {
+            AttackPattern temp = new AttackPattern(attackPattern[0].cooltime, attackPattern[0].cooltime); 
+            attackPattern[0] = temp;
             anim.SetTrigger("isAtk");
-            attackPattern[0] = new AttackPattern(attackPattern[0].cooltime, attackPattern[0].cooltime);
         }
         else if(Miss() || InRange()){
             anim.SetBool("isWalk", false);
@@ -84,20 +61,16 @@ public class Snake : Enemy
     }
     public override bool Miss()
     {
-        return playerDistance > chaseDistance;
+        isChase = playerDistance < chaseDistance;
+        if(isChase && playerVector.x < 1f && playerVector.y > range){
+            return true;            
+        }
+        return !isChase;
     }
     public bool InRange()
     {
-        if(playerDistance < range)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return playerDistance < range;
     }
-
     public override void CheckObstacle(){
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position, 0.1f, obstacleLayer);

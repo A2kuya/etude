@@ -1,13 +1,19 @@
 fileFormatVersion: 2
-guid: ad5c9f0029f5c2c4882b00b80fdb6f93
+guid: e1bc3c6c0d12ca04284560c424f16db9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9013273362597887021
-    second: Snake_hurt_0
+      213: 1401160697380777023
+    second: Hyena_idle_0
   - first:
-      213: 1636013400089125610
-    second: Snake_hurt_1
+      213: -7614874780779479536
+    second: Hyena_idle_1
+  - first:
+      213: 6551609900776630453
+    second: Hyena_idle_2
+  - first:
+      213: -5850674595801997420
+    second: Hyena_idle_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -121,43 +127,110 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Snake_hurt_0
+      name: Hyena_idle_0
       rect:
         serializedVersion: 2
-        x: 20
+        x: 12
         y: 0
-        width: 27
-        height: 16
+        width: 35
+        height: 28
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -17.5, y: 14}
+        - {x: -17.5, y: -10}
+        - {x: -13.5, y: -14}
+        - {x: 17.5, y: -14}
+        - {x: 17.5, y: 3}
+        - {x: -0.5, y: 14}
       tessellationDetail: 0
       bones: []
-      spriteID: 3d3ccde81ab6ae280800000000000000
-      internalID: -9013273362597887021
+      spriteID: f3cae980b3ce17310800000000000000
+      internalID: 1401160697380777023
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Snake_hurt_1
+      name: Hyena_idle_1
       rect:
         serializedVersion: 2
-        x: 68
+        x: 59
         y: 0
-        width: 27
-        height: 15
+        width: 36
+        height: 28
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -18, y: 14}
+        - {x: -18, y: -5}
+        - {x: -16, y: -14}
+        - {x: 18, y: -14}
+        - {x: 18, y: 9}
+        - {x: 4, y: 14}
       tessellationDetail: 0
       bones: []
-      spriteID: ae26718f48944b610800000000000000
-      internalID: 1636013400089125610
+      spriteID: 01efe827bb7825690800000000000000
+      internalID: -7614874780779479536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_idle_2
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 0
+        width: 36
+        height: 27
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 2, y: 13.5}
+        - {x: -18, y: 13.5}
+        - {x: -18, y: -2.5}
+        - {x: -14, y: -13.5}
+        - {x: 18, y: -13.5}
+        - {x: 18, y: 2.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b829ba2e7efbea50800000000000000
+      internalID: 6551609900776630453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Hyena_idle_3
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 0
+        width: 35
+        height: 27
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -17.5, y: 13.5}
+        - {x: -17.5, y: -3.5}
+        - {x: -14.5, y: -13.5}
+        - {x: 17.5, y: -13.5}
+        - {x: 17.5, y: 0.5}
+        - {x: 14.5, y: 12.5}
+        - {x: 6.5, y: 13.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49fd1dc047a3ecea0800000000000000
+      internalID: -5850674595801997420
       vertices: []
       indices: 
       edges: []

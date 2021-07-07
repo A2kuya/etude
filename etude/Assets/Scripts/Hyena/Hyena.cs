@@ -1,157 +1,104 @@
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-[RequireComponent(typeof(Controller2D))]
-public class Hyena : MonoBehaviour
+public class Hyena : Enemy
 {
+    public int atkCooltime;
+    public float atkCurtime;
+    public int dashCooltime;
+    public float dashCurtime;
+    public float maxDashDistance;
+    public float minDashDistance;
 
-	public float maxJumpHeight = 4;
-	public float minJumpHeight = 1;
-	public float timeToJumpApex = .4f;
-	float accelerationTimeAirborne = .2f;
-	float accelerationTimeGrounded = .1f;
-	float moveSpeed = 6;
+    public Vector2 dashTarget;
+    public float dashSpeed;
+    public float dashTime;
+    public bool isDash;
+    public bool canAttack;
+    void Awake()
+    {
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rigid = GetComponent<Rigidbody2D>();
+        player = GameObject.Find("Player");
+        playerLayer = LayerMask.GetMask("Player");
+        playerAttackLayer = LayerMask.GetMask("PlayerAttackLayer");
+        obstacleLayer = LayerMask.GetMask("Obstacle");
+        hpBar = Instantiate(prfHpBar, canvas.transform);
+        atkCollider.SetActive(false);
+        dir = Vector2.left;
+        isChase = false;
+        attackPattern = new List<AttackPattern>();
+        attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임
+        attackPattern.Add(new AttackPattern(0, dashCooltime));  //대쉬 쿨타임
+    }
+    void fixedUpdate(){
+        if(isDash){
+            Dash();
+        }
+    }
+    void Update()
+    {
+        CheckDead();
+        UpdateHpBar();
+        GetSpriteSize();
+        CheckObstacle();
+        DontSlide();
+        CaculateDistance(); //거리 계산 및 방향판정
+        ManageCoolTime();   //쿨타임 관리
+    }
 
-	public Vector2 wallJumpClimb;
-	public Vector2 wallJumpOff;
-	public Vector2 wallLeap;
+    public override void Detect(){
+        RaycastHit2D rayhit = Physics2D.Raycast(transform.position + Vector3.up, transform.right * -1, detectDistance, playerLayer);
+        Debug.DrawRay(transform.position + Vector3.up, transform.right * -1, Color.red);
+        if(rayhit.collider != null)
+            isChase = true;
+    }
 
-	public float wallSlideSpeedMax = 3;
-	public float wallStickTime = .25f;
-	float timeToWallUnstick;
+    public override void Movement(){
+        Move(isLeft);
+    }
 
-	float gravity;
-	float maxJumpVelocity;
-	float minJumpVelocity;
-	Vector3 velocity;
-	float velocityXSmoothing;
+    public override void Attack(){
 
-	Controller2D controller;
+        if (atkCurtime <= 0f &&  (isGround || isSlope))
+        {
+            AttackPattern temp = new AttackPattern(attackPattern[0].cooltime, attackPattern[0].cooltime); 
+            attackPattern[0] = temp;
+            atkCurtime = atkCooltime;
+            canAttack = false;
+            anim.SetTrigger("isAtk");
+        }
+    }
 
-	Vector2 directionalInput;
-	bool wallSliding;
-	int wallDirX;
+    public override bool Miss(){
+        //끝까지 추격
+        return false;
+    }
+    public int KeepDistance(){
+        if(playerDistance <= minDashDistance){
+            dashTarget = new Vector2(transform.position.x + (maxDashDistance - minDashDistance), transform.position.y);
+            return 0;
+        }
+        else if(playerDistance >= maxDashDistance){
+            return 2;
+        }
+        else{
+            dashTarget = player.transform.position;
+            return 1;
+        }
+    }
 
-	void Start()
-	{
-		controller = GetComponent<Controller2D>();
-
-		gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-		maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-		minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
-	}
-
-	void Update()
-	{
-		CalculateVelocity();
-		HandleWallSliding();
-
-		controller.Move(velocity * Time.deltaTime, directionalInput);
-
-		if (controller.collisions.above || controller.collisions.below)
-		{
-			if (controller.collisions.slidingDownMaxSlope)
-			{
-				velocity.y += controller.collisions.slopeNormal.y * -gravity * Time.deltaTime;
-			}
-			else
-			{
-				velocity.y = 0;
-			}
-		}
-	}
-
-	public void SetDirectionalInput(Vector2 input)
-	{
-		directionalInput = input;
-	}
-
-	public void OnJumpInputDown()
-	{
-		if (wallSliding)
-		{
-			if (wallDirX == directionalInput.x)
-			{
-				velocity.x = -wallDirX * wallJumpClimb.x;
-				velocity.y = wallJumpClimb.y;
-			}
-			else if (directionalInput.x == 0)
-			{
-				velocity.x = -wallDirX * wallJumpOff.x;
-				velocity.y = wallJumpOff.y;
-			}
-			else
-			{
-				velocity.x = -wallDirX * wallLeap.x;
-				velocity.y = wallLeap.y;
-			}
-		}
-		if (controller.collisions.below)
-		{
-			if (controller.collisions.slidingDownMaxSlope)
-			{
-				if (directionalInput.x != -Mathf.Sign(controller.collisions.slopeNormal.x))
-				{ // not jumping against max slope
-					velocity.y = maxJumpVelocity * controller.collisions.slopeNormal.y;
-					velocity.x = maxJumpVelocity * controller.collisions.slopeNormal.x;
-				}
-			}
-			else
-			{
-				velocity.y = maxJumpVelocity;
-			}
-		}
-	}
-
-	public void OnJumpInputUp()
-	{
-		if (velocity.y > minJumpVelocity)
-		{
-			velocity.y = minJumpVelocity;
-		}
-	}
-
-
-	void HandleWallSliding()
-	{
-		wallDirX = (controller.collisions.left) ? -1 : 1;
-		wallSliding = false;
-		if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0)
-		{
-			wallSliding = true;
-
-			if (velocity.y < -wallSlideSpeedMax)
-			{
-				velocity.y = -wallSlideSpeedMax;
-			}
-
-			if (timeToWallUnstick > 0)
-			{
-				velocityXSmoothing = 0;
-				velocity.x = 0;
-
-				if (directionalInput.x != wallDirX && directionalInput.x != 0)
-				{
-					timeToWallUnstick -= Time.deltaTime;
-				}
-				else
-				{
-					timeToWallUnstick = wallStickTime;
-				}
-			}
-			else
-			{
-				timeToWallUnstick = wallStickTime;
-			}
-
-		}
-
-	}
-
-	void CalculateVelocity()
-	{
-		float targetVelocityX = directionalInput.x * moveSpeed;
-		velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-		velocity.y += gravity * Time.deltaTime;
-	}
+    public void Dash(){
+        
+    }
+    override public void ManageCoolTime()    //쿨타임 관리
+    {
+        if(atkCurtime > 0f)
+            atkCurtime -= Time.deltaTime;
+        else
+            canAttack = true;
+        if(dashCurtime > 0f) dashCurtime -= Time.deltaTime;
+    }
 }

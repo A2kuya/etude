@@ -2,30 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnakeWalk : StateMachineBehaviour
+public class HyenaDash : StateMachineBehaviour
 {
-    Snake snake;
-
+    Hyena hyena;
+    float dashTime;
+    float curDashTime;
+    Vector2 target;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake = animator.GetComponent<Snake>();
-        snake.isMoving = true;
+       hyena = animator.GetComponent<Hyena>();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(!snake.Miss()){
-            snake.yFlip();
-            snake.Movement();
-            snake.Attack();
-        }
-        else{
-            animator.SetBool("isWalk", false);
-        }
+        
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake.isMoving = false;
+        hyena.Attack();
     }
+
 }
