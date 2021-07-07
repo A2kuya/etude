@@ -195,8 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621a313e2d79949488c55cb370b82d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
-  canvas: {fileID: 0}
+  prfHpBar: {fileID: 4945231661239180369, guid: 9e3fcbbbd69ec3f448aeeba832635bbf, type: 3}
   atkCollider: {fileID: 7316770140068744468}
   hp: 100
   curHp: 100
@@ -228,10 +227,13 @@ MonoBehaviour:
   maxangle: 70
   angle: 0
   atkCooltime: 3
+  atkCurtime: 0
   dashCooltime: 1
-  maxDashDistance: 4
-  dashVector: {x: 0, y: 0}
+  dashCurtime: 0
+  maxDashDistance: 10
+  minDashDistance: 5
+  dashTarget: {x: 0, y: 0}
   dashSpeed: 30
   dashTime: 0.2
-  curDashtime: 0
   isDash: 0
+  canAttack: 0

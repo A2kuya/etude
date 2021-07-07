@@ -18,23 +18,21 @@ public class HyenaIdle : StateMachineBehaviour
         }
         else{
             hyena.yFlip();
-            if(hyena.KeepDistance() == 0){
-                //뒤로 대쉬
-                Debug.Log("close");
-                hyena.isDash = true;
-                animator.SetTrigger("isDash");
-            }
-            else if(hyena.KeepDistance() == 1 && hyena.canAttack){
+            if(hyena.KeepDistance() == 1 && hyena.canAttack && hyena.canDash){
                 //플레이어 앞으로 대쉬
-                Debug.Log("attack");
-                hyena.isDash = true;
                 animator.SetTrigger("isDash");
             }
+            else if(hyena.KeepDistance() == 0 && hyena.canDash){
+                //뒤로 걷기
+                animator.SetBool("isBackWalk", true);
+            }   
             else if(hyena.KeepDistance() == 1 && !hyena.canAttack){
                 hyena.Stop();
             }
             else if(hyena.KeepDistance() == 2){
                 animator.SetBool("isWalk", true);
+            }else{
+
             }
         }
     }

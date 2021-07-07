@@ -54,41 +54,39 @@ abstract public class Enemy : MonoBehaviour
     abstract public bool Miss();    //놓침
 
     
-    public void Move(bool left){
-        int dir = (left ? -1 : 1);
+    public void Move(bool re){
+        int reverse = (re ? -1 : 1);
         if(isSlope && isGround && angle < maxangle)
-            rigid.velocity = perp * dir * speed * -1f;
+            rigid.velocity = perp * dir.x * reverse * speed * -1f;
         else if(!isSlope && isGround)
-            rigid.velocity = new Vector2(dir * speed, 0);
+            rigid.velocity = new Vector2(dir.x * reverse * speed, 0);
         else if(!isGround)
-            rigid.velocity = new Vector2(dir * speed, rigid.velocity.y);
+            rigid.velocity = new Vector2(dir.x * reverse * speed, rigid.velocity.y);
     }
-
-    public void Move(int dir, float speed){     //해당 속도로 좌우이동
+    public void Move(bool re, float speed){
+        int reverse = (re ? -1 : 1);
         if(isSlope && isGround && angle < maxangle)
-            rigid.velocity = perp * dir * speed * -1f;
+            rigid.velocity = perp * dir.x * reverse * speed * -1f;
         else if(!isSlope && isGround)
-            rigid.velocity = new Vector2(dir * speed, 0);
+            rigid.velocity = new Vector2(dir.x * reverse * speed, 0);
         else if(!isGround)
-            rigid.velocity = new Vector2(dir * speed, rigid.velocity.y);
+            rigid.velocity = new Vector2(dir.x * reverse * speed, rigid.velocity.y);
     }
-    public void Move(Vector2 target, float speed){  //목표 지점으로 좌우 이동
-        Debug.Log(target);
+    public void Move(Vector2 dir, float speed){     //해당 속도로 좌우이동
         if(isSlope && isGround && angle < maxangle)
-            rigid.position = Vector2.MoveTowards(transform.position, perp * -1f * (target.x - transform.position.x) / perp.x, speed);
+            rigid.velocity = perp * dir.x * speed * -1f;
         else if(!isSlope && isGround)
-            rigid.position = Vector2.MoveTowards(transform.position, target, speed);
+            rigid.velocity = new Vector2(dir.x * speed, 0);
         else if(!isGround)
             rigid.velocity = new Vector2(dir.x * speed, rigid.velocity.y);
     }
-
     public void Stop(){
         rigid.velocity = Vector2.zero;
     }
 
     virtual public void CheckObstacle(){
         //바닥 체크
-        isGround = Physics2D.OverlapCircle(transform.position, 0.1f, obstacleLayer);
+        isGround = Physics2D.OverlapCircle(transform.position, 0.2f, obstacleLayer);
         //경사 체크
         Vector2 frontPosition = new Vector2(transform.position.x, transform.position.y + 0.1f);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1, obstacleLayer);
@@ -117,10 +115,24 @@ abstract public class Enemy : MonoBehaviour
         playerVector.y = player.transform.position.y - transform.position.y;
         playerDistance = Vector2.Distance(transform.position, player.transform.position);
         isLeft = (transform.position.x - player.transform.position.x > 0);
+        if(isLeft) dir = Vector2.left;
+        else dir = Vector2.right;
     }
     public void yFlip()  //좌우 반전
     {
         if (isLeft)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+        }
+    }
+    public void yFlip(bool re)  //좌우 반전
+    {  
+        bool reverse = (re? !isLeft : isLeft);
+        if (reverse)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
@@ -182,8 +194,8 @@ abstract public class Enemy : MonoBehaviour
     }
     public void UpdateHpBar(){
         hpBar.SetActive(curHp != hp);
-        hpBar.GetComponent<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, spriteSize.y + 0.5f, 0));
-        hpBar.GetComponent<Slider>().value = (float) curHp / (float) hp;
+        hpBar.GetComponentInChildren<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, spriteSize.y + 0.5f, 0));
+        hpBar.GetComponentInChildren<Slider>().value = (float) curHp / (float) hp;
     }
     public void CheckDead(){
         if(curHp <= 0f){

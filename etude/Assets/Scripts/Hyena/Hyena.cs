@@ -6,16 +6,17 @@ public class Hyena : Enemy
 {
     public int atkCooltime;
     public float atkCurtime;
+    public bool canAttack;
+    public bool canDash;
     public int dashCooltime;
     public float dashCurtime;
     public float maxDashDistance;
     public float minDashDistance;
-
-    public Vector2 dashTarget;
+    public float dashDistance;
     public float dashSpeed;
     public float dashTime;
+    public float maxDashTime = 0.5f;
     public bool isDash;
-    public bool canAttack;
     void Awake()
     {
         anim = GetComponent<Animator>();
@@ -33,7 +34,11 @@ public class Hyena : Enemy
         attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임
         attackPattern.Add(new AttackPattern(0, dashCooltime));  //대쉬 쿨타임
     }
-    void fixedUpdate(){
+
+    void FixedUpdate() {
+        if(isMoving){
+            Movement();
+        }
         if(isDash){
             Dash();
         }
@@ -57,19 +62,11 @@ public class Hyena : Enemy
     }
 
     public override void Movement(){
-        Move(isLeft);
+        Move(isClose);
     }
 
     public override void Attack(){
 
-        if (atkCurtime <= 0f &&  (isGround || isSlope))
-        {
-            AttackPattern temp = new AttackPattern(attackPattern[0].cooltime, attackPattern[0].cooltime); 
-            attackPattern[0] = temp;
-            atkCurtime = atkCooltime;
-            canAttack = false;
-            anim.SetTrigger("isAtk");
-        }
     }
 
     public override bool Miss(){
@@ -78,27 +75,41 @@ public class Hyena : Enemy
     }
     public int KeepDistance(){
         if(playerDistance <= minDashDistance){
-            dashTarget = new Vector2(transform.position.x + (maxDashDistance - minDashDistance), transform.position.y);
+            isClose = true;
             return 0;
         }
         else if(playerDistance >= maxDashDistance){
+            isClose = false;
             return 2;
         }
         else{
-            dashTarget = player.transform.position;
+            dashDistance = Mathf.Abs(playerVector.x) - 2f;
+            dashTime = Mathf.Min(dashDistance / dashSpeed, maxDashTime);
+            isClose = false;
             return 1;
         }
     }
-
+    public bool isClose;
+    public float startTime;
     public void Dash(){
-        
+        float progress = (Time.time - startTime) / dashTime;
+        Move((isClose ? -1 : 1) * dir, dashSpeed);
+        if (progress >= 1f)
+		{
+            Stop();
+		    isDash = false;
+		}
     }
     override public void ManageCoolTime()    //쿨타임 관리
     {
-        if(atkCurtime > 0f)
+        if(atkCurtime >= 0f)
             atkCurtime -= Time.deltaTime;
         else
             canAttack = true;
-        if(dashCurtime > 0f) dashCurtime -= Time.deltaTime;
+
+        if(dashCurtime >= 0f)
+            dashCurtime -= Time.deltaTime;
+        else
+            canDash = true;
     }
 }

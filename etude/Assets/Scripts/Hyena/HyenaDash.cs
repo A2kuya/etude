@@ -5,22 +5,31 @@ using UnityEngine;
 public class HyenaDash : StateMachineBehaviour
 {
     Hyena hyena;
-    float dashTime;
-    float curDashTime;
     Vector2 target;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       hyena = animator.GetComponent<Hyena>();
+        hyena = animator.GetComponent<Hyena>();  
+        hyena.isDash = true;
+        hyena.dashCurtime = hyena.dashCooltime;
+        hyena.canDash = false;
+        hyena.startTime = Time.time;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        hyena.yFlip();
+        if(hyena.isDash)
+            animator.speed = 0f;
+        else
+            animator.speed = 1f;
         
+        hyena.Attack();
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        hyena.Attack();
+        hyena.isDash = false;
+        hyena.Stop();
     }
 
 }
