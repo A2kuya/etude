@@ -8,10 +8,14 @@ public class CameraMove : MonoBehaviour
     private Transform camera;                // 카메라 자신의 Transform
 
     Vector3 v;
+    Vector3 a;
     // Start is called before the first frame update
     void Start()
     {
        camera = GetComponent<Transform>();
+        v = target.position;
+        v.z = -10f;
+       
     }
 
     // Update is called once per frame
@@ -29,7 +33,7 @@ public class CameraMove : MonoBehaviour
         }
         v.y = target.position.y+7f;
         v.z = -10f;
-        camera.position = Vector3.MoveTowards(camera.position, v, 0.3f);
-  
+
+        camera.position = Vector3.SmoothDamp(camera.position, v,ref a, 0.1f, 40f);
     }
 }
