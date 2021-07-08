@@ -16,19 +16,16 @@ public class HyenaAttack : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.3f){
-            
-        }
-        else if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.7f){
-
+        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f){
+            hyena.atkCollider.SetActive(true);
         }
         else{
-            hyena.atkCollider.SetActive(true);
         }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         
+            hyena.atkCollider.SetActive(false);
     }
 }

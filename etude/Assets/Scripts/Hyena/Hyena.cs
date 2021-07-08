@@ -15,8 +15,10 @@ public class Hyena : Enemy
     public float dashDistance;
     public float dashSpeed;
     public float dashTime;
-    public float maxDashTime = 0.5f;
+    public float maxDashTime;
     public bool isDash;
+    public bool isClose;
+    public float startTime;
     void Awake()
     {
         anim = GetComponent<Animator>();
@@ -66,12 +68,35 @@ public class Hyena : Enemy
     }
 
     public override void Attack(){
-
+        if(InRange()){
+            anim.SetTrigger("isAttack");
+        }
+    }
+    public bool InRange(){
+        if(Mathf.Abs(playerVector.y) < 3f)
+            return true;
+        else
+            return false;
     }
 
     public override bool Miss(){
         //끝까지 추격
         return false;
+    }
+    override public void CheckObstacle(){
+        //바닥 체크
+        isGround = Physics2D.OverlapCircle(transform.position, 0.2f, obstacleLayer);
+        //경사 체크
+        Vector2 frontPosition = new Vector2(transform.position.x + spriteSize.x * (isLeft ? -1 : 1) / 4, transform.position.y + 0.1f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.2f, obstacleLayer);
+        RaycastHit2D fronthit = Physics2D.Raycast(frontPosition, (isLeft ? Vector2.left : Vector2.right), 0.1f + spriteSize.x /2, obstacleLayer);
+        Debug.DrawRay(frontPosition, (isLeft ? Vector2.left : Vector2.right), Color.red);
+        Debug.DrawRay(transform.position, Vector2.down, Color.green);
+        if(fronthit){
+            CheckSlope(fronthit);
+        }else if(hit){
+            CheckSlope(hit);
+        }
     }
     public int KeepDistance(){
         if(playerDistance <= minDashDistance){
@@ -83,17 +108,15 @@ public class Hyena : Enemy
             return 2;
         }
         else{
-            dashDistance = Mathf.Abs(playerVector.x) - 2f;
+            dashDistance = Mathf.Abs(Mathf.Abs(playerVector.x) - 2f);
             dashTime = Mathf.Min(dashDistance / dashSpeed, maxDashTime);
             isClose = false;
             return 1;
         }
     }
-    public bool isClose;
-    public float startTime;
     public void Dash(){
         float progress = (Time.time - startTime) / dashTime;
-        Move((isClose ? -1 : 1) * dir, dashSpeed);
+        Move(isClose, dashSpeed);
         if (progress >= 1f)
 		{
             Stop();
