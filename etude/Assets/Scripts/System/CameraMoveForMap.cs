@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMove : MonoBehaviour
+public class CameraMoveForMap : MonoBehaviour
 {
     public Transform target;        // 따라다닐 타겟 오브젝트의 Transform
     private Transform camera;                // 카메라 자신의 Transform
