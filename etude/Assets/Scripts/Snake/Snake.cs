@@ -46,7 +46,7 @@ public class Snake : Enemy
     }
     public override void Attack()
     {
-        if (attackPattern[0].curtime <= 0f && InRange())
+        if (InRange())
         {
             AttackPattern temp = new AttackPattern(attackPattern[0].cooltime, attackPattern[0].cooltime); 
             attackPattern[0] = temp;

@@ -15,6 +15,7 @@ public class CameraMove : MonoBehaviour
        camera = GetComponent<Transform>();
         v = target.position;
         v.z = -10f;
+        camera.position = v;
        
     }
 
