@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Floor
   - Ladder
+  - Enemy
+  - PlayerAttack
+  - Through
   layers:
   - Default
   - TransparentFX
@@ -14,7 +17,7 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - PlayerAttack
   - 
   - 
   - 

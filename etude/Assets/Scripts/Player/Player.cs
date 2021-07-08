@@ -31,8 +31,10 @@ public class Player : MonoBehaviour
 	bool wallSliding;
 	int wallDirX;
 
-	int hp;
-	int damage;
+	public int maxHp = 100;
+	public int hp = 100;
+	public int damage = 10;
+	public int stiffness = 0;
 
 	public Animator animator;
 
@@ -60,6 +62,8 @@ public class Player : MonoBehaviour
 	bool startCoolTime = false;
 	Collider2D ladderCol;
 	float var;
+
+	public bool downJump = false; 
 
 	void Start()
 	{
@@ -157,7 +161,8 @@ public class Player : MonoBehaviour
 		}
 		if (canMove)
 		{
-			controller.Move(velocity * Time.deltaTime, directionalInput);
+			controller.Move(velocity * Time.deltaTime, directionalInput, downJump);
+			if (downJump) downJump = !downJump;
 		}
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -347,6 +352,34 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	public void TakeDamage(int damage, int stiffness, bool knockback = false)
+    {
+		hp -= damage;
+		this.stiffness -= stiffness;
+		//if (!knockback)
+		//	rigidbody.AddForce(Vector2.zero);
+		animator.SetTrigger("doHurt");
+	}
+
+	private void ActiveAttackPos()
+    {
+		attackPos.gameObject.SetActive(true);
+	}
+
+	private void DeActiveAttackPos()
+    {
+		attackPos.gameObject.SetActive(false);
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.gameObject.CompareTag("Enemy"))
+		{
+			Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+			enemy.TakeDamage(damage, 0);
+		}
+	}
+
     private void OnTriggerStay2D(Collider2D collision)
     {
 		if (collision.CompareTag("Ladder"))
@@ -359,6 +392,7 @@ public class Player : MonoBehaviour
 			}
 		}
     }
+
 	private void OnTriggerExit2D(Collider2D collision)
 	{
 		if (collision.CompareTag("Ladder"))

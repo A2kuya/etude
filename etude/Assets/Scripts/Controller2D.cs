@@ -9,6 +9,7 @@ public class Controller2D : RaycastController
 	public CollisionInfo collisions;
 	[HideInInspector]
 	public Vector2 playerInput;
+	public bool playerDownJump;
 
 	public override void Start()
 	{
@@ -22,13 +23,14 @@ public class Controller2D : RaycastController
 		Move(moveAmount, Vector2.zero, standingOnPlatform);
 	}
 
-	public void Move(Vector2 moveAmount, Vector2 input, bool standingOnPlatform = false)
+	public void Move(Vector2 moveAmount, Vector2 input, bool downJump = false, bool standingOnPlatform = false)
 	{
 		UpdateRaycastOrigins();
 
 		collisions.Reset();
 		collisions.moveAmountOld = moveAmount;
 		playerInput = input;
+		playerDownJump = downJump;
 
 		if (moveAmount.y < 0)
 		{
@@ -142,8 +144,9 @@ public class Controller2D : RaycastController
 					{
 						continue;
 					}
-					if (playerInput.y == -1)
+					if (playerDownJump)
 					{
+						playerDownJump = false;
 						collisions.fallingThroughPlatform = true;
 						Invoke("ResetFallingThroughPlatform", .5f);
 						continue;
