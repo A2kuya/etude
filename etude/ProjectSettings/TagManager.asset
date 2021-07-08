@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Floor
   - Ladder
+  - Enemy
+  - PlayerAttack
+  - Through
   layers:
   - Default
   - TransparentFX
@@ -14,17 +17,17 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
+  - PlayerAttack
   - 
   - 
   - 
   - Enemy
+  - EnemyAttack
   - 
-  - Ladder
   - 
   - 
   - Obstacle
-  - Platform
+  - Ladder
   - 
   - 
   - Minimap

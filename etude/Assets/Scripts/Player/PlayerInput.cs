@@ -22,7 +22,12 @@ public class PlayerInput : MonoBehaviour
         }
 		if (Input.GetKeyDown(KeyCode.X))
 		{
-			player.OnJumpInputDown();
+			if (Input.GetKey(KeyCode.DownArrow))
+				player.downJump = true;
+			else
+			{
+				player.OnJumpInputDown();
+			}
 		}
 		if (Input.GetKeyUp(KeyCode.X))
 		{
