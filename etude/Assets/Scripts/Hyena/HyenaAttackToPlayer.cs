@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SnakeDamage : MonoBehaviour
+public class HyenaAttackToPlayer : MonoBehaviour
 {
-    Snake parent;
+    // Start is called before the first frame update
+    Hyena parent;
     void Start()
     {
-        parent = GetComponentInParent<Snake>();
+        parent = GetComponentInParent<Hyena>();
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

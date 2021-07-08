@@ -10,6 +10,7 @@ public class HyenaDash : StateMachineBehaviour
     {
         hyena = animator.GetComponent<Hyena>();  
         hyena.isDash = true;
+        hyena.isMoving = true;
         hyena.dashCurtime = hyena.dashCooltime;
         hyena.canDash = false;
         hyena.startTime = Time.time;
@@ -29,7 +30,9 @@ public class HyenaDash : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         hyena.isDash = false;
+        hyena.isMoving = true;
         hyena.Stop();
+        hyena.Attack();
     }
 
 }

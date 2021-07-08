@@ -42,7 +42,7 @@ public class Snake : Enemy
     }
     public override void Movement()
     {
-        Move(isLeft);
+        Move(false);
     }
     public override void Attack()
     {

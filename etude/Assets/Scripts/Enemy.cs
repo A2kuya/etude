@@ -82,6 +82,7 @@ abstract public class Enemy : MonoBehaviour
     }
     public void Stop(){
         rigid.velocity = Vector2.zero;
+        isMoving = false;
     }
 
     virtual public void CheckObstacle(){
@@ -153,36 +154,28 @@ abstract public class Enemy : MonoBehaviour
             }
         }
     }
-    public void TakeDamage(int damage, int stiffness, bool knockback = false)  //피격
+    public void TakeDamage(int damage, int stiffness = 0)  //피격
     {
-        hp -= damage;
+        curHp -= damage;
         this.stiffness -= stiffness;
-        if(!knockback)
-            rigid.AddForce(Vector2.zero);
+        CheckDead();
         anim.SetTrigger("isHurt");
     }
-    public void TakeDamage(int damage, int stiffness, int knockback, Vector3 attackPosition)  //피격
+    public void TakeDamage(int damage, int stiffness, Vector3 attackPosition)  //피격
     {
-        hp -= damage;
+        curHp -= damage;
         this.stiffness -= stiffness;
-        Vector2 v = Vector2.up;
+        Vector2 v;
         if(transform.position.x - attackPosition.x > 0)
-            v.x = -1;
+            v = Vector2.right;
         else if(transform.position.x - attackPosition.x == 0)
-            if(isLeft) v.x = -1;
-            else v.x = 1;
-        else    v.x = 1;
-        rigid.AddForce(v);
+            if(isLeft) v = Vector2.right;
+            else v = Vector2.left;
+        else    v = Vector2.left;
+        Stop();
+        rigid.AddForce(v + Vector2.up);
+        anim.SetTrigger("isHurt");
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.layer == playerAttackLayer)
-        {
-            collision.gameObject.GetComponentInParent<Player>();    //타격 함수 호출
-        }
-    }
-
     public void GetSpriteSize(){
         Vector2 worldSize = Vector3.zero;
         spriteSize = spriteRenderer.sprite.rect.size;
@@ -200,7 +193,15 @@ abstract public class Enemy : MonoBehaviour
     public void CheckDead(){
         if(curHp <= 0f){
             anim.SetTrigger("isDead");
-            Destroy(hpBar);
         }
     }
+    public void Death(){
+        Destroy(hpBar);
+        gameObject.SetActive(false);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("parentTrigger");
+    }
+
 }

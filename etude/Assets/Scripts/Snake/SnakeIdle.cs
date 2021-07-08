@@ -12,8 +12,10 @@ public class SnakeIdle : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake.Detect();
-        if (!snake.Miss())
+        if(!snake.isChase){
+            snake.Detect();
+        }
+        else if (!snake.Miss())
         {
             if (snake.InRange())
             {
