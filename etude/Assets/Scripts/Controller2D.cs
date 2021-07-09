@@ -10,6 +10,7 @@ public class Controller2D : RaycastController
 	[HideInInspector]
 	public Vector2 playerInput;
 	public bool playerDownJump;
+	public bool isClimbing;
 
 	public override void Start()
 	{
@@ -144,7 +145,7 @@ public class Controller2D : RaycastController
 					{
 						continue;
 					}
-					if (playerDownJump)
+					if (playerDownJump || isClimbing)
 					{
 						playerDownJump = false;
 						collisions.fallingThroughPlatform = true;
