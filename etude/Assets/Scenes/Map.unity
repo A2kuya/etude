@@ -47231,6 +47231,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 2.1
       objectReference: {fileID: 0}
+    - target: {fileID: 2700734651075719953, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: lever
+      value: 
+      objectReference: {fileID: 1486694844}
     - target: {fileID: 3309823655096954952, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_SortingOrder
       value: 8
