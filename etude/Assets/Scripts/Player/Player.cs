@@ -241,15 +241,15 @@ public class Player : MonoBehaviour
 	{
 		if (Input.GetKeyUp(key))
 		{
-			canRun = true; // ´Þ¸®´Â ÆÇÁ¤À» true·Î ¹Ù²ãÁØ´Ù.
+			canRun = true; // ï¿½Þ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ trueï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ø´ï¿½.
 		}
 		if (canRun)
 		{
 			checkRun -= Time.deltaTime;
 			if (checkRun <= 0)
 			{
-				canRun = false;  // ´Þ¸®´Â ÆÇÁ¤À» false·Î ¹Ù²ãÁØ´Ù.
-				checkRun = 0.2f; // ±×¸®°í checkRunÀÇ ½Ã°£Àº 0.2·Î µ¹·ÁÁØ´Ù.
+				canRun = false;  // ï¿½Þ¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ falseï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ø´ï¿½.
+				checkRun = 0.2f; // ï¿½×¸ï¿½ï¿½ï¿½ checkRunï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ 0.2ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 			}
 		}
 		if (Input.GetKey(key) && canRun == false || Input.GetAxisRaw("Horizontal") == 0)

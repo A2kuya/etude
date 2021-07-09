@@ -6,7 +6,7 @@ abstract public class Enemy : MonoBehaviour
 {
     protected SpriteRenderer spriteRenderer;
     protected Animator anim;
-    protected Rigidbody2D rigid;
+    public Rigidbody2D rigid;
     protected GameObject player;
     public GameObject prfHpBar;
     public GameObject canvas;

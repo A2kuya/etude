@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 7316770140068744471}
   - component: {fileID: 100940316507771723}
   - component: {fileID: 6339307284533915532}
+  - component: {fileID: 5557225287271426447}
   m_Layer: 12
   m_Name: Melee
   m_TagString: Untagged
@@ -162,7 +163,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.11166577, y: 0.14347507}
@@ -178,6 +179,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2441208, y: 0.28670654}
   m_EdgeRadius: 0
+--- !u!114 &5557225287271426447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7316770140068744468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ecf1ce6a78c26e4693e053c6f9b1fe6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7316770140547282167
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,6 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621a313e2d79949488c55cb370b82d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rigid: {fileID: 0}
   prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
   canvas: {fileID: 5365725228914321532}
   atkCollider: {fileID: 7316770140068744468}
