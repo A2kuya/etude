@@ -62,7 +62,7 @@ public class Snake : Enemy
     public override bool Miss()
     {
         isChase = playerDistance < chaseDistance;
-        if(isChase && playerVector.x < 1f && playerVector.y > range){
+        if(isChase && Mathf.Abs(playerVector.x) < 1f && Mathf.Abs(playerVector.y) > range){
             return true;            
         }
         return !isChase;

@@ -159,7 +159,8 @@ abstract public class Enemy : MonoBehaviour
         curHp -= damage;
         this.stiffness -= stiffness;
         CheckDead();
-        anim.SetTrigger("isHurt");
+        if(gameObject.activeSelf)
+            anim.SetTrigger("isHurt");
     }
     public void TakeDamage(int damage, int stiffness, Vector3 attackPosition)  //피격
     {
@@ -199,9 +200,4 @@ abstract public class Enemy : MonoBehaviour
         Destroy(hpBar);
         gameObject.SetActive(false);
     }
-
-    private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("parentTrigger");
-    }
-
 }

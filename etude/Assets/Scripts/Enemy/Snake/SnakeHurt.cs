@@ -8,7 +8,7 @@ public class SnakeHurt : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         snake = animator.GetComponent<Snake>();
-        snake.gameObject.tag = "EnemyUnbeatable";
+        //snake.gameObject.tag = "EnemyUnbeatable";
         snake.CheckDead();
         animator.speed = 0.5f;
     }
@@ -20,7 +20,7 @@ public class SnakeHurt : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        snake.gameObject.tag = "Enemy";
+        //snake.gameObject.tag = "Enemy";
         animator.speed = 1;
     }
 
