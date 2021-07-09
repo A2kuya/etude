@@ -18,6 +18,11 @@ public class UseLever : MonoBehaviour
         StartPosition = cage[1].position.y;
     }
 
+    void Update()
+    {
+        ChangeSprite(flag);    
+    }
+
     public void ChangeSprite(bool flag)
     {
         if (flag)
@@ -31,6 +36,11 @@ public class UseLever : MonoBehaviour
             }
         }
         
+    }
+
+    public bool getFlag()
+    {
+        return flag;
     }
 
     public void SwitchFlag()

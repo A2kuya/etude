@@ -9,6 +9,8 @@ TagManager:
   - Enemy
   - PlayerAttack
   - Through
+  - TopLadder
+  - BottomLadder
   layers:
   - Default
   - TransparentFX
