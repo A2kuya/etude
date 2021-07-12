@@ -56,11 +56,7 @@ abstract public class Boss : MonoBehaviour
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position, 0.2f, obstacleLayer);
     }
-    public void ManageCoolTime(){
-        foreach(KeyValuePair<string, AttackPattern> attackPattern in attackPatterns){
-            attackPattern.Value.ManageCoolTime();
-        }
-    }
+    
     public void TakeDamage(int damage, int stiffness = 0)  //피격
     {
         curHp -= damage;
@@ -69,13 +65,20 @@ abstract public class Boss : MonoBehaviour
         anim.SetTrigger("isHurt");
     }
     public void CheckDead(){
-        if(curHp <= 0f){
+        if (curHp <= 0f)
+        {
+            Transform summons = transform.GetChild(1);
+            int childCount = summons.childCount;
+            for (int i = 0; i < childCount; i++)
+            {
+                summons.GetChild(i).GetComponent<Enemy>().CheckDead(true);
+            }
             anim.SetTrigger("isDead");
         }
     }
     public void Death(){
         Destroy(hpBar);
-        gameObject.SetActive(false);
+        this.enabled = false;
     }
     public void UpdateHpBar(){
         hpBar.SetActive(curHp != hp);

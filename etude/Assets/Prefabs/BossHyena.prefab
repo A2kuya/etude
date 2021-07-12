@@ -140,10 +140,10 @@ GameObject:
   - component: {fileID: 8034375001182517230}
   - component: {fileID: 8034375001182517229}
   - component: {fileID: 8034375001182517228}
-  - component: {fileID: 8034375001182517202}
   - component: {fileID: 8034375001182517201}
   - component: {fileID: 8034375001182517231}
   - component: {fileID: 8034375001182517203}
+  - component: {fileID: 8034375001182517202}
   m_Layer: 0
   m_Name: BossHyena
   m_TagString: Untagged
@@ -239,36 +239,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &8034375001182517202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8034375001182517200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56f9d53fc3c649544a0fdb1c5d132a80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
-  canvas: {fileID: 8034374999660276827}
-  hp: 100
-  curHp: 100
-  stiffness: 100
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 67584
-  playerVector: {x: 0, y: 0}
-  playerDistance: 0
-  isLeft: 0
-  isGround: 0
-  isJump: 0
-  isMoving: 0
+  m_Constraints: 4
 --- !u!95 &8034375001182517201
 Animator:
   serializedVersion: 3
@@ -281,7 +252,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 4c9ea064226973c43ad9958d6de619a3, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -320,6 +291,36 @@ CircleCollider2D:
   m_Offset: {x: -0.10652811, y: 0.2166553}
   serializedVersion: 2
   m_Radius: 0.069599345
+--- !u!114 &8034375001182517202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8034375001182517200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56f9d53fc3c649544a0fdb1c5d132a80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
+  canvas: {fileID: 8034374999660276827}
+  hp: 100
+  curHp: 100
+  stiffness: 100
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 65536
+  playerVector: {x: 0, y: 0}
+  playerDistance: 0
+  isLeft: 0
+  isGround: 0
+  isJump: 0
+  isMoving: 0
+  prfHyena: {fileID: 7316770140547282167, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
 --- !u!1 &8034375001452430070
 GameObject:
   m_ObjectHideFlags: 0
