@@ -4,10 +4,10 @@ using UnityEngine;
 
 abstract public class AttackPattern
 {
-    int damage;
-    float cooltime;
-    float curtime;
-    bool canAttack;
+    public int damage;
+    protected float cooltime;
+    protected float curtime;
+    private bool canAttack;
     public AttackPattern(int damage, float cooltime){
         this.damage = damage;
         this.cooltime = cooltime;
@@ -15,13 +15,16 @@ abstract public class AttackPattern
         this.canAttack = true;
     }
 
-    abstract public void excute();
-    public void ManageCoolTime(){
-        if(curtime >= 0f){
+    abstract public void Excute();
+    protected IEnumerator Cooltime(){
+        canAttack = false;
+        curtime = cooltime;
+        while(curtime > 0f){
             curtime -= Time.deltaTime;
-            canAttack = false;
+            yield return new WaitForEndOfFrame();
         }
-        else   
-            canAttack = true;
+        canAttack = true;
     }
+    public bool Can() { return canAttack; }
+    
 }

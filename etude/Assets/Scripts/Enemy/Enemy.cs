@@ -191,13 +191,13 @@ abstract public class Enemy : MonoBehaviour
         hpBar.GetComponentInChildren<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, spriteSize.y + 0.5f, 0));
         hpBar.GetComponentInChildren<Slider>().value = (float) curHp / (float) hp;
     }
-    public void CheckDead(){
-        if(curHp <= 0f){
+    public void CheckDead(bool death = false){
+        if(curHp <= 0f || death){
             anim.SetTrigger("isDead");
         }
     }
     public void Death(){
         Destroy(hpBar);
-        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 }
