@@ -12,7 +12,7 @@ public class HyenaBackWalk : StateMachineBehaviour
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        hyena.yFlip(true);
+        hyena.Flip(true);
         if(hyena.canDash && hyena.canAttack){
             hyena.KeepDistance();
             hyena.isClose = false;

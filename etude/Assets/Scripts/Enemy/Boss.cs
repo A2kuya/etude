@@ -29,7 +29,13 @@ abstract public class Boss : MonoBehaviour
     protected Vector2 spriteSize;
 
 
-
+    public void Move(Vector2 dir, float speed)
+    {
+        if (isGround)
+            rigid.velocity = new Vector2(dir.x * speed, 0);
+        else if (!isGround)
+            rigid.velocity = new Vector2(dir.x * speed, rigid.velocity.y);
+    }
     public void Stop(){
         rigid.velocity = Vector2.zero;
         isMoving = false;
@@ -40,10 +46,10 @@ abstract public class Boss : MonoBehaviour
         playerDistance = Vector2.Distance(transform.position, player.transform.position);
         isLeft = (transform.position.x - player.transform.position.x > 0);
     }
-    public void yFlip(bool re)  //좌우 반전
+    public void Flip(bool reverse = false)  //좌우 반전
     {
-        bool reverse = (re? !isLeft : isLeft);
-        if (reverse)
+        bool dir = (reverse? !isLeft : isLeft);
+        if (dir)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
@@ -64,15 +70,9 @@ abstract public class Boss : MonoBehaviour
         CheckDead();
         anim.SetTrigger("isHurt");
     }
-    public void CheckDead(){
+    virtual public void CheckDead(){
         if (curHp <= 0f)
         {
-            Transform summons = transform.GetChild(1);
-            int childCount = summons.childCount;
-            for (int i = 0; i < childCount; i++)
-            {
-                summons.GetChild(i).GetComponent<Enemy>().CheckDead(true);
-            }
             anim.SetTrigger("isDead");
         }
     }
@@ -94,6 +94,5 @@ abstract public class Boss : MonoBehaviour
         worldSize.y *= transform.lossyScale.y;
         spriteSize = worldSize;
     }
-    
-    
+        
 }
