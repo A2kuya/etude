@@ -4,9 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Player))]
 public class PlayerInput : MonoBehaviour
 {
-
 	Player player;
-	public UseLever lever;
 
 	void Start()
 	{
@@ -27,7 +25,7 @@ public class PlayerInput : MonoBehaviour
 		{
 			if (Input.GetKey(KeyCode.DownArrow))
 				player.downJump = true;
-			else
+			else if (!Input.GetKey(KeyCode.Z))
 			{
 				player.OnJumpInputDown();
 			}
@@ -38,17 +36,24 @@ public class PlayerInput : MonoBehaviour
 			player.OnJumpInputUp();
 		}
 
-		if (Input.GetKeyDown(KeyCode.F))
-        {
-			if (!lever.getFlag())
-			{
-				lever.SwitchFlag();
-			}
-        }
-
 		if (Input.GetKeyDown(KeyCode.Z))
 		{
-			player.isAttacking = true;
+			if (!player.isClimbing)
+			{
+				if (Input.GetKey(KeyCode.DownArrow))
+				{
+					player.isSpecialAttacking = true;
+				}
+				else
+				{
+					player.isAttacking = true;
+				}
+			}
+		}
+
+		if (Input.GetKeyUp(KeyCode.Z))
+        {
+			player.animator.SetBool("isCharging", false);
 		}
 	}
 }

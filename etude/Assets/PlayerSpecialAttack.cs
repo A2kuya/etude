@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackTransition1 : StateMachineBehaviour
+public class PlayerSpecialAttack : StateMachineBehaviour
 {
     public Player player;
 
@@ -13,25 +13,15 @@ public class PlayerAttackTransition1 : StateMachineBehaviour
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
-    override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (player.isAttacking)
-        {
-            player.animator.Play("player_attack_2");
-        }
-        if (Input.GetKey(KeyCode.Z))
-        {
-            if (!player.animator.GetCurrentAnimatorStateInfo(0).IsName("player_charge_attack"))
-            {
-                player.animator.SetBool("isCharging", true);
-            }
-        }
-    }
+    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    
+    //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player.isAttacking = false;
+        player.isSpecialAttacking = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

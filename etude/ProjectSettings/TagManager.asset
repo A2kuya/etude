@@ -11,6 +11,8 @@ TagManager:
   - Through
   - TopLadder
   - BottomLadder
+  - BrokenFloor
+  - Lever
   layers:
   - Default
   - TransparentFX

@@ -13,11 +13,10 @@ public class BrokeGround : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-            Broke();
+
     }
 
-    void Broke()
+    public void Break()
     {
         this.gameObject.SetActive(false);
     }

@@ -30,7 +30,6 @@ public class UseLever : MonoBehaviour
             spriteRenderer.sprite = newSprite;
             if (cage[1].position.y-StartPosition < 2.2)
             {
-                print(cage[1].position.y);
                 cage[1].Translate(Vector2.up * Time.deltaTime);
                 cage[2].Translate(Vector2.up * Time.deltaTime);
             }
