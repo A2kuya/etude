@@ -11,6 +11,7 @@ public class Controller2D : RaycastController
 	public Vector2 playerInput;
 	public bool playerDownJump;
 	public bool isClimbing;
+	public bool bottomLadder;
 
 	public override void Start()
 	{
@@ -145,11 +146,18 @@ public class Controller2D : RaycastController
 					{
 						continue;
 					}
-					if (playerDownJump || isClimbing)
+					if (playerDownJump)
 					{
 						playerDownJump = false;
 						collisions.fallingThroughPlatform = true;
 						Invoke("ResetFallingThroughPlatform", .5f);
+						continue;
+					}
+					if (isClimbing && !bottomLadder)
+                    {
+						isClimbing = false;
+						collisions.fallingThroughPlatform = true;
+						Invoke("ResetFallingThroughPlatform", .1f);
 						continue;
 					}
 				}

@@ -15,9 +15,14 @@ public class PlayerIdle : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(player.isAttacking)
+        if (player.isAttacking)
         {
             player.animator.Play("player_attack_1");
+        }
+
+        else if (player.isSpecialAttacking)
+        {
+            player.animator.Play("player_special_attack");
         }
     }
 

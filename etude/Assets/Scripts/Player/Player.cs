@@ -56,16 +56,22 @@ public class Player : MonoBehaviour
 	float startTime = 0f;
 	Vector2 moveAmount;
 
-	bool isLadder = false;
+	public bool isLadder = false;
 	Collider2D ladderCol;
 	bool topLadder = false;
 	bool bottomLadder = false;
 	Rigidbody2D rb;
 	float originGravity;
 	float climbSpeed = 8f;
-	bool isClimbing = false;
+	public bool isClimbing = false;
+	float jumpCoolTime = 0.4f;
+	float jumpTime = 0.4f;
+	bool startJumpTime = false;
 
-	public bool downJump = false; 
+	public bool downJump = false;
+
+	public bool isSpecialAttacking = false;
+	public BrokeGround brokeGround;
 
 	void Start()
 	{
@@ -90,13 +96,15 @@ public class Player : MonoBehaviour
 		JumpAttackAnimator();
 		
 		CalculateVelocity();
+
+		LadderCoolTime();
 		LadderClimb();
 		UpdateDash();
 
 		if (canMove)
 		{
 			controller.Move(velocity * Time.deltaTime, directionalInput, downJump);
-			if (downJump) downJump = !downJump;
+			if (downJump) downJump = false;
 		}
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -276,9 +284,9 @@ public class Player : MonoBehaviour
 
 	void LadderClimb()
     {
-		if (isLadder)
+		if (isLadder && !isAttacking)
 		{
-			if (directionalInput.y != 0)
+			if (directionalInput.y != 0 && jumpTime == jumpCoolTime)
 			{
 				isClimbing = true;
 			}
@@ -294,7 +302,7 @@ public class Player : MonoBehaviour
 
 				animator.SetBool("isClimbing", true);
 				animator.SetBool("isJumping", false);
-				animator.ResetTrigger("doFalling");
+				isAttacking = false;
 
 				transform.position = new Vector3(ladderCol.transform.position.x, transform.position.y);
 				velocity.x = 0;
@@ -327,10 +335,11 @@ public class Player : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.X))
 				{
+					startJumpTime = true;
 					velocity.x += 1;
 					velocity.y = maxJumpVelocity;
 
-					isLadder = false;
+					isClimbing = false;
 					animator.SetBool("isClimbing", false);
 
 					isJumping = true;
@@ -340,9 +349,14 @@ public class Player : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.C))
 				{
-					isLadder = false;
+					startJumpTime = true;
+					isClimbing = false;
 					animator.SetBool("isClimbing", false);
 				}
+			}
+            else if (gravity != originGravity)
+			{
+				gravity = originGravity;
 			}
 		}
 		else if (gravity != originGravity)
@@ -351,15 +365,28 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	void LadderCoolTime()
+    {
+		if (jumpTime > 0 && startJumpTime)
+		{
+			jumpTime -= Time.deltaTime;
+		}
+		else
+		{
+			startJumpTime = false;
+			jumpTime = jumpCoolTime;
+		}
+	}
+
 	void JumpAnimator()
     {
-		if (velocity.y < 0 && !isAttacking && !isDashing && !isLadder)
+		if (velocity.y < 0 && !isAttacking && !isDashing && !isClimbing)
 		{
 			isJumping = true;
 			animator.SetTrigger("doFalling");
 			animator.SetBool("isJumping", true);
 		}
-		else if (velocity.y > 0 && isJumping == false && !isLadder)
+		else if (velocity.y > 0 && isJumping == false && !isClimbing)
         {
 			isJumping = true;
             animator.SetTrigger("doJumping");
@@ -411,6 +438,27 @@ public class Player : MonoBehaviour
 		if (collision.transform.tag == "BottomLadder")
 		{
 			bottomLadder = true;
+			controller.bottomLadder = bottomLadder;
+		}
+
+		if (isSpecialAttacking && collision.transform.tag == "BrokenFloor")
+		{
+			brokeGround.Break();
+		}
+	}
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+		if (Input.GetKeyDown(KeyCode.F))
+		{
+			if (collision.gameObject.CompareTag("Lever"))
+			{
+				UseLever lever = collision.gameObject.GetComponent<UseLever>();
+				if (!lever.getFlag())
+				{
+					lever.SwitchFlag();
+				}
+			}
 		}
 	}
 
@@ -430,6 +478,7 @@ public class Player : MonoBehaviour
 		if (collision.transform.tag == "BottomLadder")
 		{
 			bottomLadder = false;
+			controller.bottomLadder = bottomLadder;
 		}
 	}
 }
