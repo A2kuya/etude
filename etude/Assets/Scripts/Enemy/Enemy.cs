@@ -81,7 +81,7 @@ abstract public class Enemy : MonoBehaviour
             rigid.velocity = new Vector2(dir.x * speed, rigid.velocity.y);
     }
     public void Stop(){
-        rigid.velocity = Vector2.zero;
+        rigid.velocity = new Vector2(0, rigid.velocity.y);
         isMoving = false;
     }
 
@@ -130,10 +130,10 @@ abstract public class Enemy : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
-    public void yFlip(bool re)  //좌우 반전
+    public void Flip(bool reverse = false)  //좌우 반전
     {  
-        bool reverse = (re? !isLeft : isLeft);
-        if (reverse)
+        bool dir = (reverse? !isLeft : isLeft);
+        if (dir)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }

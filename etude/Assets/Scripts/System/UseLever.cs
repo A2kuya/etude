@@ -46,8 +46,4 @@ public class UseLever : MonoBehaviour
     {
         flag = !flag;
     }
-
-
-
-
 }

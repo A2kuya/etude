@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
 	bool isDashing = false;
 
 	Vector2 playerDir;
+	Vector2 dashDir;
 	float dashDistance = 10f;
 	float dashTime = 0.2f;
 	float startTime = 0f;
@@ -72,6 +73,9 @@ public class Player : MonoBehaviour
 
 	public bool isSpecialAttacking = false;
 	public BrokeGround brokeGround;
+
+	public bool isInteracting = false;
+	GameObject interactObj;
 
 	void Start()
 	{
@@ -101,6 +105,18 @@ public class Player : MonoBehaviour
 		LadderClimb();
 		UpdateDash();
 
+		if(isInteracting && interactObj != null)
+        {
+			if(interactObj.name == "Lever")
+            {
+				UseLever useLever = interactObj.GetComponent<UseLever>();
+				if (!useLever.getFlag())
+                {
+					useLever.SwitchFlag();
+                }
+            }
+        }
+
 		if (canMove)
 		{
 			controller.Move(velocity * Time.deltaTime, directionalInput, downJump);
@@ -121,8 +137,23 @@ public class Player : MonoBehaviour
 		SetRun(KeyCode.LeftArrow, ref leftCanRun, ref leftCheckRun);
 		SetRun(KeyCode.RightArrow, ref rightCanRun, ref rightCheckRun);
 	}
-	
-	public void SetDirectionalInput(Vector2 input)
+
+    private void FixedUpdate()
+    {
+		Debug.DrawRay(transform.position, playerDir * 5f, new Color(0, 1, 0));
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 5f, LayerMask.GetMask("Interact")); 
+
+		if (hit.collider != null)
+        {
+			interactObj = hit.collider.gameObject;
+        }
+		else
+        {
+			interactObj = null;
+        }
+    }
+
+    public void SetDirectionalInput(Vector2 input)
 	{
 		directionalInput = input;
 	}
@@ -177,8 +208,10 @@ public class Player : MonoBehaviour
 		if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_dash_1"))
 		{
 			animator.SetTrigger("doDash");
+			attackPos.gameObject.SetActive(false);
 			canMove = false;
 			isDashing = true;
+			dashDir = playerDir;
 			startTime = Time.time;
 		}
 	}
@@ -189,13 +222,14 @@ public class Player : MonoBehaviour
 		{
 			float progress = (Time.time - startTime) / dashTime;
 			progress = Mathf.Clamp(progress, 0, 1);
-			moveAmount = new Vector3(dashDistance, 0, 0) * progress * playerDir.x;
+			moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
 			controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
 
 			if (progress >= 1)
 			{
 				isDashing = false;
 				canMove = true;
+				transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
 			}
 		}
 	}
@@ -444,21 +478,7 @@ public class Player : MonoBehaviour
 		if (isSpecialAttacking && collision.transform.tag == "BrokenFloor")
 		{
 			brokeGround.Break();
-		}
-	}
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-		if (Input.GetKeyDown(KeyCode.F))
-		{
-			if (collision.gameObject.CompareTag("Lever"))
-			{
-				UseLever lever = collision.gameObject.GetComponent<UseLever>();
-				if (!lever.getFlag())
-				{
-					lever.SwitchFlag();
-				}
-			}
+			attackPos.gameObject.SetActive(false);
 		}
 	}
 

@@ -55,5 +55,10 @@ public class PlayerInput : MonoBehaviour
         {
 			player.animator.SetBool("isCharging", false);
 		}
+
+		if (Input.GetKeyDown(KeyCode.F))
+        {
+			player.isInteracting = true;
+        }
 	}
 }

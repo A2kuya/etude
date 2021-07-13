@@ -2,20 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BHBite : StateMachineBehaviour
-{
-    BossHyena bh;
+public class BHIdle : StateMachineBehaviour
+{   
+    BossHyena bh; 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        bh = animator.GetComponent<BossHyena>();
-        Debug.Log("bite");
-    }    
+       bh = animator.GetComponent<BossHyena>();
+       bh.Stop();
+    }
+
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        bh.Bite();
-    }    
+       bh.Flip();
+    }
+
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+       
     }
 }
