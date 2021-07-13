@@ -508,5 +508,5 @@ MonoBehaviour:
   prfHyena: {fileID: 7316770140547282167, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
   state: 0
   dashDistance: 0
-  rushtime: 50
-  maxRushspeed: 0
+  maxRushspeed: 30
+  maxRushtime: 5
