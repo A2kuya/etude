@@ -457,7 +457,7 @@ public class Player : MonoBehaviour
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
 			Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-			enemy.TakeDamage(damage, 0);
+			//enemy.TakeDamage(damage, 0);
 		}
 
 		if (collision.CompareTag("Ladder"))
