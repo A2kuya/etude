@@ -11,6 +11,8 @@ TagManager:
   - Through
   - TopLadder
   - BottomLadder
+  - BrokenFloor
+  - Lever
   layers:
   - Default
   - TransparentFX
@@ -26,7 +28,7 @@ TagManager:
   - Enemy
   - EnemyAttack
   - 
-  - 
+  - Interact
   - 
   - Obstacle
   - Ladder

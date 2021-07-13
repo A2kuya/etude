@@ -51,21 +51,31 @@ public class Player : MonoBehaviour
 	bool isDashing = false;
 
 	Vector2 playerDir;
+	Vector2 dashDir;
 	float dashDistance = 10f;
 	float dashTime = 0.2f;
 	float startTime = 0f;
 	Vector2 moveAmount;
 
-	bool isLadder = false;
+	public bool isLadder = false;
 	Collider2D ladderCol;
 	bool topLadder = false;
 	bool bottomLadder = false;
 	Rigidbody2D rb;
 	float originGravity;
 	float climbSpeed = 8f;
-	bool isClimbing = false;
+	public bool isClimbing = false;
+	float jumpCoolTime = 0.4f;
+	float jumpTime = 0.4f;
+	bool startJumpTime = false;
 
-	public bool downJump = false; 
+	public bool downJump = false;
+
+	public bool isSpecialAttacking = false;
+	public BrokeGround brokeGround;
+
+	public bool isInteracting = false;
+	GameObject interactObj;
 
 	void Start()
 	{
@@ -90,13 +100,27 @@ public class Player : MonoBehaviour
 		JumpAttackAnimator();
 		
 		CalculateVelocity();
+
+		LadderCoolTime();
 		LadderClimb();
 		UpdateDash();
+
+		if(isInteracting && interactObj != null)
+        {
+			if(interactObj.name == "Lever")
+            {
+				UseLever useLever = interactObj.GetComponent<UseLever>();
+				if (!useLever.getFlag())
+                {
+					useLever.SwitchFlag();
+                }
+            }
+        }
 
 		if (canMove)
 		{
 			controller.Move(velocity * Time.deltaTime, directionalInput, downJump);
-			if (downJump) downJump = !downJump;
+			if (downJump) downJump = false;
 		}
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -113,8 +137,23 @@ public class Player : MonoBehaviour
 		SetRun(KeyCode.LeftArrow, ref leftCanRun, ref leftCheckRun);
 		SetRun(KeyCode.RightArrow, ref rightCanRun, ref rightCheckRun);
 	}
-	
-	public void SetDirectionalInput(Vector2 input)
+
+    private void FixedUpdate()
+    {
+		Debug.DrawRay(transform.position, playerDir * 5f, new Color(0, 1, 0));
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 5f, LayerMask.GetMask("Interact")); 
+
+		if (hit.collider != null)
+        {
+			interactObj = hit.collider.gameObject;
+        }
+		else
+        {
+			interactObj = null;
+        }
+    }
+
+    public void SetDirectionalInput(Vector2 input)
 	{
 		directionalInput = input;
 	}
@@ -169,8 +208,10 @@ public class Player : MonoBehaviour
 		if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_dash_1"))
 		{
 			animator.SetTrigger("doDash");
+			attackPos.gameObject.SetActive(false);
 			canMove = false;
 			isDashing = true;
+			dashDir = playerDir;
 			startTime = Time.time;
 		}
 	}
@@ -181,13 +222,14 @@ public class Player : MonoBehaviour
 		{
 			float progress = (Time.time - startTime) / dashTime;
 			progress = Mathf.Clamp(progress, 0, 1);
-			moveAmount = new Vector3(dashDistance, 0, 0) * progress * playerDir.x;
+			moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
 			controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
 
 			if (progress >= 1)
 			{
 				isDashing = false;
 				canMove = true;
+				transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
 			}
 		}
 	}
@@ -276,9 +318,9 @@ public class Player : MonoBehaviour
 
 	void LadderClimb()
     {
-		if (isLadder)
+		if (isLadder && !isAttacking)
 		{
-			if (directionalInput.y != 0)
+			if (directionalInput.y != 0 && jumpTime == jumpCoolTime)
 			{
 				isClimbing = true;
 			}
@@ -294,7 +336,7 @@ public class Player : MonoBehaviour
 
 				animator.SetBool("isClimbing", true);
 				animator.SetBool("isJumping", false);
-				animator.ResetTrigger("doFalling");
+				isAttacking = false;
 
 				transform.position = new Vector3(ladderCol.transform.position.x, transform.position.y);
 				velocity.x = 0;
@@ -327,10 +369,11 @@ public class Player : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.X))
 				{
+					startJumpTime = true;
 					velocity.x += 1;
 					velocity.y = maxJumpVelocity;
 
-					isLadder = false;
+					isClimbing = false;
 					animator.SetBool("isClimbing", false);
 
 					isJumping = true;
@@ -340,9 +383,14 @@ public class Player : MonoBehaviour
 
 				if (Input.GetKeyDown(KeyCode.C))
 				{
-					isLadder = false;
+					startJumpTime = true;
+					isClimbing = false;
 					animator.SetBool("isClimbing", false);
 				}
+			}
+            else if (gravity != originGravity)
+			{
+				gravity = originGravity;
 			}
 		}
 		else if (gravity != originGravity)
@@ -351,15 +399,28 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	void LadderCoolTime()
+    {
+		if (jumpTime > 0 && startJumpTime)
+		{
+			jumpTime -= Time.deltaTime;
+		}
+		else
+		{
+			startJumpTime = false;
+			jumpTime = jumpCoolTime;
+		}
+	}
+
 	void JumpAnimator()
     {
-		if (velocity.y < 0 && !isAttacking && !isDashing && !isLadder)
+		if (velocity.y < 0 && !isAttacking && !isDashing && !isClimbing)
 		{
 			isJumping = true;
 			animator.SetTrigger("doFalling");
 			animator.SetBool("isJumping", true);
 		}
-		else if (velocity.y > 0 && isJumping == false && !isLadder)
+		else if (velocity.y > 0 && isJumping == false && !isClimbing)
         {
 			isJumping = true;
             animator.SetTrigger("doJumping");
@@ -411,6 +472,13 @@ public class Player : MonoBehaviour
 		if (collision.transform.tag == "BottomLadder")
 		{
 			bottomLadder = true;
+			controller.bottomLadder = bottomLadder;
+		}
+
+		if (isSpecialAttacking && collision.transform.tag == "BrokenFloor")
+		{
+			brokeGround.Break();
+			attackPos.gameObject.SetActive(false);
 		}
 	}
 
@@ -430,6 +498,7 @@ public class Player : MonoBehaviour
 		if (collision.transform.tag == "BottomLadder")
 		{
 			bottomLadder = false;
+			controller.bottomLadder = bottomLadder;
 		}
 	}
 }
