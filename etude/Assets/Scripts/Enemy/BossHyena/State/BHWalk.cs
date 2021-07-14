@@ -12,7 +12,11 @@ public class BHWalk : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+       bh.Movement();
        bh.Flip();
+       if(!bh.Far()){
+          animator.SetBool("isWalk", false);
+       }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

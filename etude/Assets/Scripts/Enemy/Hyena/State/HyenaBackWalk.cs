@@ -17,13 +17,13 @@ public class HyenaBackWalk : StateMachineBehaviour
             hyena.KeepDistance();
             hyena.isClose = false;
             hyena.isMoving = false;
-            hyena.yFlip();
+            hyena.Flip();
             animator.SetTrigger("isDash");
         }
         else if(hyena.KeepDistance() == 1){
             hyena.isClose = false;
             hyena.isMoving = false;
-            hyena.yFlip();
+            hyena.Flip();
             animator.SetBool("isBackWalk", false);
         }
     }
