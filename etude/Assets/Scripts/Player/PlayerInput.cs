@@ -42,7 +42,11 @@ public class PlayerInput : MonoBehaviour
 			{
 				if (Input.GetKey(KeyCode.DownArrow))
 				{
-					player.isSpecialAttacking = true;
+					if (player.isSpecialAttackReady)
+					{
+						player.isSpecialAttacking = true;
+						player.isSpecialAttackReady = false;
+					}
 				}
 				else
 				{
@@ -58,7 +62,7 @@ public class PlayerInput : MonoBehaviour
 
 		if (Input.GetKeyDown(KeyCode.F))
         {
-			player.isInteracting = true;
+			player.Interact();
         }
 	}
 }
