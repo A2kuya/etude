@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Snake : Enemy
+public class Snake : GroundEnemy
 {
     public int cooltime;
     // Start is called before the first frame update
@@ -13,7 +13,6 @@ public class Snake : Enemy
         rigid = GetComponent<Rigidbody2D>();
         player = GameObject.Find("Player");
         playerLayer = LayerMask.GetMask("Player");
-        playerAttackLayer = LayerMask.GetMask("PlayerAttackLayer");
         obstacleLayer = LayerMask.GetMask("Obstacle");
         hpBar = Instantiate(prfHpBar, canvas.transform);
         atkCollider.SetActive(false);
@@ -46,7 +45,7 @@ public class Snake : Enemy
     }
     public override void Attack()
     {
-        if (InRange())
+        if (InRange() && attackPattern[0].curtime <= 0f)
         {
             AttackPattern temp = new AttackPattern(attackPattern[0].cooltime, attackPattern[0].cooltime); 
             attackPattern[0] = temp;

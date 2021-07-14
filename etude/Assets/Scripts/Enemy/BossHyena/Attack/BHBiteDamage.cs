@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class BHBiteDamage : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    BossHyena parent;
+    void OnEnable()
     {
-        
+        parent = gameObject.transform.parent.GetComponentInParent<BossHyena>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.CompareTag("Player")){
+            other.GetComponent<Player>().TakeDamage(parent.attackPatterns["bite"].damage, 0);
+        }
     }
 }

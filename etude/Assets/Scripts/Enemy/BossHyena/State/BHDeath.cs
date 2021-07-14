@@ -8,6 +8,7 @@ public class BHDeath : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
        bh = animator.GetComponent<BossHyena>();
+       animator.speed = 1;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -17,6 +18,7 @@ public class BHDeath : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       
+        animator.speed = 0;
+        bh.Death();
     }
 }

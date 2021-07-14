@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hyena : Enemy
+public class Hyena : GroundEnemy
 {
     public int atkCooltime;
     public float atkCurtime;
@@ -19,22 +19,21 @@ public class Hyena : Enemy
     public bool isDash;
     public bool isClose;
     public float startTime;
-    void Awake()
+    void Start()
     {
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
         player = GameObject.Find("Player");
         playerLayer = LayerMask.GetMask("Player");
-        playerAttackLayer = LayerMask.GetMask("PlayerAttackLayer");
         obstacleLayer = LayerMask.GetMask("Obstacle");
         hpBar = Instantiate(prfHpBar, canvas.transform);
         atkCollider.SetActive(false);
         dir = Vector2.left;
-        isChase = false;
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임
         attackPattern.Add(new AttackPattern(0, dashCooltime));  //대쉬 쿨타임
+        CaculateDistance();
     }
 
     void FixedUpdate() {
