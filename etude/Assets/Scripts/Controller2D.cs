@@ -78,7 +78,10 @@ public class Controller2D : RaycastController
 
 			if (hit)
 			{
-
+				if (hit.collider.tag == "Through")
+                {
+					continue;
+                }
 				if (hit.distance == 0)
 				{
 					continue;

@@ -9,21 +9,23 @@ public class BHBite : StateMachineBehaviour
     {
         bh = animator.GetComponent<BossHyena>();
         bh.Flip();
-        bh.Bite();
-        Debug.Log("bite");
+        bh.Dash();
     }    
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(!bh.InRange()){
+        if(bh.EndDash()){
             animator.speed = 0;
         }
         else{
             bh.Flip();
             animator.speed = 1;
         }
+        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.6f){
+            bh.atkCollider[0].SetActive(true);
+        }
     }    
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        bh.atkCollider[0].SetActive(false);   
     }
 }

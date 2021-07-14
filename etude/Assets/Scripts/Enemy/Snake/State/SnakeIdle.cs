@@ -25,7 +25,7 @@ public class SnakeIdle : StateMachineBehaviour
                 animator.SetBool("isWalk", true);
         }
         if (snake.InRange())
-            snake.yFlip();
+            snake.Flip();
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

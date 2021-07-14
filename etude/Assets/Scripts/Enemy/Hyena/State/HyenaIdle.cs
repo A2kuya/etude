@@ -17,7 +17,7 @@ public class HyenaIdle : StateMachineBehaviour
             hyena.Detect();
         }
         else{
-            hyena.yFlip();
+            hyena.Flip();
             if(hyena.KeepDistance() == 1 && hyena.canAttack && hyena.canDash){
                 //플레이어 앞으로 대쉬
                 animator.SetTrigger("isDash");

@@ -15,7 +15,7 @@ public class SnakeWalk : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if(!snake.Miss()){
-            snake.yFlip();
+            snake.Flip();
             snake.Movement();
             snake.Attack();
         }

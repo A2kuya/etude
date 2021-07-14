@@ -18,7 +18,7 @@ public class HyenaDash : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        hyena.yFlip();
+        hyena.Flip();
         if(hyena.isDash)
             animator.speed = 0f;
         else
@@ -30,7 +30,7 @@ public class HyenaDash : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         hyena.isDash = false;
-        hyena.isMoving = true;
+        hyena.isMoving = false;
         hyena.Stop();
         hyena.Attack();
     }

@@ -13,7 +13,7 @@ public class HyenaWalk : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        hyena.yFlip();
+        hyena.Flip();
         if(hyena.KeepDistance() == 2)
             hyena.isMoving = true;
         else{
