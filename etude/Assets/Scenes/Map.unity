@@ -45202,6 +45202,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCam: {fileID: 615218714}
+--- !u!1 &394361651 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2700734650895415751, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+  m_PrefabInstance: {fileID: 1055821474}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &394361654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394361651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1742e8b53787e409d11b06bd0d85a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &615218714
 GameObject:
   m_ObjectHideFlags: 0
