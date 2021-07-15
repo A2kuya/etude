@@ -5,6 +5,8 @@ using System;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
+	public GameManagerForMap manager;
+
 	bool canMove = true;
 	public float maxJumpHeight = 4;
 	public float minJumpHeight = 1;
@@ -204,6 +206,11 @@ public class Player : MonoBehaviour
 				{
 					useLever.SwitchFlag();
 				}
+			}
+
+			if(interactObj.name =="Shop")
+			{
+				manager.Action(interactObj);
 			}
 		}
 	}

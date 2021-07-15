@@ -491,13 +491,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
   canvas: {fileID: 8034374999660276827}
-  atkCollider:
-  - {fileID: 7282947342956756095}
-  - {fileID: 3406752080883316795}
   hp: 100
   curHp: 100
   stiffness: 100
-  walkSpeed: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -510,6 +506,10 @@ MonoBehaviour:
   isGround: 0
   isJump: 0
   isMoving: 0
+  atkCollider:
+  - {fileID: 7282947342956756095}
+  - {fileID: 3406752080883316795}
+  walkSpeed: 10
   prfHyena: {fileID: 8444670480493234184}
   state: 0
   dashDistance: 0
@@ -535,11 +535,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7316770140547282123, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7316770140547282123, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7316770140547282123, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7316770140547282123, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
       propertyPath: m_LocalPosition.x
