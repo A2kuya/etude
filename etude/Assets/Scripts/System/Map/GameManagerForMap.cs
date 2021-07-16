@@ -5,24 +5,46 @@ using UnityEngine.UI;
 
 public class GameManagerForMap : MonoBehaviour
 {
-
+    public TalkManager talkManager;
     public Text talkText;
     public GameObject talkPanel;
     public GameObject scanObject;
+    public int talkIndex;
 
     public bool isAction;
 
     public void Action(GameObject scanObj)
     {
-        if(isAction)
-        {
-            isAction=false;
-        }
-        isAction=true;
-        scanObject=scanObj;
-        talkText.text="안녕 나는 상인이야.";
+        scanObject = scanObj;
+        ObjData objData = scanObject.GetComponent<ObjData>();
+        Talk(objData.id,objData.isNpc);
+
         talkPanel.SetActive(isAction);
 
+    }
+
+    void Talk(int id, bool isNpc)
+    {
+        string talkData= talkManager.GetTalk(id, talkIndex);
+
+        if(talkData==null)
+        {
+            isAction=false;
+            talkIndex=0;
+            return;
+        }
+
+        if(isNpc) 
+        {
+            talkText.text=talkData;
+        }
+        else
+        {
+            talkText.text=talkData;
+        }
+
+        isAction=true;
+        talkIndex++;
     }
 
 }

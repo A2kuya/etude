@@ -208,9 +208,10 @@ public class Player : MonoBehaviour
 				}
 			}
 
-			if(interactObj.name =="Shop")
+			if (interactObj.tag == "NPC")
 			{
 				manager.Action(interactObj);
+				
 			}
 		}
 	}
