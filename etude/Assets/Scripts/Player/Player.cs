@@ -72,8 +72,8 @@ public class Player : MonoBehaviour
 
 	public bool isChargeAttacking = false;
 
-	float dashDelay = 4.5f;
-	const float dashCoolTime = 4.5f;
+	float dashDelay = 1f;
+	const float dashCoolTime = 1f;
 	bool isDashReady = true;
 
 	float speicalAttackDelay = 2.5f;

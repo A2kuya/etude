@@ -175,6 +175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2700734650895415752}
   - component: {fileID: 2700734650895415753}
+  - component: {fileID: 1329050178280068451}
   m_Layer: 7
   m_Name: AttackPos
   m_TagString: PlayerAttack
@@ -222,6 +223,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.27, y: 0.36}
   m_EdgeRadius: 0
+--- !u!114 &1329050178280068451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700734650895415751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f1742e8b53787e409d11b06bd0d85a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2700734651075719946
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,6 +416,7 @@ MonoBehaviour:
   playerInput: {x: 0, y: 0}
   playerDownJump: 0
   isClimbing: 0
+  bottomLadder: 0
 --- !u!114 &2700734651075719954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,20 +433,23 @@ MonoBehaviour:
   minJumpHeight: 1
   timeToJumpApex: 0.4
   moveSpeed: 6
-  wallJumpClimb: {x: 0, y: 0}
-  wallJumpOff: {x: 0, y: 0}
-  wallLeap: {x: 0, y: 0}
-  wallSlideSpeedMax: 3
-  wallStickTime: 0.25
   velocity: {x: 0, y: 0, z: 0}
   maxHp: 100
   hp: 100
   damage: 10
+  specialDamage: 30
+  chargeDamage: 50
   stiffness: 0
   animator: {fileID: 0}
   isAttacking: 0
   attackPos: {fileID: 2700734650895415753}
+  isLadder: 0
+  isClimbing: 0
   downJump: 0
+  isSpecialAttacking: 0
+  brokeGround: {fileID: 0}
+  isChargeAttacking: 0
+  isSpecialAttackReady: 1
 --- !u!114 &2700734651075719953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -445,4 +462,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994603eac62b4a34c925442ac8f29018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lever: {fileID: 0}

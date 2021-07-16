@@ -8,7 +8,7 @@ public class HyenaHurt : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         hyena = animator.GetComponent<Hyena>();
-        //hyena.gameObject.tag = "EnemyUnbeatable";
+        hyena.isChase = true;
         hyena.CheckDead();
         animator.speed = 0.5f;
     }

@@ -442,33 +442,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
   canvas: {fileID: 8264794794085317799}
-  atkCollider: {fileID: 8743946464066966583}
-  hp: 100
-  curHp: 100
+  hp: 30
+  curHp: 30
   stiffness: 100
-  damage: 10
-  isLeft: 1
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  playerAttackLayer:
-    serializedVersion: 2
-    m_Bits: 0
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 65536
-  speed: 3
-  dir: {x: 0, y: 0}
-  attackSpeed: 0
-  detectDistance: 10
-  chaseDistance: 20
   playerVector: {x: 0, y: 0}
   playerDistance: 0
-  range: 3
+  isLeft: 1
   isGround: 0
   isJump: 0
-  isSlope: 0
   isMoving: 0
+  atkCollider: {fileID: 8743946464066966583}
+  damage: 10
+  speed: 3
+  dir: {x: 0, y: 0}
+  detectDistance: 10
+  chaseDistance: 20
+  range: 3
+  isSlope: 0
   isChase: 0
   maxangle: 70
   angle: 0

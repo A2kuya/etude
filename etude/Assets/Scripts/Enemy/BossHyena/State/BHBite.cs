@@ -8,6 +8,7 @@ public class BHBite : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         bh = animator.GetComponent<BossHyena>();
+        bh.InAttack(true);
         bh.Flip();
         bh.Dash();
     }    
@@ -27,5 +28,6 @@ public class BHBite : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         bh.atkCollider[0].SetActive(false);   
+        bh.InAttack(false);
     }
 }

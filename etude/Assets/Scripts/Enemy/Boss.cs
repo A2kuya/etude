@@ -22,6 +22,5 @@ abstract public class Boss : Enemy
     override public void Death(){
         Destroy(hpBar);
         this.enabled = false;
-    }
-        
+    }        
 }

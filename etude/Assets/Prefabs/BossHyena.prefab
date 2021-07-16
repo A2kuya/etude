@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3883077344947360767}
   - component: {fileID: 8291826686221376540}
   - component: {fileID: 5588154732616955116}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Rush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 1152659126017295857}
   - component: {fileID: 4778443363493203053}
   - component: {fileID: 581413049940371650}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Bite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,13 +491,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
   canvas: {fileID: 8034374999660276827}
-  atkCollider:
-  - {fileID: 7282947342956756095}
-  - {fileID: 3406752080883316795}
   hp: 100
   curHp: 100
   stiffness: 100
-  walkSpeed: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -510,6 +506,10 @@ MonoBehaviour:
   isGround: 0
   isJump: 0
   isMoving: 0
+  atkCollider:
+  - {fileID: 7282947342956756095}
+  - {fileID: 3406752080883316795}
+  walkSpeed: 10
   prfHyena: {fileID: 8444670480493234184}
   state: 0
   dashDistance: 0
