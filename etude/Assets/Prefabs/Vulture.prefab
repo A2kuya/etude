@@ -270,9 +270,10 @@ MonoBehaviour:
   shootRayDamage: 0
   attackCooltime: 3
   isAttack: 0
-  left: {x: 12, y: 24, z: 0}
-  right: {x: 72, y: 24, z: 0}
+  left: {x: 14, y: 18, z: 0}
+  right: {x: 50, y: 18, z: 0}
   roundTripCount: 6
+  roundTripSpeed: 40
 --- !u!1 &6832445954524418967
 GameObject:
   m_ObjectHideFlags: 0

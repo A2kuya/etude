@@ -95,6 +95,7 @@ public class Vulture : Boss
     public Vector3 left;
     public Vector3 right;
     public int roundTripCount;
+    public int roundTripSpeed;
     private int count;
     public void FallStoneStart(){
         Debug.Log("start");
@@ -110,7 +111,7 @@ public class Vulture : Boss
             else{
                 isMoving = true;
                 count++;
-                iTween.MoveTo(gameObject, iTween.Hash("position", (isLeft ? left : right), "easeType", iTween.EaseType.linear, "speed", 50f, "oncomplete", "Turn"));
+                iTween.MoveTo(gameObject, iTween.Hash("position", (isLeft ? left : right), "easeType", iTween.EaseType.linear, "speed", roundTripSpeed, "oncomplete", "Turn"));
             }
         }else{
             if(Random.Range(0f, 1f) <= 0.03 && count > 0)
