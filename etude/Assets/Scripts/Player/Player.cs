@@ -141,7 +141,6 @@ public class Player : MonoBehaviour
 
 		StateManager();
 
-		print(state);
 		animator.SetInteger("state", (int)state);
 
 		CalculateVelocity();
@@ -165,7 +164,7 @@ public class Player : MonoBehaviour
 
 	void StateManager()
     {
-		// Priority = dash -> fall -> attack -> jump -> run -> walk -> idle
+		// Priority = dash -> climb -> fall -> attack -> jump -> run -> walk -> idle
 		if (state == State.dash)
         {
 			InitAttack();
@@ -296,16 +295,9 @@ public class Player : MonoBehaviour
 
 				else
 				{
-					
 					state = State.idle;
 					moveSpeed = 8f;
 				}
-			}
-
-			if (interactObj.tag == "NPC")
-			{
-				manager.Action(interactObj);
-				
 			}
 		}
 
@@ -664,15 +656,20 @@ public class Player : MonoBehaviour
 	{
 		if (interactObj != null)
 		{
-			if (interactObj.name == "Lever")
+			if (interactKey)
 			{
-				if (interactKey)
+				if (interactObj.name == "Lever")
 				{
 					UseLever useLever = interactObj.GetComponent<UseLever>();
 					if (!useLever.getFlag())
 					{
 						useLever.SwitchFlag();
 					}
+				}
+
+				if (interactObj.tag == "NPC")
+				{
+					manager.Action(interactObj);
 				}
 			}
 		}
