@@ -5,7 +5,7 @@ using System;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-	public GameManagerForMap manager;
+	public GameManager manager;
 
 	bool canMove = true;
 	public float maxJumpHeight = 4;
