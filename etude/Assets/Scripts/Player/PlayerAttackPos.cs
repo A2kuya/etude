@@ -15,15 +15,15 @@ public class PlayerAttackPos : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (player.isSpecialAttacking)
+            if (player.GetState() == "specialAttack")
                 collision.gameObject.GetComponent<Enemy>().TakeDamage(player.specialDamage);
-            else if (player.isChargeAttacking)
+            else if (player.GetState() == "chargeAttack")
                 collision.gameObject.GetComponent<Enemy>().TakeDamage(player.chargeDamage);
             else
                 collision.gameObject.GetComponent<Enemy>().TakeDamage(player.damage);
         }
 
-        if (player.isSpecialAttacking && collision.transform.tag == "BrokenFloor")
+        if (player.GetState() == "specialAttack" && collision.transform.tag == "BrokenFloor")
         {
             player.brokeGround.Break();
             gameObject.SetActive(false);

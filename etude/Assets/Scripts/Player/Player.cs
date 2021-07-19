@@ -5,24 +5,29 @@ using System;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-	bool canMove = true;
-	public float maxJumpHeight = 4;
-	public float minJumpHeight = 1;
-	public float timeToJumpApex = .4f;
-	float accelerationTimeAirborne = .2f;
-	float accelerationTimeGrounded = .1f;
-	public float moveSpeed = 8;
+	// State() Var
+	private Collider2D col;
+	public Collider2D attackPos;
+	private Controller2D controller;
+    private Rigidbody2D rb;
+	public Animator animator;
 
-	float gravity;
-	float maxJumpVelocity;
-	float minJumpVelocity;
-	public Vector3 velocity;
-	float velocityXSmoothing;
-
-	Controller2D controller;
-
+	// Key Var
+	private float hAxis;
+	private float vAxis;
+	private bool jumpKeyDown;
+	private bool jumpKeyUp;
+	private bool attackKeyDown;
+	private bool attackKeyUp;
+	private bool attackKey;
+	private bool dashKey;
+	private bool interactKey;
+	private bool HealKey;
 	Vector2 directionalInput;
 
+	// State
+	private enum State { idle, walk, run, jump, fall, dash, attack, jumpAttack, specialAttack, charge, chargeAttack, climb }
+	private State state = State.idle;
 	public int maxHp = 100;
 	public int hp = 100;
 	public int damage = 10;
@@ -30,68 +35,81 @@ public class Player : MonoBehaviour
 	public int chargeDamage = 50;
 	public int stiffness = 0;
 
-	[HideInInspector]
-	public Animator animator;
+	// Move
+	bool canMove = true;
+	public Vector3 velocity;
+	public float moveSpeed = 8;
+	Vector2 playerDir;
 
+	// Run
 	bool leftCanRun = false;
 	float leftCheckRun = 0.2f;
 	bool rightCanRun = false;
 	float rightCheckRun = 0.2f;
 
-	bool isJumping = false;
-	public bool isAttacking = false;
-	[HideInInspector]
-	public Collider2D attackPos;
-	
-	bool isDashing = false;
+	// Jump
+	public float maxJumpHeight = 4;
+	public float minJumpHeight = 1;
+	public float timeToJumpApex = .4f;
+	float accelerationTimeAirborne = .2f;
+	float accelerationTimeGrounded = .1f;
+	float gravity;
+	float maxJumpVelocity;
+	float minJumpVelocity;
+	float velocityXSmoothing;
+	public bool downJump = false;
 
-	Vector2 playerDir;
+	// Dash
+	public float dashCoolTime;
+	float dashDelay;
+	bool isDashReady = true;
 	Vector2 dashDir;
 	float dashDistance = 10f;
 	float dashTime = 0.2f;
 	float startTime = 0f;
 	Vector2 moveAmount;
 
-	public bool isLadder = false;
+	// Combo Attack
+	private bool[] attacks = new bool[2];
+	private bool isAttackReady;
+	private float attackDelay;
+	public float attackCoolTime;
+
+	// Charge Attack
+	private float chargeAttackTime = 0;
+	private float chargeAttackMinTime = 1;
+
+	// Special Attack
+	public BrokeGround brokeGround;
+	public float speicalAttackCoolTime;
+	float speicalAttackDelay;
+	public bool isSpecialAttackReady = true;
+
+	// Ladder Climb
+	bool isLadder = false;
 	Collider2D ladderCol;
 	bool topLadder = false;
 	bool bottomLadder = false;
 	float originGravity;
 	float climbSpeed = 8f;
-	public bool isClimbing = false;
-	float jumpCoolTime = 0.4f;
-	float jumpTime = 0.4f;
-	bool startJumpTime = false;
 
-	public bool downJump = false;
+	float climbDelay = 0.4f;
+	const float climbCoolTime = 0.4f;
+	bool isClimbReady = false;
 
-	public bool isSpecialAttacking = false;
-	public BrokeGround brokeGround;
-
+	// Interact
 	GameObject interactObj;
 
-	public bool isChargeAttacking = false;
-
-	float dashDelay = 4.5f;
-	const float dashCoolTime = 4.5f;
-	bool isDashReady = true;
-
-	float speicalAttackDelay = 2.5f;
-	const float speicalAttackCoolTime = 4.5f;
-	public bool isSpecialAttackReady = true;
-
-	float hAxis;
-	float vAxis;
-
-	bool jumpKey;
-	bool attackKey;
-	bool dashKey;
-
+	// Heal
+	private int potions = 5;
+	public int healAmount;
 
 	void Start()
 	{
 		animator = GetComponent<Animator>();
 		controller = GetComponent<Controller2D>();
+		col = GetComponent<Collider2D>();
+		rb = GetComponent<Rigidbody2D>();
 
 		originGravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
 		gravity = originGravity;
@@ -101,132 +119,204 @@ public class Player : MonoBehaviour
 		playerDir = new Vector3(1, 0, 0);
 
 		attackPos.gameObject.SetActive(false);
+
+		dashDelay = dashCoolTime;
+		speicalAttackDelay = speicalAttackCoolTime;
+		attackDelay = attackCoolTime;
 	}
 
 	void Update()
 	{
-		//GetInput();
-		MoveAnimator();
-		JumpAnimator();
-		JumpAttackAnimator();
+		InputManager();
 
-		CoolTimer(ref speicalAttackDelay, speicalAttackCoolTime, ref isSpecialAttackReady);
+		Move();
+		Jump();
+		Dash();
+		Attack();
+		LadderClimb();
+		Interact();
+		Heal();
+
+		StateManager();
+
+		print(state);
+		animator.SetInteger("state", (int)state);
 
 		CalculateVelocity();
-
-		LadderCoolTime();
-		LadderClimb();
-		UpdateDash();
-
-		Movement();
 	}
 
-	void GetInput()
+	void InputManager()
     {
 		hAxis = Input.GetAxisRaw("Horizontal");
 		vAxis = Input.GetAxisRaw("Vertical");
-		attackKey = Input.GetKeyDown(KeyCode.Z);
-		jumpKey = Input.GetKeyDown(KeyCode.X);
+		attackKeyDown = Input.GetKeyDown(KeyCode.Z);
+		attackKeyUp = Input.GetKeyUp(KeyCode.Z);
+		attackKey = Input.GetKey(KeyCode.Z);
+		jumpKeyDown = Input.GetKeyDown(KeyCode.X);
+		jumpKeyUp = Input.GetKeyUp(KeyCode.X);
 		dashKey = Input.GetKeyDown(KeyCode.C);
+		interactKey = Input.GetKeyDown(KeyCode.F);
+		HealKey = Input.GetKeyDown(KeyCode.A);
+
+		directionalInput = new Vector2(hAxis, vAxis);
 	}
 
-	private void FixedUpdate()
+	void StateManager()
     {
-		Debug.DrawRay(transform.position, playerDir * 5f, new Color(0, 1, 0));
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 5f, LayerMask.GetMask("Interact")); 
-
-		if (hit.collider != null)
+		// Priority = dash -> fall -> attack -> jump -> run -> walk -> idle
+		if (state == State.dash)
         {
-			interactObj = hit.collider.gameObject;
-        }
-		else
+			InitAttack();
+			animator.Play("player_dash");
+		}
+
+		else if (state == State.climb)
         {
-			interactObj = null;
+			return;
         }
-    }
 
-	void CoolTimer(ref float delay, float coolTime, ref bool isReady)
-    {
-		delay += Time.deltaTime;
-		isReady = coolTime < delay;
-    }
-
-	void ChargeAttackOn()
-    {
-		isChargeAttacking = true;
-    }
-
-	void ChargeAttackOff()
-    {
-		isChargeAttacking = false;
-	}
-
-	public void SetDirectionalInput(Vector2 input)
-	{
-		directionalInput = input;
-	}
-
-	public void OnJumpInputDown()
-	{
-		if (controller.collisions.below)
+		else if (velocity.y < 0f)
 		{
-			if (controller.collisions.slidingDownMaxSlope)
-			{
-				if (directionalInput.x != -Mathf.Sign(controller.collisions.slopeNormal.x))
-				{ // not jumping against max slope
-					velocity.y = maxJumpVelocity * controller.collisions.slopeNormal.y;
-					velocity.x = maxJumpVelocity * controller.collisions.slopeNormal.x;
-				}
+			if (state == State.jumpAttack)
+            {
+				velocity.y -= .5f;
 			}
 			else
-			{
-				velocity.y = maxJumpVelocity;
+            {
+				state = State.fall;
 			}
 		}
-	}
 
-	public void OnJumpInputUp()
-	{
-		if (velocity.y > minJumpVelocity)
-		{
-			velocity.y = minJumpVelocity;
-		}
-	}
-
-	public void Interact()
-    {
-		if (interactObj != null)
-		{
-			if (interactObj.name == "Lever")
+		else if (state == State.jump)
+        {
+			if (velocity.y < 0f)
 			{
-				UseLever useLever = interactObj.GetComponent<UseLever>();
-				if (!useLever.getFlag())
+				state = State.fall;
+			}
+		}
+
+		else if (state == State.fall)
+        {
+			if(controller.collisions.below)
+            {
+				state = State.idle;
+				InitAttack();
+			}
+		}
+
+		else if (state == State.jumpAttack)
+        {
+			if (controller.collisions.below)
+			{
+				if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_jump_attack_transition") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
 				{
-					useLever.SwitchFlag();
+					state = State.idle;
+				}
+				else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_jump_attack_transition"))
+				{
+					animator.SetTrigger("exitJumpAttack");
+				}
+			}
+			
+		}
+
+		else if (state == State.specialAttack)
+        {
+			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_special_attack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            {
+				state = State.idle;
+            }
+		}
+
+		else if (state == State.charge)
+        {
+			moveSpeed = 5f;
+			if (attackKeyUp)
+			{
+				if (chargeAttackTime > chargeAttackMinTime)
+				{
+					state = State.chargeAttack;
+				}
+				else
+                {
+					state = State.idle;
+				}
+				chargeAttackTime = 0;
+				moveSpeed = 8f;
+			}
+		}
+
+		else if (state == State.chargeAttack)
+        {
+			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_charge_attack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+            {
+				state = State.idle;
+			}
+		}
+
+		else if (state == State.attack)
+        {
+			moveSpeed = 1f;
+			if (attacks[0] && !attacks[1])
+            {
+				animator.Play("player_attack_1");
+			}
+			
+			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack_1") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+			{
+				attacks[0] = false;
+
+				if (attacks[1])
+                {
+					animator.Play("player_attack_2");
+				}
+
+				else if (chargeAttackTime > .3f)
+                {
+					state = State.charge;
+                }
+
+				else
+                {
+					state = State.idle;
+					moveSpeed = 8f;
+				}
+			}
+
+			else if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack_2") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+			{
+				attacks[1] = false;
+
+				if (chargeAttackTime > .3f)
+				{
+					state = State.charge;
+				}
+
+				else
+				{
+					
+					state = State.idle;
+					moveSpeed = 8f;
 				}
 			}
 		}
-	}
 
-	public void Dash()
-	{
-		if (isDashReady)
+		else if (Mathf.Abs(hAxis) > 0f)
 		{
-			if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_dash_1"))
-			{
-				animator.SetTrigger("doDash");
-				attackPos.gameObject.SetActive(false);
-				canMove = false;
-				isDashing = true;
-				dashDir = playerDir;
-				startTime = Time.time;
-				dashDelay = 0;
-			}
+			if (Mathf.Abs(velocity.x) > 8f)
+				state = State.run;
+			else
+				state = State.walk;
 		}
-	}
 
-	void Movement()
-    {
+		else
+        {
+			state = State.idle;
+        }
+    }
+
+	private void Move()
+	{
 		if (canMove)
 		{
 			controller.Move(velocity * Time.deltaTime, directionalInput, downJump);
@@ -244,94 +334,42 @@ public class Player : MonoBehaviour
 			}
 		}
 
+		// Moving Left
+		if (hAxis < 0)
+		{
+			transform.localScale = new Vector2(-10, 10);
+			playerDir = new Vector3(-1, 0, 0);
+		}
+
+		// Moving Right
+		else if (hAxis > 0)
+		{
+			transform.localScale = new Vector2(10, 10);
+			playerDir = new Vector3(1, 0, 0);
+		}
+
 		SetRun(KeyCode.LeftArrow, ref leftCanRun, ref leftCheckRun);
 		SetRun(KeyCode.RightArrow, ref rightCanRun, ref rightCheckRun);
-	}
-
-	void UpdateDash()
-    {
-		CoolTimer(ref dashDelay, dashCoolTime, ref isDashReady);
-
-		if (isDashing)
-		{
-			float progress = (Time.time - startTime) / dashTime;
-			progress = Mathf.Clamp(progress, 0, 1);
-			moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
-			controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
-
-			if (progress >= 1)
-			{
-				isDashing = false;
-				canMove = true;
-				transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
-			}
-		}
-	}
-
-	void JumpAttackAnimator()
-    {
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_jump_attack"))
-		{
-			velocity.y -= 0.5f;
-		}
-	}
-
-	void CalculateVelocity()
-	{
-		float targetVelocityX = directionalInput.x * moveSpeed;
-		velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-		velocity.y += gravity * Time.deltaTime;
-	}
-
-	void MoveAnimator()
-    {
-		SpriteRenderer sr = GetComponent<SpriteRenderer>();
-
-		if (Input.GetAxisRaw("Horizontal") == 0)
-		{
-			animator.SetBool("isMoving", false);
-		}
-		else if (Input.GetAxisRaw("Horizontal") < 0)
-		{
-			animator.SetBool("isMoving", true);
-			if (!isAttacking)
-			{
-				sr.flipX = true;
-				attackPos.transform.rotation = Quaternion.Euler(0, 180, 0);
-				playerDir = new Vector3(-1, 0, 0);
-			}
-		}
-		else if (Input.GetAxisRaw("Horizontal") > 0)
-		{
-			animator.SetBool("isMoving", true);
-			if (!isAttacking)
-			{
-				sr.flipX = false;
-				attackPos.transform.rotation = Quaternion.Euler(0, 0, 0);
-				playerDir = new Vector3(1, 0, 0);
-			}
-		}
 	}
 
 	void SetRun(KeyCode key, ref bool canRun, ref float checkRun)
 	{
 		if (Input.GetKeyUp(key))
 		{
-			canRun = true; 
+			canRun = true;
 		}
 		if (canRun)
 		{
 			checkRun -= Time.deltaTime;
 			if (checkRun <= 0)
 			{
-				canRun = false;  
-				checkRun = 0.2f; 
+				canRun = false;
+				checkRun = 0.2f;
 			}
 		}
-		if (Input.GetKey(key) && canRun == false || Input.GetAxisRaw("Horizontal") == 0)
+		if (Input.GetKey(key) && canRun == false || hAxis == 0)
 		{
 			moveSpeed = 8;
-			animator.SetBool("isRunning", false);
 		}
 		else if (Input.GetKey(key) && canRun == true)
 		{
@@ -340,46 +378,242 @@ public class Player : MonoBehaviour
 			rightCanRun = true;
 			leftCheckRun = 0.1f;
 			rightCheckRun = 0.1f;
-			animator.SetBool("isMoving", false);
-			animator.SetBool("isRunning", true);
 		}
 		if (Input.GetKeyUp(key))
 		{
 			moveSpeed = 8;
-			animator.SetBool("isRunning", false);
 		}
 	}
 
-	void LadderClimb()
-    {
-		if (isLadder && !isAttacking)
+	void CalculateVelocity()
+	{
+		if (state != State.climb)
 		{
-			if (directionalInput.y != 0 && jumpTime == jumpCoolTime)
-			{
-				isClimbing = true;
-			}
+			float targetVelocityX = directionalInput.x * moveSpeed;
+			velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
+			velocity.y += gravity * Time.deltaTime;
+		}
+	}
 
-			if (isClimbing)
+	private void Jump()
+    {
+		if (state != State.attack && state != State.jumpAttack  && state != State.dash)
+		{
+			if (jumpKeyDown)
 			{
-				if (directionalInput.y < 0 && bottomLadder || directionalInput.y > 0 && topLadder)
-				{
-					isClimbing = false;
-					animator.SetBool("isClimbing", false);
+				if (state == State.climb)
+                {
+					isClimbReady = false;
+					climbDelay = 0;
+					velocity.x += 1;
+					velocity.y = maxJumpVelocity;
+					state = State.jump;
 					return;
 				}
 
-				animator.SetBool("isClimbing", true);
-				animator.SetBool("isJumping", false);
-				isAttacking = false;
+				if (vAxis == -1)
+				{
+					print(123);
+					downJump = true;
+				}
+				OnJumpInputDown();
+				state = State.jump;
+			}
+			if (jumpKeyUp)
+			{
+				OnJumpInputUp();
+			}
+		}
+	}
+
+	// JumpKey Down
+	private void OnJumpInputDown()
+	{
+		if (controller.collisions.below)
+		{
+			if (controller.collisions.slidingDownMaxSlope)
+			{
+				if (directionalInput.x != -Mathf.Sign(controller.collisions.slopeNormal.x))
+				{ // not jumping against max slope
+					velocity.y = maxJumpVelocity * controller.collisions.slopeNormal.y;
+					velocity.x = maxJumpVelocity * controller.collisions.slopeNormal.x;
+				}
+			}
+
+			else if (downJump)
+            {
+				return;
+            }
+
+			else
+			{
+				velocity.y = maxJumpVelocity;
+			}
+		}
+	}
+
+	// JumpKey Up
+	private void OnJumpInputUp()
+	{
+		if (velocity.y > minJumpVelocity)
+		{
+			velocity.y = minJumpVelocity;
+		}
+	}
+
+	private void Dash()
+	{
+		if (dashKey)
+		{
+			if (isDashReady)
+			{
+				{
+					state = State.dash;
+					canMove = false;
+					dashDir = playerDir;
+					startTime = Time.time;
+					dashDelay = 0;
+					attackPos.gameObject.SetActive(false);
+				}
+			}
+		}
+
+		CoolTimer(ref dashDelay, ref isDashReady, dashCoolTime);
+
+		if (state == State.dash)
+		{
+			velocity = Vector3.zero;
+
+			float progress = (Time.time - startTime) / dashTime;
+			progress = Mathf.Clamp(progress, 0, 1);
+			moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
+			controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
+			if (progress >= 1)
+			{
+				canMove = true;
+				state = State.idle;
+				transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
+			}
+		}
+	}
+
+	void CoolTimer(ref float delay, ref bool isReady, float coolTime)
+	{
+		if (!isReady)
+		{
+			delay += Time.deltaTime;
+		}
+		isReady = coolTime < delay;
+	}
+
+	private void InitAttack()
+    {
+		attacks[0] = false;
+		attacks[1] = false;
+	}
+
+	private void Attack()
+    {
+		CoolTimer(ref attackDelay, ref isAttackReady, attackCoolTime);
+		CoolTimer(ref speicalAttackDelay, ref isSpecialAttackReady, speicalAttackCoolTime);
+
+		if (attackKeyDown)
+        {
+			if (controller.collisions.below)
+            {
+				if (vAxis == -1)
+				{
+					if (isSpecialAttackReady && state == State.idle)
+					{
+						state = State.specialAttack;
+						speicalAttackDelay = 0f;
+						isSpecialAttackReady = false;
+					}
+				}
+
+				else if (isAttackReady)
+				{
+					state = State.attack;
+					if (!attacks[0] && !attacks[1])
+					{
+						attacks[0] = true;
+					}
+					else if (attacks[0])
+					{
+						attacks[1] = true;
+						attackDelay = 0f;
+						isAttackReady = false;
+					}
+				}
+			}
+			 
+			else
+            {
+				state = State.jumpAttack;
+				velocity.y = 0;
+			}
+		}
+
+		if (attackKey && (state == State.attack || state == State.charge))
+        {
+			if (controller.collisions.below)
+			{
+				chargeAttackTime += Time.deltaTime;
+			}
+        }
+
+		if (attackKeyUp)
+		{
+			if (chargeAttackTime < chargeAttackMinTime)
+			{
+				chargeAttackTime = 0;
+			}
+		}
+    }
+
+	public String GetState()
+    {
+		return state.ToString();
+    }
+
+	private void ActiveAttackPos()
+	{
+		attackPos.gameObject.SetActive(true);
+	}
+
+	private void DeActiveAttackPos()
+	{
+		attackPos.gameObject.SetActive(false);
+	}
+
+	void LadderClimb()
+	{
+		CoolTimer(ref climbDelay, ref isClimbReady, climbCoolTime);
+
+		if (isLadder && state != State.attack && state != State.jumpAttack)
+		{
+			if (vAxis != 0 && isClimbReady)
+			{
+				state = State.climb;
+				canMove = true;
+			}
+
+			if (state == State.climb)
+			{
+				if (directionalInput.y < 0 && bottomLadder || directionalInput.y > 0 && topLadder)
+				{
+					state = State.idle;
+					return;
+				}
 
 				transform.position = new Vector3(ladderCol.transform.position.x, transform.position.y);
 				velocity.x = 0;
 				velocity.y = 0;
 				gravity = 0;
 
-				if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_climb"))
+				if (!animator.GetCurrentAnimatorStateInfo(0).IsName("player_climb") && !animator.GetCurrentAnimatorStateInfo(0).IsName("player_hurt"))
 				{
-					animator.SetTrigger("doClimb");
+					animator.Play("player_climb");
 				}
 
 				if (directionalInput.y == 0)
@@ -393,36 +627,21 @@ public class Player : MonoBehaviour
 				}
 				else if (directionalInput.y < 0 && !bottomLadder)
 				{
-					if(topLadder)
-                    {
+					if (topLadder)
+					{
 						controller.isClimbing = true;
 					}
 					velocity.y = directionalInput.y * climbSpeed;
 					animator.SetFloat("climbSpeed", 1);
 				}
 
-				if (Input.GetKeyDown(KeyCode.X))
+				if (dashKey)
 				{
-					startJumpTime = true;
-					velocity.x += 1;
-					velocity.y = maxJumpVelocity;
-
-					isClimbing = false;
-					animator.SetBool("isClimbing", false);
-
-					isJumping = true;
-					animator.SetTrigger("doJumping");
-					animator.SetBool("isJumping", true);
-				}
-
-				if (Input.GetKeyDown(KeyCode.C))
-				{
-					startJumpTime = true;
-					isClimbing = false;
-					animator.SetBool("isClimbing", false);
+					isClimbReady = false;
+					climbDelay = 0;
 				}
 			}
-            else if (gravity != originGravity)
+			else if (gravity != originGravity)
 			{
 				gravity = originGravity;
 			}
@@ -433,45 +652,44 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void LadderCoolTime()
-    {
-		if (jumpTime > 0 && startJumpTime)
+	private void Interact()
+	{
+		if (interactObj != null)
 		{
-			jumpTime -= Time.deltaTime;
-		}
-		else
-		{
-			startJumpTime = false;
-			jumpTime = jumpCoolTime;
+			if (interactObj.name == "Lever")
+			{
+				if (interactKey)
+				{
+					UseLever useLever = interactObj.GetComponent<UseLever>();
+					if (!useLever.getFlag())
+					{
+						useLever.SwitchFlag();
+					}
+				}
+			}
 		}
 	}
 
-	void JumpAnimator()
+	private void FixedUpdate()
     {
-		if (velocity.y < 0 && !isAttacking && !isDashing && !isClimbing)
-		{
-			isJumping = true;
-			animator.SetTrigger("doFalling");
-			animator.SetBool("isJumping", true);
-		}
-		else if (velocity.y > 0 && isJumping == false && !isClimbing)
+		Debug.DrawRay(transform.position, playerDir * 5f, new Color(0, 1, 0));
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, playerDir, 5f, LayerMask.GetMask("Interact")); 
+
+		if (hit.collider != null)
         {
-			isJumping = true;
-            animator.SetTrigger("doJumping");
-			animator.SetBool("isJumping", true);
-		}
-		else if(velocity.y == 0 && isJumping == true)
+			interactObj = hit.collider.gameObject;
+        }
+		else
         {
-			isJumping = false;
-			animator.SetBool("isJumping", false);
-		}
-	}
-	
+			interactObj = null;
+        }
+    }
+
 	public void TakeDamage(int damage, int stiffness)
     {
 		hp -= damage;
 		this.stiffness -= stiffness;
-		animator.SetTrigger("doHurt");
+		animator.Play("player_hurt");
 	}
 
 	public void TakeDamage(int damage, int stiffness, Vector2 enemyPos, Vector2 knockback)
@@ -489,18 +707,20 @@ public class Player : MonoBehaviour
         }
 		velocity.x = knockbackDir * knockback.x;
 		velocity.y = knockback.y;
-		animator.SetTrigger("doHurt");
+		animator.Play("player_hurt");
 	}
 
-	private void ActiveAttackPos()
+	private void Heal()
     {
-		attackPos.gameObject.SetActive(true);
-	}
-
-	private void DeActiveAttackPos()
-    {
-		attackPos.gameObject.SetActive(false);
-	}
+		if (HealKey)
+		{
+			if (potions > 0)
+			{
+				potions -= 1;
+				hp += healAmount;
+			}
+		}
+    }
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
@@ -525,7 +745,6 @@ public class Player : MonoBehaviour
         if (collision.CompareTag("Ladder"))
         {
             isLadder = false;
-			isClimbing = false;
 			controller.isClimbing = false;
             animator.SetBool("isClimbing", false);
         }

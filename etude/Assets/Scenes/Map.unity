@@ -47194,9 +47194,33 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1486694844}
     - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: moveSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: healAmount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: brokeGround
       value: 
       objectReference: {fileID: 995025521}
+    - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: dashCoolTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: attackCoolTime
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: isSpecialAttackReady
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2700734651075719954, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: speicalAttackCoolTime
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3309823655096954952, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_SortingOrder
       value: 8
@@ -47249,7 +47273,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2700734651075719953, guid: f32460f1c17607744bc69510003bf01e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f32460f1c17607744bc69510003bf01e, type: 3}
 --- !u!1 &1061301188
 GameObject:
