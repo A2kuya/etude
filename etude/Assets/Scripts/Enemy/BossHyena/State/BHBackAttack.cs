@@ -10,7 +10,6 @@ public class BHBackAttack : StateMachineBehaviour
     {
         bh = animator.GetComponent<BossHyena>();
         summon = false;
-        Debug.Log("backAttack");
     }    
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

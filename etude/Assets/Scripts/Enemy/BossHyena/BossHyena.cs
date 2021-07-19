@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BossHyena : Boss
 {
     public GameObject prfHyena;
-    List<GameObject> hyenas;
     Transform summons;
     public phase state;
     public enum phase{ first, second, third }
@@ -48,7 +47,6 @@ public class BossHyena : Boss
         CheckDead();
         CaculateDistance();
         CheckObstacle();
-        ManagePhase();
     }
     public void Movement(){
         Move((isLeft?Vector2.left:Vector2.right), walkSpeed);
@@ -61,8 +59,10 @@ public class BossHyena : Boss
         while (gameObject.activeSelf)
         {
             if(!isAttack){
-                yield return new WaitForSeconds(attackCooltime);
-                if (state >= phase.third && attackPatterns["backAttack"].Can())
+                yield return new WaitForSeconds(1f);
+                if(CheckPhase())
+                    anim.SetTrigger("changePhase");
+                else if (state >= phase.third && attackPatterns["backAttack"].Can())
                     attackPatterns["backAttack"].Excute();
                 else if (state >= phase.second && attackPatterns["rush"].Can())
                     attackPatterns["rush"].Excute();
@@ -72,6 +72,7 @@ public class BossHyena : Boss
                     attackPatterns["bite"].Excute();
                 else if (Far())
                     anim.SetBool("isWalk", true);
+                yield return new WaitForSeconds(attackCooltime - 1f);
             }
             else
                 yield return new WaitForSeconds(1f);
@@ -112,12 +113,14 @@ public class BossHyena : Boss
         rushtime = maxRushtime;
         beforeLeft = isLeft;
         isTurn = false;
+        InAttack(true);
         atkCollider[1].SetActive(true);
     }
     public void rushEnd(){
         atkCollider[1].SetActive(false);
         isTurn = true;
         rushtime = 0;
+        InAttack(false);
     }
     public bool Rush(){
         if(rushtime <= 0f && rushspeed <=0f){
@@ -150,7 +153,6 @@ public class BossHyena : Boss
     public void SetRushCollider(bool set){
         transform.GetChild(0).GetChild(1).gameObject.SetActive(set);
     }
-
     public void BackAttack(){
         Vector3 v = new Vector3((isLeft ? -5 : 5), 0, 0);
         Quaternion q = Quaternion.Euler(0, (isLeft ? 180 : 0), 0);
@@ -161,12 +163,20 @@ public class BossHyena : Boss
     public bool InRange(){
         return Mathf.Abs(playerVector.x) <= 6f;
     }
-
-    
-
-    public void ManagePhase(){
-        if((float) curHp/hp <= 0.2) state = phase.third;
-        else if((float) curHp/hp <= 0.5) state = phase.second;
+    public bool CheckPhase(){
+        if((float) curHp/hp <= 0.2 && state != phase.third){
+            state = phase.third;
+            return true;
+        }
+        else if((float) curHp/hp <= 0.5 && state == phase.first){
+            state = phase.second;
+            return true;
+        }
+        return false;
+    }
+    public void KnockbackToPlayer(){
+        Vector2 v = new Vector2(100, 20);
+        player.GetComponent<Player>().TakeDamage(0, 100, transform.position, v);
     }
     public override void CheckDead(bool death = false)
     {
@@ -174,7 +184,7 @@ public class BossHyena : Boss
             int childCount = summons.childCount;
             for (int i = 0; i < childCount; i++)
             {
-                summons.GetChild(i).GetComponent<GroundEnemy>().CheckDead(true);
+                summons.GetChild(i).GetComponent<Enemy>().CheckDead(true);
             }
             anim.SetTrigger("isDead");
         }
@@ -186,5 +196,4 @@ public class BossHyena : Boss
         Destroy(this);
         base.Death();
     }
-
 }

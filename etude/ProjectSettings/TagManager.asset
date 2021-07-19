@@ -13,6 +13,7 @@ TagManager:
   - BottomLadder
   - BrokenFloor
   - Lever
+  - EnemyUnbeatable
   layers:
   - Default
   - TransparentFX

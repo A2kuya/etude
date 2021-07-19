@@ -8,7 +8,7 @@ public class SnakeHurt : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         snake = animator.GetComponent<Snake>();
-        //snake.gameObject.tag = "EnemyUnbeatable";
+        snake.isChase = true;
         snake.CheckDead();
         animator.speed = 0.5f;
     }

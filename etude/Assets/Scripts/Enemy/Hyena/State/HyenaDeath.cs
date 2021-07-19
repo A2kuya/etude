@@ -12,7 +12,9 @@ public class HyenaDeath : StateMachineBehaviour
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f){
+           hyena.Death();
+        }
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

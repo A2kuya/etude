@@ -5,6 +5,8 @@ using System;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
+	public GameManagerForMap manager;
+
 	// State() Var
 	private Collider2D col;
 	public Collider2D attackPos;
@@ -298,6 +300,12 @@ public class Player : MonoBehaviour
 					state = State.idle;
 					moveSpeed = 8f;
 				}
+			}
+
+			if (interactObj.tag == "NPC")
+			{
+				manager.Action(interactObj);
+				
 			}
 		}
 

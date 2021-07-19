@@ -42,7 +42,7 @@ public abstract class Enemy : MonoBehaviour
         playerDistance = Vector2.Distance(transform.position, player.transform.position);
         isLeft = (transform.position.x - player.transform.position.x > 0);
     }
-    public void Flip(bool reverse = false)  //좌우 반전
+    virtual public void Flip(bool reverse = false)  //좌우 반전
     {  
         bool dir = (reverse? !isLeft : isLeft);
         if (dir)
@@ -62,21 +62,23 @@ public abstract class Enemy : MonoBehaviour
         if(gameObject.activeSelf)
             anim.SetTrigger("isHurt");
     }
-    public void TakeDamage(int damage, int stiffness, Vector3 attackPosition)  //피격
+    public void TakeDamage(int damage, int stiffness, Vector2 enemyPos, Vector2 knockback)
     {
-        curHp -= damage;
-        this.stiffness -= stiffness;
-        Vector2 v;
-        if(transform.position.x - attackPosition.x > 0)
-            v = Vector2.right;
-        else if(transform.position.x - attackPosition.x == 0)
-            if(isLeft) v = Vector2.right;
-            else v = Vector2.left;
-        else    v = Vector2.left;
+		hp -= damage;
+		this.stiffness -= stiffness;
+		int knockbackDir = 0; 
+		if(transform.position.x - enemyPos.x <= 0)
+        {
+			knockbackDir = -1;
+        }
+        else
+        {
+			knockbackDir = 1;
+        }
         Stop();
-        rigid.AddForce(v + Vector2.up);
-        anim.SetTrigger("isHurt");
-    }
+	    rigid.AddForce(new Vector2(knockbackDir * knockback.x, knockback.y));
+		anim.SetTrigger("isHurt");
+	}
     public void GetSpriteSize(){
         Vector2 worldSize = Vector3.zero;
         spriteSize = spriteRenderer.sprite.rect.size;
