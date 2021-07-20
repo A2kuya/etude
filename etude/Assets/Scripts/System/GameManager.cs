@@ -3,15 +3,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManagerForMap : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+
+    //NPC talk
+
     public TalkManager talkManager;
     public Text talkText;
     public GameObject talkPanel;
     public GameObject scanObject;
     public int talkIndex;
-
     public bool isAction;
+
+    //Endless System
+
+
+    //Shop
+
+    public Shop shop;
+
+    private int count;
+
+
+    private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+
+        }
+    
 
     public void Action(GameObject scanObj)
     {
@@ -19,8 +38,15 @@ public class GameManagerForMap : MonoBehaviour
         ObjData objData = scanObject.GetComponent<ObjData>();
         Talk(objData.id,objData.isNpc);
 
-        talkPanel.SetActive(isAction);
+        if(objData.id==101)
+        {
+            shop.Action();
 
+        }
+        else
+        {
+            talkPanel.SetActive(isAction);
+        }
     }
 
     void Talk(int id, bool isNpc)
@@ -45,6 +71,15 @@ public class GameManagerForMap : MonoBehaviour
 
         isAction=true;
         talkIndex++;
+    }
+
+    void addCount()
+    {
+        count++;
+    }
+    int GetCount()
+    {
+        return count;
     }
 
 }
