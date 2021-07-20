@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
 	public int specialDamage = 30;
 	public int chargeDamage = 50;
 	private int stiffness = 0;
+	public int money = 0;
 
 	// Move
 	bool canMove = true;
@@ -743,6 +744,19 @@ public class Player : MonoBehaviour
 				hp += healAmount;
 			}
 		}
+    }
+
+	public void BuyItem(int amount)
+    {
+		if (money < amount)
+			return;
+		else
+			money -= amount;
+    }
+
+	public void GetCoin(int amount)
+    {
+		money += amount;
     }
 
 	private void OnTriggerEnter2D(Collider2D collision)

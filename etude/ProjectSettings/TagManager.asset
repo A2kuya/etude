@@ -14,6 +14,7 @@ TagManager:
   - BrokenFloor
   - Lever
   - EnemyUnbeatable
+  - NPC
   layers:
   - Default
   - TransparentFX
@@ -37,7 +38,7 @@ TagManager:
   - 
   - Minimap
   - 
-  - 
+  - Coin
   - 
   - 
   - 

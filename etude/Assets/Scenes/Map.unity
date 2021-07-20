@@ -45920,7 +45920,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 215159
+    m_Bits: 4409463
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -57823,25 +57823,9 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 952024905}
-    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
-      propertyPath: unBeatTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
-      propertyPath: brokeGround
-      value: 
-      objectReference: {fileID: 995025521}
-    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
-      propertyPath: dashCoolTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1919837712281944194, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 1919837712919254300, guid: f32460f1c17607744bc69510003bf01e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_RootOrder
