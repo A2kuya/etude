@@ -10,6 +10,7 @@ public class VultureFallStones : StateMachineBehaviour
         vulture = animator.GetComponent<Vulture>(); 
         animator.speed = 0;
         vulture.isMoving = true;
+        vulture.isAttack = true;
         iTween.MoveTo(vulture.gameObject, iTween.Hash("y", vulture.left.y, "easeType", iTween.EaseType.easeOutExpo, "oncomplete", "FallStoneStart"));
         
     }
@@ -19,6 +20,7 @@ public class VultureFallStones : StateMachineBehaviour
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        vulture.isMoving = false;
         vulture.FallStoneEnd();
     }
 }

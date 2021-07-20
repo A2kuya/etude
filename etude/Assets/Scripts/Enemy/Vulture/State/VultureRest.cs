@@ -7,7 +7,8 @@ public class VultureRest : StateMachineBehaviour
     Vulture vulture;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        vulture = animator.GetComponent<Vulture>();       
+        vulture = animator.GetComponent<Vulture>();
+        vulture.RestStart();    
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

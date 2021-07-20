@@ -7,7 +7,9 @@ public class VultureCutAir : StateMachineBehaviour
     Vulture vulture;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        vulture = animator.GetComponent<Vulture>();       
+        vulture = animator.GetComponent<Vulture>();      
+        vulture.CutAirStart(); 
+        animator.speed = 0;
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -15,6 +17,7 @@ public class VultureCutAir : StateMachineBehaviour
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        animator.speed = 1;
+        vulture.CutAirEnd();
     }
 }
