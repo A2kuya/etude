@@ -444,13 +444,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
   attackPos: {fileID: 1919837712919254296}
-  animator: {fileID: 0}
   maxHp: 100
   hp: 100
   damage: 10
   specialDamage: 30
   chargeDamage: 50
-  stiffness: 0
   velocity: {x: 0, y: 0, z: 0}
   moveSpeed: 8
   maxJumpHeight: 5
@@ -459,10 +457,9 @@ MonoBehaviour:
   downJump: 0
   dashCoolTime: 0.5
   attackCoolTime: 1
-  brokeGround: {fileID: 0}
   speicalAttackCoolTime: 0.5
-  isSpecialAttackReady: 1
   healAmount: 10
+  unBeatTime: 0
 --- !u!1 &1919837712606562335
 GameObject:
   m_ObjectHideFlags: 0
