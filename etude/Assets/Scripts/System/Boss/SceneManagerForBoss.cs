@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SceneManagerForBoss : MonoBehaviour
 {
-    public GameObject Boss;
+    public Vulture Boss;
     public GameObject Spine;
     public GameObject Platform;
 
@@ -22,15 +22,17 @@ public class SceneManagerForBoss : MonoBehaviour
     }
     void Update()
     {
-        if(false)//보스 체력이 50 이하
+
+        /*switch(Boss.state)//보스 체력이 50 이하
         {
-            ActiveSpin();           
-        }
-        
-        if(false)
-        {
+            case Boss.:
+            ActiveSpin();
+            break;
+
+            case 3:
             DeleteRandomPlatfrom();
-        }
+            break;
+        }*/
     }
 
 

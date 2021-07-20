@@ -27,6 +27,10 @@ AnimationClip:
       value: {fileID: -7861718794189056894, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
     - time: 0.25
       value: {fileID: 1167447168798534649, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
+    - time: 0.33333334
+      value: {fileID: -2488760612029165208, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
+    - time: 0.41666666
+      value: {fileID: 5327983651339067107, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,12 +54,14 @@ AnimationClip:
     - {fileID: 2824886239409089999, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
     - {fileID: -7861718794189056894, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
     - {fileID: 1167447168798534649, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
+    - {fileID: -2488760612029165208, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
+    - {fileID: 5327983651339067107, guid: 105bf0579a0961a4a97eb7bfef9b64b1, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.33333334
+    m_StopTime: 0.5
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -77,6 +83,13 @@ AnimationClip:
   m_Events:
   - time: 0.25
     functionName: ActiveAttackPos
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.41666666
+    functionName: DeActiveAttackPos
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
