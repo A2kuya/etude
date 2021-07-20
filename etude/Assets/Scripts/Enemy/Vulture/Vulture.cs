@@ -59,11 +59,11 @@ public class Vulture : Boss
                 if (CheckPhase()){
                     anim.SetTrigger("changePhase");
                 }
-                else if (attackPatterns["fallStones"].Can())
-                {
-                    isAttack = true;
-                    attackPatterns["fallStones"].Excute();
-                }
+                // else if (attackPatterns["fallStones"].Can())
+                // {
+                //     isAttack = true;
+                //     attackPatterns["fallStones"].Excute();
+                // }
                 else if (attackPatterns["shootRay"].Can())
                 {
                     isAttack = true;
