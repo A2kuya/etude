@@ -25,7 +25,8 @@ public class PlayerAttackPos : MonoBehaviour
 
         if (player.GetState() == "specialAttack" && collision.transform.tag == "BrokenFloor")
         {
-            player.brokeGround.Break();
+            BrokeGround brokeGround = collision.GetComponent<BrokeGround>();
+            brokeGround.Break();
             gameObject.SetActive(false);
         }
     }

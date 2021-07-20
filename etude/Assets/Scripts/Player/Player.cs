@@ -7,14 +7,14 @@ public class Player : MonoBehaviour
 {
 	public GameManagerForMap manager;
 
-	// State() Var
+	// State()
 	private Collider2D col;
 	public Collider2D attackPos;
 	private Controller2D controller;
     private Rigidbody2D rb;
-	public Animator animator;
+	private Animator animator;
 
-	// Key Var
+	// Key
 	private float hAxis;
 	private float vAxis;
 	private bool jumpKeyDown;
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
 	public int damage = 10;
 	public int specialDamage = 30;
 	public int chargeDamage = 50;
-	public int stiffness = 0;
+	private int stiffness = 0;
 
 	// Move
 	bool canMove = true;
@@ -82,10 +82,9 @@ public class Player : MonoBehaviour
 	private float chargeAttackMinTime = 1;
 
 	// Special Attack
-	public BrokeGround brokeGround;
 	public float speicalAttackCoolTime;
 	float speicalAttackDelay;
-	public bool isSpecialAttackReady = true;
+	private bool isSpecialAttackReady = true;
 
 	// Ladder Climb
 	bool isLadder = false;
@@ -105,6 +104,10 @@ public class Player : MonoBehaviour
 	// Heal
 	private int potions = 5;
 	public int healAmount;
+
+	// UnBeat
+	private bool isUnBeat = false;
+	public float unBeatTime;
 
 	void Start()
 	{
@@ -692,28 +695,43 @@ public class Player : MonoBehaviour
 
 	public void TakeDamage(int damage, int stiffness)
     {
-		hp -= damage;
-		this.stiffness -= stiffness;
-		animator.Play("player_hurt");
+		if (!isUnBeat)
+		{
+			hp -= damage;
+			this.stiffness -= stiffness;
+			animator.Play("player_hurt");
+			StartCoroutine("UnBeatable");
+		}
 	}
 
 	public void TakeDamage(int damage, int stiffness, Vector2 enemyPos, Vector2 knockback)
-    {
-		hp -= damage;
-		this.stiffness -= stiffness;
-		int knockbackDir = 0; 
-		if(transform.position.x - enemyPos.x <= 0)
-        {
-			knockbackDir = -1;
-        }
-        else
-        {
-			knockbackDir = 1;
-        }
-		velocity.x = knockbackDir * knockback.x;
-		velocity.y = knockback.y;
-		animator.Play("player_hurt");
+	{
+		if (!isUnBeat)
+		{
+			hp -= damage;
+			this.stiffness -= stiffness;
+			int knockbackDir = 0;
+			if (transform.position.x - enemyPos.x <= 0)
+			{
+				knockbackDir = -1;
+			}
+			else
+			{
+				knockbackDir = 1;
+			}
+			velocity.x = knockbackDir * knockback.x;
+			velocity.y = knockback.y;
+			animator.Play("player_hurt");
+			StartCoroutine("UnBeatable");
+		}
 	}
+
+	private IEnumerator UnBeatable()
+    {
+		isUnBeat = true;
+		yield return new WaitForSeconds(unBeatTime);
+		isUnBeat = false;
+    }
 
 	private void Heal()
     {
