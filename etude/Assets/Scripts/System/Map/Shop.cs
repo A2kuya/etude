@@ -8,6 +8,10 @@ public class Shop : MonoBehaviour
     public RectTransform uiGroup;
     public Player enterPlayer;
 
+    public GameObject[] itemObj;
+    public int[] itemPrice;
+
+
     bool flag;
 
 
@@ -39,6 +43,11 @@ public class Shop : MonoBehaviour
         }
 
         flag=!flag;
+
+    }
+
+    public void Buy(int index)
+    {
 
     }
 
