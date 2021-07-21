@@ -295,12 +295,10 @@ MonoBehaviour:
   stoneCycleMin: 0.1
   stoneCycleMax: 0.4
   rayTime: 3
-  rayRotateAmount: 2
-  nextAttackDir: {x: 0, y: 0, z: 0}
-  nextAttackLocation: {x: 0, y: 0, z: 0}
-  cutCount: 0
+  rayRotateAmount: 1
   cutAirDelayFirstPhase: 0.6
   cutAirDelaySecondPhase: 0.3
+  resttime: 5
 --- !u!1 &6832445954524418967
 GameObject:
   m_ObjectHideFlags: 0

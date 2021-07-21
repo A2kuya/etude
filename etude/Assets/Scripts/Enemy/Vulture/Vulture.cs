@@ -19,6 +19,7 @@ public class Vulture : Boss
     
     public float attackCooltime;
     public bool isAttack;
+    private Vector2 transportVector;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -47,9 +48,7 @@ public class Vulture : Boss
         CheckDead();
         CaculateDistance();
         CheckObstacle();
-        curtime -= Time.deltaTime;
     }
-    public float curtime;
 
     IEnumerator Attack(){
         while(true){
@@ -59,22 +58,25 @@ public class Vulture : Boss
                 if (CheckPhase()){
                     anim.SetTrigger("changePhase");
                 }
-                // else if (attackPatterns["fallStones"].Can())
-                // {
-                //     isAttack = true;
-                //     attackPatterns["fallStones"].Excute();
-                // }
+                else if (attackPatterns["fallStones"].Can())
+                {
+                    Debug.Log("fallstone");
+                    isAttack = true;
+                    attackPatterns["fallStones"].Excute();
+                }
                 else if (attackPatterns["shootRay"].Can())
                 {
                     isAttack = true;
                     attackPatterns["shootRay"].Excute();
                 }
                 else if (attackPatterns["cutAir"].Can()){
+                    Debug.Log("cutair");
                     isAttack = true;
                     attackPatterns["cutAir"].Excute();
                 }
                 else
                 {
+                    Debug.Log("Move");
                     Move();
                     yield return new WaitForSeconds(attackCooltime - 1f);
                 }
@@ -126,6 +128,7 @@ public class Vulture : Boss
     }
     public Vector3 left;
     public Vector3 right;
+    private Vector3 startPosition;
     public int roundTripCount;
     public int roundTripSpeed;
     public float stoneCycleMin;
@@ -135,13 +138,23 @@ public class Vulture : Boss
         count = 0;
         anim.speed = 1;
         isMoving = false;
+        startPosition = transform.position;
         StartCoroutine(creatStones);
         Flip();
     }
     public void FallStone(){
+        
         if(!isMoving){
-            if(count >= roundTripCount)
+            if(count > roundTripCount)
                 FallStoneEnd();
+            else if(count == roundTripCount){
+                count++;
+                iTween.MoveTo(gameObject, iTween.Hash(
+                    "position", startPosition,
+                    "easeType", iTween.EaseType.linear,
+                    "speed", roundTripSpeed
+                ));
+            }
             else{
                 isMoving = true;
                 count++;
@@ -170,17 +183,20 @@ public class Vulture : Boss
         anim.speed = 1;
         isMoving = false;
         StopCoroutine(creatStones);
-        isAttack = false;
-        anim.SetTrigger("rest");
+        anim.SetTrigger("attackEnd");
     }
+
+
 
     public int rayTime;
     public int rayRotateAmount;
+    public float rayDelay;
+    private int raynum;
+    private float angle;
     public void ShootRayStart(){
-        int raynum = 0;
         UpdateDirection();
         Flip();
-        transform.GetChild(1).localRotation = Quaternion.Euler(0, 0, 0);
+        
         isAttack = true;
         switch(state){
             case phase.first:
@@ -191,11 +207,38 @@ public class Vulture : Boss
                 raynum = 6;
                 break;
         }
-        float angle = 360 / raynum;
+        angle = 360 / raynum;
+        StartCoroutine(RayWarning());
+    }
+    IEnumerator RayWarning(){
+        WaitForSeconds wait = new WaitForSeconds(rayDelay / 3);
+        GameObject[] warningLines = new GameObject[6];
+        float q = Vector2.SignedAngle(Vector2.right, playerVector + new Vector2(0, 0.5f));
+        atkCollider[1].transform.localRotation = Quaternion.Euler(0, 0, q);
         for (int i = 0; i < raynum; i++){
-            var tmp = Instantiate(prfRay, transform.GetChild(1));
-            tmp.transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i) * (isLeft ? 1 : -1), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4;
-            tmp.transform.rotation = Quaternion.Euler(0, 0, angle * i);            
+            warningLines[i] = Instantiate(prfWarningLine, atkCollider[1].transform);
+            warningLines[i].transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4 * 10.5f;
+            warningLines[i].transform.localRotation = Quaternion.Euler(0, 0, angle * i);
+            warningLines[i].GetComponent<SpriteRenderer>().spriteSortPoint = SpriteSortPoint.Pivot;
+            warningLines[i].transform.localScale /= 20;
+
+        }
+        yield return wait;
+        for(int i=0;i<raynum;i++){
+            warningLines[i].SetActive(false);
+        }
+        yield return wait;
+        for(int i=0;i<raynum;i++){
+            warningLines[i].SetActive(true);
+        }
+        yield return wait;
+        for(int i=0;i<raynum;i++){
+            Destroy(warningLines[i]);
+        }
+        for (int i = 0; i < raynum; i++){
+            var tmp = Instantiate(prfRay, atkCollider[1].transform);
+            tmp.transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4;
+            tmp.transform.localRotation = Quaternion.Euler(0, 0, angle * i);
         }
         iTween.RotateAdd(transform.GetChild(1).gameObject, iTween.Hash(
             "amount", new Vector3(0,0, angle * rayRotateAmount),
@@ -215,7 +258,6 @@ public class Vulture : Boss
     }
 
 
-    bool keep;
     Vector3 nextAttackDir;
     Vector3 nextAttackLocation;
     int cutCount;
@@ -223,7 +265,6 @@ public class Vulture : Boss
     public float cutAirDelaySecondPhase;
     float cutAirDelay;
     public void ReadyCutAir(){
-        keep = false;
         nextAttackDir = Vector3.right;
         isLeft = true;
         Flip();
@@ -292,9 +333,9 @@ public class Vulture : Boss
     }
     public void CutAirStart(){
         isAttack = true;
-        StartCoroutine(DrawWarningLine());
+        StartCoroutine(CutWarning());
     }
-    IEnumerator DrawWarningLine(){
+    IEnumerator CutWarning(){
         WaitForSeconds wait = new WaitForSeconds(cutAirDelay / 3);
         float q = Vector2.SignedAngle(Vector2.right, nextAttackDir);
         transform.position = nextAttackLocation + nextAttackDir * -40;
@@ -321,36 +362,83 @@ public class Vulture : Boss
     public void CutAirEnd(){
         atkCollider[0].SetActive(false);
         transform.rotation = Quaternion.Euler(0,0,0);
-        transform.position = new Vector2(Random.Range(left.x, right.x), left.y+10);
+        transportVector = new Vector2(Random.Range(left.x, right.x), left.y+10);
+        transport = true;
     }
 
 
-    protected Vector2 restPoint;
+
+    public float resttime;
+    public float fallDistance;
+    private int downCount;
+    private bool transport;
     public void RestStart(){
-        IEnumerator rest = Rest();
-        iTween.MoveTo(gameObject, iTween.Hash(
-            "y", left.y,
-            "time", 1f,
-            "easeType", iTween.EaseType.linear,
-            "oncomplete", "StartCoroutine",
-            "oncompleteparams", rest
-        ));    
-    }
-    IEnumerator Rest(){
-        WaitForSeconds wait = new WaitForSeconds(1f);
-        rigid.bodyType = RigidbodyType2D.Dynamic;
-        while(!isGround){
-            iTween.MoveBy(gameObject, iTween.Hash(
-                "y", 2f,
+        if(transport){
+            transport = false;
+            transform.position = transportVector;
+            iTween.MoveTo(gameObject, iTween.Hash(
+                "y", left.y,
                 "time", 1f,
-                "easeType", iTween.EaseType.easeInBack
+                "easeType", iTween.EaseType.linear,
+                "oncomplete", "RestFallStart"
+            ));
+         }else{
+             RestFallStart();
+         }
+    }
+    void RestFallStart(){
+        StartCoroutine(RestFall());
+    }
+    IEnumerator RestFall(){
+        WaitForSeconds wait = new WaitForSeconds(1f);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position - new Vector3(0, spriteSize.y, 0), Vector2.down, 25, obstacleLayer);
+        downCount = (int)(hit.distance / fallDistance);
+        for(int i = downCount;i > 0; i--){
+            iTween.MoveBy(gameObject, iTween.Hash(
+                "y", -fallDistance,
+                "time", 0.9f,
+                "easeType", iTween.EaseType.easeOutCubic
             ));
             yield return wait;
         }
-        Trigger("restEnd");
-        isAttack = false;
+        iTween.MoveBy(gameObject, iTween.Hash(
+            "y", downCount * fallDistance - hit.distance,
+            "time", 1f,
+            "easeType", iTween.EaseType.easeOutCubic
+        ));
+        yield return wait;
+        Trigger("rest");
     }
-
+    public void RestInLand(){
+        StartCoroutine(Rest());
+    }
+    IEnumerator Rest(){
+        rigid.bodyType = RigidbodyType2D.Dynamic;
+        float curtime = resttime;
+        while(curtime > 0f){
+            yield return new WaitForEndOfFrame();
+            curtime -= Time.deltaTime;
+        }
+        rigid.bodyType = RigidbodyType2D.Kinematic;
+        isAttack = false;
+        Trigger("restEnd");
+    }
+    public void TakeOffStart(){
+        StartCoroutine(TakeOff());
+    }
+    IEnumerator TakeOff(){
+        WaitForSeconds wait = new WaitForSeconds(1f);
+        for(int i = 3;i > 0; i--){
+            iTween.MoveBy(gameObject, iTween.Hash(
+                "y", 1f,
+                "time", 0.9f,
+                "easeType", iTween.EaseType.easeOutCubic
+            ));
+            yield return wait;
+        }
+        yield return wait;
+        Trigger("fly");
+    }
 
 
 
@@ -380,10 +468,7 @@ public class Vulture : Boss
     }
     public override void Death()
     {
-        StopCoroutine(Attack());
         rigid.bodyType = RigidbodyType2D.Dynamic;
-        gameObject.tag = "Untagged";
-        Destroy(this);
         base.Death();
     }
     override public void CaculateDistance() {  //거리계산 및 방향계산
@@ -396,7 +481,11 @@ public class Vulture : Boss
     }
     override public void CheckObstacle(){
         //바닥 체크
-        isGround = Physics2D.OverlapCircle(new Vector2(0, transform.position.y - spriteSize.y / 2), 0.1f, obstacleLayer);
+        isGround = Physics2D.OverlapCircle(transform.position - new Vector3(0, spriteSize.y / -2, 0), 0.2f, obstacleLayer);
+    }
+    public void KnockbackToPlayer(){
+        Vector2 v = new Vector2(100, 20);
+        player.GetComponent<Player>().TakeDamage(0, 100, transform.position, v);
     }
     override public void Flip(bool reverse = false){
         bool dir = (reverse ? !isLeft : isLeft);

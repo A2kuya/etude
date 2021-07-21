@@ -21,6 +21,9 @@ abstract public class Boss : Enemy
     
     override public void Death(){
         Destroy(hpBar);
+        StopAllCoroutines();
+        gameObject.tag = "Untagged";
+        anim.speed = 0;
         this.enabled = false;
-    }        
+    }
 }
