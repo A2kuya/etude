@@ -49473,7 +49473,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Boss: {fileID: 1565329082}
-  Ground: {fileID: 0}
+  Ground: {fileID: 995025516}
   barri: {fileID: 746685328}
 --- !u!61 &1404770720
 BoxCollider2D:
