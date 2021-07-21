@@ -23,16 +23,16 @@ public class SceneManagerForBoss : MonoBehaviour
     void Update()
     {
 
-        /*switch(Boss.state)//보스 체력이 50 이하
-        {
-            case Boss.:
-            ActiveSpin();
-            break;
+        // switch(Boss.state)//보스 체력이 50 이하
+        // {
+        //     case Boss.state.:
+        //     ActiveSpin();
+        //     break;
 
-            case 3:
-            DeleteRandomPlatfrom();
-            break;
-        }*/
+        //     case 3:
+        //     DeleteRandomPlatfrom();
+        //     break;
+        // }
     }
 
 

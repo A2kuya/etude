@@ -5,41 +5,43 @@ using UnityEngine;
 
 public class ActiveBarricade : MonoBehaviour
 {
+    public BossHyena Boss;
+
     Transform Barri;
     float StartPosition;
-    bool flag=true;
+    bool flag;
 
-    // Start is called before the first frame update
+
     void Start()
     {
         Barri = GetComponent<Transform>();
         StartPosition = Barri.position.x;
+        flag=true;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void Active()
     {
-        if (flag)
-            Deactivate();
+        if(flag)
+        {
+            if(Barri.position.x - StartPosition < 4)
+                Barri.Translate(Vector3.right * Time.deltaTime);
+        }
         else
-            Active();
-    }
-
-    void Active()
-    {
-        if(StartPosition - Barri.position.x < 4)
-            Barri.Translate(Vector3.right * Time.deltaTime);
-    }
-
-    void Deactivate()
-    {
-        if (StartPosition - Barri.position.x < 4)
-            Barri.Translate(Vector3.left * Time.deltaTime*2);
+        {
+            if (StartPosition - Barri.position.x < 0)
+                Barri.Translate(Vector3.left * Time.deltaTime*2);
+        }
     }
 
 
     public void SwitchFlag()
     {
         flag = !flag;
+    }
+
+    public bool getflag()
+    {
+        return flag;
     }
 }

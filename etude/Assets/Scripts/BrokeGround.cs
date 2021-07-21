@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class BrokeGround : MonoBehaviour
 {
+    bool BossDie;
     // Start is called before the first frame update
     void Start()
     {
-        
+        BossDie=false;
     }
 
     // Update is called once per frame
@@ -18,6 +19,12 @@ public class BrokeGround : MonoBehaviour
 
     public void Break()
     {
-        this.gameObject.SetActive(false);
+        if(BossDie)
+            this.gameObject.SetActive(false);
+    }
+
+    public void SwitchBossDie()
+    {
+        BossDie=!BossDie;
     }
 }
