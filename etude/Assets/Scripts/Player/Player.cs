@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 	private Collider2D col;
 	public Collider2D attackPos;
 	private Controller2D controller;
-    private Rigidbody2D rb;
+	private Rigidbody2D rb;
 	private Animator animator;
 
 	// Key
@@ -99,6 +99,9 @@ public class Player : MonoBehaviour
 	const float climbCoolTime = 0.4f;
 	bool isClimbReady = false;
 
+	// Hurt
+	public float hurtTime;
+
 	// Interact
 	GameObject interactObj;
 
@@ -144,14 +147,14 @@ public class Player : MonoBehaviour
 		Heal();
 
 		StateManager();
-
+		print(state);
 		animator.SetInteger("state", (int)state);
 
 		CalculateVelocity();
 	}
 
 	void InputManager()
-    {
+	{
 		hAxis = Input.GetAxisRaw("Horizontal");
 		vAxis = Input.GetAxisRaw("Vertical");
 		attackKeyDown = Input.GetKeyDown(KeyCode.Z);
@@ -167,50 +170,55 @@ public class Player : MonoBehaviour
 	}
 
 	void StateManager()
-    {
+	{
 		// Priority = dash -> climb -> fall -> attack -> jump -> run -> walk -> idle
 		if (state == State.dash)
-        {
+		{
 			InitAttack();
-			animator.Play("player_dash");
+			animator.Play("player_dash_blend_tree");
 		}
 
 		else if (state == State.climb)
-        {
+		{
 			return;
-        }
+		}
 
-		else if (velocity.y < 0f)
+		else if (velocity.y < -0.2f)
 		{
 			if (state == State.jumpAttack)
-            {
+			{
 				velocity.y -= .5f;
 			}
 			else
-            {
+			{
 				state = State.fall;
 			}
 		}
 
 		else if (state == State.jump)
-        {
+		{
 			if (velocity.y < 0f)
+			{
+				state = State.fall;
+			}
+
+			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_jump") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
 			{
 				state = State.fall;
 			}
 		}
 
 		else if (state == State.fall)
-        {
-			if(controller.collisions.below)
-            {
+		{
+			if (controller.collisions.below)
+			{
 				state = State.idle;
 				InitAttack();
 			}
 		}
 
 		else if (state == State.jumpAttack)
-        {
+		{
 			if (controller.collisions.below)
 			{
 				if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_jump_attack_transition") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
@@ -222,19 +230,19 @@ public class Player : MonoBehaviour
 					animator.SetTrigger("exitJumpAttack");
 				}
 			}
-			
+
 		}
 
 		else if (state == State.specialAttack)
-        {
+		{
 			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_special_attack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-            {
+			{
 				state = State.idle;
-            }
+			}
 		}
 
 		else if (state == State.charge)
-        {
+		{
 			moveSpeed = 5f;
 			if (attackKeyUp)
 			{
@@ -243,7 +251,7 @@ public class Player : MonoBehaviour
 					state = State.chargeAttack;
 				}
 				else
-                {
+				{
 					state = State.idle;
 				}
 				chargeAttackTime = 0;
@@ -252,37 +260,37 @@ public class Player : MonoBehaviour
 		}
 
 		else if (state == State.chargeAttack)
-        {
+		{
 			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_charge_attack") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
-            {
+			{
 				state = State.idle;
 			}
 		}
 
 		else if (state == State.attack)
-        {
+		{
 			moveSpeed = 1f;
 			if (attacks[0] && !attacks[1])
-            {
+			{
 				animator.Play("player_attack_1");
 			}
-			
+
 			if (animator.GetCurrentAnimatorStateInfo(0).IsName("player_attack_1") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
 			{
 				attacks[0] = false;
 
 				if (attacks[1])
-                {
+				{
 					animator.Play("player_attack_2");
 				}
 
 				else if (chargeAttackTime > .3f)
-                {
+				{
 					state = State.charge;
-                }
+				}
 
 				else
-                {
+				{
 					state = State.idle;
 					moveSpeed = 8f;
 				}
@@ -314,10 +322,10 @@ public class Player : MonoBehaviour
 		}
 
 		else
-        {
+		{
 			state = State.idle;
-        }
-    }
+		}
+	}
 
 	private void Move()
 	{
@@ -400,13 +408,13 @@ public class Player : MonoBehaviour
 	}
 
 	private void Jump()
-    {
-		if (state != State.attack && state != State.jumpAttack  && state != State.dash)
+	{
+		if (state != State.attack && state != State.jumpAttack && state != State.dash)
 		{
 			if (jumpKeyDown)
 			{
 				if (state == State.climb)
-                {
+				{
 					isClimbReady = false;
 					climbDelay = 0;
 					velocity.x += 1;
@@ -417,7 +425,6 @@ public class Player : MonoBehaviour
 
 				if (vAxis == -1)
 				{
-					print(123);
 					downJump = true;
 				}
 				OnJumpInputDown();
@@ -445,9 +452,9 @@ public class Player : MonoBehaviour
 			}
 
 			else if (downJump)
-            {
+			{
 				return;
-            }
+			}
 
 			else
 			{
@@ -467,36 +474,48 @@ public class Player : MonoBehaviour
 
 	private void Dash()
 	{
-		if (dashKey)
+		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash1) ||
+			SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
 		{
-			if (isDashReady)
+			if (dashKey)
 			{
+				if (isDashReady)
 				{
-					state = State.dash;
-					canMove = false;
-					dashDir = playerDir;
-					startTime = Time.time;
-					dashDelay = 0;
-					attackPos.gameObject.SetActive(false);
+					{
+						if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+                        {
+							animator.SetFloat("dashNum", 1);
+                        }
+						state = State.dash;
+						canMove = false;
+						dashDir = playerDir;
+						startTime = Time.time;
+						dashDelay = 0;
+						attackPos.gameObject.SetActive(false);
+					}
 				}
 			}
-		}
 
-		CoolTimer(ref dashDelay, ref isDashReady, dashCoolTime);
+			CoolTimer(ref dashDelay, ref isDashReady, dashCoolTime);
 
-		if (state == State.dash)
-		{
-			velocity = Vector3.zero;
-
-			float progress = (Time.time - startTime) / dashTime;
-			progress = Mathf.Clamp(progress, 0, 1);
-			moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
-			controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
-			if (progress >= 1)
+			if (state == State.dash)
 			{
-				canMove = true;
-				state = State.idle;
-				transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
+				velocity = Vector3.zero;
+
+				float progress = (Time.time - startTime) / dashTime;
+				progress = Mathf.Clamp(progress, 0, 1);
+				moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
+				controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
+				if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+                {
+					StartCoroutine("UnBeatable", dashTime);
+				}
+				if (progress >= 1)
+				{
+					canMove = true;
+					state = State.idle;
+					transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
+				}
 			}
 		}
 	}
@@ -522,37 +541,40 @@ public class Player : MonoBehaviour
 		CoolTimer(ref speicalAttackDelay, ref isSpecialAttackReady, speicalAttackCoolTime);
 
 		if (attackKeyDown)
-        {
+		{
 			if (controller.collisions.below)
-            {
+			{
 				if (vAxis == -1)
 				{
-					if (isSpecialAttackReady && state == State.idle)
+					if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.SpecialAttack1))
 					{
-						state = State.specialAttack;
-						speicalAttackDelay = 0f;
-						isSpecialAttackReady = false;
+						if (isSpecialAttackReady && state == State.idle)
+						{
+							state = State.specialAttack;
+							speicalAttackDelay = 0f;
+							isSpecialAttackReady = false;
+						}
 					}
 				}
 
-				else if (isAttackReady)
+				else
 				{
-					state = State.attack;
-					if (!attacks[0] && !attacks[1])
+					if (!attacks[0] && !attacks[1] && isAttackReady)
 					{
+						state = State.attack;
 						attacks[0] = true;
 					}
 					else if (attacks[0])
 					{
+						state = State.attack;
 						attacks[1] = true;
 						attackDelay = 0f;
 						isAttackReady = false;
 					}
 				}
 			}
-			 
-			else
-            {
+			else if (state != State.climb)
+			{
 				state = State.jumpAttack;
 				velocity.y = 0;
 			}
@@ -700,8 +722,7 @@ public class Player : MonoBehaviour
 		{
 			hp -= damage;
 			this.stiffness -= stiffness;
-			animator.Play("player_hurt");
-			StartCoroutine("UnBeatable");
+			StartCoroutine("hurtEffector");
 		}
 	}
 
@@ -723,16 +744,34 @@ public class Player : MonoBehaviour
 			velocity.x = knockbackDir * knockback.x;
 			velocity.y = knockback.y;
 			animator.Play("player_hurt");
+			state = State.idle;
+			InitAttack();
+			canMove = false;
 			StartCoroutine("UnBeatable");
 		}
 	}
 
-	private IEnumerator UnBeatable()
+	private IEnumerator hurtEffector()
+    {
+		animator.Play("player_hurt");
+		animator.SetBool("isHurt", true);
+		state = State.idle;
+		InitAttack();
+		canMove = false;
+
+		StartCoroutine("UnBeatable", unBeatTime);
+
+		yield return new WaitForSeconds(hurtTime);
+	}
+
+	private IEnumerator UnBeatable(float time)
     {
 		isUnBeat = true;
-		yield return new WaitForSeconds(unBeatTime);
+		yield return new WaitForSeconds(time);
+		animator.SetBool("isHurt", false);
 		isUnBeat = false;
-    }
+		canMove = true;
+	}
 
 	private void Heal()
     {

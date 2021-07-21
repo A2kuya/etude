@@ -45617,6 +45617,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7316770140547282125, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
+      propertyPath: coin
+      value: 
+      objectReference: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
     - target: {fileID: 7316770140547282167, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
       propertyPath: m_Name
       value: Hyena
@@ -45816,6 +45820,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossHyena
       objectReference: {fileID: 0}
+    - target: {fileID: 8034375001182517202, guid: 7878f2d04b52b7e4ea777a1f6f9c0c0e, type: 3}
+      propertyPath: coin
+      value: 
+      objectReference: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
     - target: {fileID: 8034375001182517230, guid: 7878f2d04b52b7e4ea777a1f6f9c0c0e, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -47010,6 +47018,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7316770140547282125, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
+      propertyPath: coin
+      value: 
+      objectReference: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
     - target: {fileID: 7316770140547282167, guid: 497d0b157380e8e4ea9b522153df83d9, type: 3}
       propertyPath: m_Name
       value: Hyena
@@ -47701,6 +47713,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Snake (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8743946464075532274, guid: 1eaf654a58e62c441a8758c19d38c72f, type: 3}
+      propertyPath: coin
+      value: 
+      objectReference: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
     - target: {fileID: 8743946464075532274, guid: 1eaf654a58e62c441a8758c19d38c72f, type: 3}
       propertyPath: canvas
       value: 
@@ -49329,6 +49345,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCam: {fileID: 1007516735}
+--- !u!1 &1439870634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1439870636}
+  - component: {fileID: 1439870635}
+  m_Layer: 0
+  m_Name: SkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1439870635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439870634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6976e73d3fcfbd14fa9f540941f98326, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unlockedSkillsList: 
+--- !u!4 &1439870636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439870634}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1452230489
 GameObject:
   m_ObjectHideFlags: 0
@@ -57823,6 +57883,18 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 952024905}
+    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: hurtTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: unBeatTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: attackCoolTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1919837712281944194, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_Name
       value: Player
@@ -57833,11 +57905,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 96.02
+      value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 34.55
+      value: 15.8
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -59337,6 +59409,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Snake
       objectReference: {fileID: 0}
+    - target: {fileID: 8743946464075532274, guid: 1eaf654a58e62c441a8758c19d38c72f, type: 3}
+      propertyPath: coin
+      value: 
+      objectReference: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
     - target: {fileID: 8743946464075532274, guid: 1eaf654a58e62c441a8758c19d38c72f, type: 3}
       propertyPath: canvas
       value: 

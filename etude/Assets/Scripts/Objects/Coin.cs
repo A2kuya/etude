@@ -9,7 +9,7 @@ public class Coin : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             Player player = collision.gameObject.GetComponent<Player>();
-            player.GetCoin(100);
+            player.GetCoin(1);
             Destroy(gameObject);
         }
     }

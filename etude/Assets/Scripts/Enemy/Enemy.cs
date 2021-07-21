@@ -9,6 +9,7 @@ public abstract class Enemy : MonoBehaviour
     protected Animator anim;
     protected Rigidbody2D rigid;
     protected GameObject player;
+    public GameObject coin;
     public GameObject prfHpBar;
     public GameObject canvas;
     protected GameObject hpBar;
@@ -99,7 +100,18 @@ public abstract class Enemy : MonoBehaviour
         }
     }
     virtual public void Death(){
+        SpawnCoins();
         Destroy(hpBar);
         Destroy(gameObject);
+    }
+
+    private void SpawnCoins()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            int random = Random.Range(-500, 500);
+            var instance = Instantiate(coin, new Vector3(transform.position.x, transform.position.y + 2), Quaternion.identity);
+            instance.GetComponent<Rigidbody2D>().AddForce(new Vector2(random, 800));
+        }
     }
 }
