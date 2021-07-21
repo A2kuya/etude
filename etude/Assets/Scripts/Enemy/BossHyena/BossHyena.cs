@@ -189,11 +189,4 @@ public class BossHyena : Boss
             anim.SetTrigger("isDead");
         }
     }
-    public override void Death()
-    {
-        StopCoroutine(Attack());
-        gameObject.tag = "Untagged";
-        Destroy(this);
-        base.Death();
-    }
 }

@@ -58,6 +58,8 @@ public abstract class Enemy : MonoBehaviour
     public void TakeDamage(int damage, int stiffness = 0)  //피격
     {
         curHp -= damage;
+        if(curHp < 0)
+            curHp = 0;
         this.stiffness -= stiffness;
         CheckDead();
         if(gameObject.activeSelf)
@@ -66,6 +68,8 @@ public abstract class Enemy : MonoBehaviour
     public void TakeDamage(int damage, int stiffness, Vector2 enemyPos, Vector2 knockback)
     {
 		hp -= damage;
+        if(curHp < 0)
+            curHp = 0;
 		this.stiffness -= stiffness;
 		int knockbackDir = 0; 
 		if(transform.position.x - enemyPos.x <= 0)
