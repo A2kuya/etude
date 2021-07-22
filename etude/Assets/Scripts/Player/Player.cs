@@ -7,14 +7,20 @@ public class Player : MonoBehaviour
 {
 	public GameManager manager;
 
+	// Sound
+	public AudioClip clip;
+	public AudioClip[] audioClips;
+
 	// State()
 	private Collider2D col;
 	public Collider2D attackPos;
 	private Controller2D controller;
 	private Rigidbody2D rb;
 	private Animator animator;
+	public HealthBar healthBar;
 
 	// Key
+	private bool canGetKey = true;
 	private float hAxis;
 	private float vAxis;
 	private bool jumpKeyDown;
@@ -120,6 +126,8 @@ public class Player : MonoBehaviour
 		col = GetComponent<Collider2D>();
 		rb = GetComponent<Rigidbody2D>();
 
+		healthBar.SetMaxHealth(maxHp);
+
 		originGravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
 		gravity = originGravity;
 		maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -154,16 +162,33 @@ public class Player : MonoBehaviour
 
 	void InputManager()
 	{
-		hAxis = Input.GetAxisRaw("Horizontal");
-		vAxis = Input.GetAxisRaw("Vertical");
-		attackKeyDown = Input.GetKeyDown(KeyCode.Z);
-		attackKeyUp = Input.GetKeyUp(KeyCode.Z);
-		attackKey = Input.GetKey(KeyCode.Z);
-		jumpKeyDown = Input.GetKeyDown(KeyCode.X);
-		jumpKeyUp = Input.GetKeyUp(KeyCode.X);
-		dashKey = Input.GetKeyDown(KeyCode.C);
-		interactKey = Input.GetKeyDown(KeyCode.F);
-		HealKey = Input.GetKeyDown(KeyCode.A);
+		if (canGetKey)
+		{
+			hAxis = Input.GetAxisRaw("Horizontal");
+			vAxis = Input.GetAxisRaw("Vertical");
+			attackKeyDown = Input.GetKeyDown(KeyCode.Z);
+			attackKeyUp = Input.GetKeyUp(KeyCode.Z);
+			attackKey = Input.GetKey(KeyCode.Z);
+			jumpKeyDown = Input.GetKeyDown(KeyCode.X);
+			jumpKeyUp = Input.GetKeyUp(KeyCode.X);
+			dashKey = Input.GetKeyDown(KeyCode.C);
+			interactKey = Input.GetKeyDown(KeyCode.F);
+			HealKey = Input.GetKeyDown(KeyCode.A);
+		}
+
+		else
+		{
+			hAxis = 0;
+			vAxis = 0;
+			attackKeyDown = false;
+			attackKeyUp = false;
+			attackKey = false;
+			jumpKeyDown = false;
+			jumpKeyUp = false;
+			dashKey = false;
+			interactKey = false;
+			HealKey = false;
+		}
 
 		directionalInput = new Vector2(hAxis, vAxis);
 	}
@@ -720,6 +745,7 @@ public class Player : MonoBehaviour
 		if (!isUnBeat)
 		{
 			hp -= damage;
+			healthBar.SetHealth(hp);
 			this.stiffness -= stiffness;
 			StartCoroutine("hurtEffector");
 		}
@@ -756,8 +782,8 @@ public class Player : MonoBehaviour
 		animator.SetBool("isHurt", true);
 		state = State.idle;
 		InitAttack();
-		canMove = false;
-
+		canMove = true;
+		canGetKey = false;
 		StartCoroutine("UnBeatable", unBeatTime);
 
 		yield return new WaitForSeconds(hurtTime);
@@ -769,7 +795,7 @@ public class Player : MonoBehaviour
 		yield return new WaitForSeconds(time);
 		animator.SetBool("isHurt", false);
 		isUnBeat = false;
-		canMove = true;
+		canGetKey = true;
 	}
 
 	private void Heal()
@@ -784,15 +810,12 @@ public class Player : MonoBehaviour
 		}
     }
 
-	public void BuyItem(int amount)
+	public void SpendMoney(int amount)
     {
-		if (money < amount)
-			return;
-		else
-			money -= amount;
+		money -= amount;
     }
 
-	public void GetCoin(int amount)
+	public void GetMoney(int amount)
     {
 		money += amount;
     }
@@ -832,5 +855,15 @@ public class Player : MonoBehaviour
 			bottomLadder = false;
 			controller.bottomLadder = bottomLadder;
 		}
+	}
+
+	public void PlayAttack1Sound()
+    {
+		SoundManager.instance.SFXPlay("Attack1", audioClips[0]);
+    }
+
+	public void PlayAttack2Sound()
+	{
+		SoundManager.instance.SFXPlay("Attack2", audioClips[1]);
 	}
 }
