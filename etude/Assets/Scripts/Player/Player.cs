@@ -6,6 +6,7 @@ using System;
 public class Player : MonoBehaviour
 {
 	public GameManager manager;
+	public SkillManager skillManager;
 
 	// Sound
 	public AudioClip clip;
@@ -31,6 +32,8 @@ public class Player : MonoBehaviour
 	private bool dashKey;
 	private bool interactKey;
 	private bool HealKey;
+	private bool SkilltreeKey;
+
 	Vector2 directionalInput;
 
 	// State
@@ -42,7 +45,10 @@ public class Player : MonoBehaviour
 	public int specialDamage = 30;
 	public int chargeDamage = 50;
 	private int stiffness = 0;
+
+	//inventory
 	public int money = 0;
+	public int skillpoint=0;
 
 	// Move
 	bool canMove = true;
@@ -153,6 +159,7 @@ public class Player : MonoBehaviour
 		LadderClimb();
 		Interact();
 		Heal();
+		SkillTree();
 
 		StateManager();
 		animator.SetInteger("state", (int)state);
@@ -174,6 +181,7 @@ public class Player : MonoBehaviour
 			dashKey = Input.GetKeyDown(KeyCode.C);
 			interactKey = Input.GetKeyDown(KeyCode.F);
 			HealKey = Input.GetKeyDown(KeyCode.A);
+			SkilltreeKey = Input.GetKeyDown(KeyCode.S);
 		}
 
 		else
@@ -188,6 +196,7 @@ public class Player : MonoBehaviour
 			dashKey = false;
 			interactKey = false;
 			HealKey = false;
+			SkilltreeKey = false;
 		}
 
 		directionalInput = new Vector2(hAxis, vAxis);
@@ -722,6 +731,14 @@ public class Player : MonoBehaviour
 					manager.Action(interactObj);
 				}
 			}
+		}
+	}
+
+	private void SkillTree()
+	{
+		if(SkilltreeKey)
+		{
+			skillManager.Enter();
 		}
 	}
 

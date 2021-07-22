@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
+    public RectTransform uiGroup;
     public static SkillManager Instance
     {
         get
@@ -38,5 +39,28 @@ public class SkillManager : MonoBehaviour
     public bool IsSkillUnlocked(SkillType skillType)
     {
         return unlockedSkillsList.Contains(skillType);
+    }
+
+
+        //Ui
+
+    public void Enter()
+    {
+        uiGroup.anchoredPosition = Vector2.zero;
+    }
+
+    public void Exit()
+    { 
+        uiGroup.anchoredPosition=Vector2.up*1000;
+    }
+
+    public void LearnDash()
+    {
+
+    }
+
+    public void LearnSpecialAttack()
+    {
+        
     }
 }
