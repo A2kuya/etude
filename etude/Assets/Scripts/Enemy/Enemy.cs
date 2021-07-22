@@ -18,11 +18,11 @@ public abstract class Enemy : MonoBehaviour
     public int stiffness;
     public LayerMask playerLayer;   //플레이어 레이어
     public LayerMask obstacleLayer; //지형 레이어
-    public Vector2 playerVector;    //플레이어와의 거리
-    public float playerDistance;
-    public bool isLeft;
-    public bool isGround;
-    public bool isJump;
+    protected Vector2 playerVector;    //플레이어와의 거리
+    protected float playerDistance;
+    protected bool isLeft;
+    protected bool isGround;
+    protected bool isJump;
     public bool isMoving;
     protected Vector2 spriteSize;
 
@@ -111,6 +111,8 @@ public abstract class Enemy : MonoBehaviour
 
     private void SpawnCoins()
     {
+        if(coin == null)
+            return;
         for (int i = 0; i < 5; i++)
         {
             int random = Random.Range(-500, 500);

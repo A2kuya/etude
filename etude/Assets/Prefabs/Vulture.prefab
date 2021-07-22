@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f941f1a4ec96304d8ea9ea52439ec3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coin: {fileID: 0}
   prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
   canvas: {fileID: 6832445954524418967}
   hp: 100
@@ -265,11 +266,6 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 65536
-  playerVector: {x: 0, y: 0}
-  playerDistance: 0
-  isLeft: 0
-  isGround: 0
-  isJump: 0
   isMoving: 0
   atkCollider:
   - {fileID: 3075413650834194351}
@@ -282,12 +278,11 @@ MonoBehaviour:
   fallingSotnesCooltime: 20
   fallingStonesDamage: 0
   cutAirCooltime: 10
-  cutAirDamage: 0
+  cutAirDamage: 10
   shootRayCooltime: 10
   shootRayDamage: 0
   attackCooltime: 3
   isAttack: 0
-  curtime: 0
   left: {x: 13, y: 18, z: 0}
   right: {x: 51, y: 18, z: 0}
   roundTripCount: 6
@@ -296,9 +291,11 @@ MonoBehaviour:
   stoneCycleMax: 0.4
   rayTime: 3
   rayRotateAmount: 1
+  rayDelay: 1
   cutAirDelayFirstPhase: 0.6
   cutAirDelaySecondPhase: 0.3
   resttime: 5
+  fallDistance: 4
 --- !u!1 &6832445954524418967
 GameObject:
   m_ObjectHideFlags: 0

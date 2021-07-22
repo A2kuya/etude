@@ -21,6 +21,5 @@ public class VultureFallStones : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         vulture.isMoving = false;
-        vulture.FallStoneEnd();
     }
 }

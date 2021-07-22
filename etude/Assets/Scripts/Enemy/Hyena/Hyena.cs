@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Hyena : GroundEnemy
 {
+    AudioSource audioSource;
     public int atkCooltime;
     public float atkCurtime;
     public bool canAttack;
@@ -21,6 +22,7 @@ public class Hyena : GroundEnemy
     public float startTime;
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
@@ -69,6 +71,7 @@ public class Hyena : GroundEnemy
     public override void Attack(){
         if(InRange()){
             anim.SetTrigger("isAttack");
+            audioSource.Play();
         }
     }
     public bool InRange(){
@@ -77,7 +80,6 @@ public class Hyena : GroundEnemy
         else
             return false;
     }
-
     public override bool Miss(){
         //끝까지 추격
         return false;

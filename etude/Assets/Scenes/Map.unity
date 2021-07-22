@@ -45816,6 +45816,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossHyena
       objectReference: {fileID: 0}
+    - target: {fileID: 8034375001182517202, guid: 7878f2d04b52b7e4ea777a1f6f9c0c0e, type: 3}
+      propertyPath: dashDistance
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8034375001182517202, guid: 7878f2d04b52b7e4ea777a1f6f9c0c0e, type: 3}
+      propertyPath: leftSummon.x
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8034375001182517202, guid: 7878f2d04b52b7e4ea777a1f6f9c0c0e, type: 3}
+      propertyPath: rightSummon.x
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8034375001182517230, guid: 7878f2d04b52b7e4ea777a1f6f9c0c0e, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -58321,11 +58333,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68.37
+      value: 101.6
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 34.77
+      value: 2.7
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.z

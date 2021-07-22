@@ -147,7 +147,6 @@ public class Player : MonoBehaviour
 		Heal();
 
 		StateManager();
-		print(state);
 		animator.SetInteger("state", (int)state);
 
 		CalculateVelocity();

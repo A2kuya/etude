@@ -7,8 +7,6 @@ public class BossHyena : Boss
 {
     public GameObject prfHyena;
     Transform summons;
-    public phase state;
-    public enum phase{ first, second, third }
     public float dashDistance;
     public int biteDamage;
     public float biteCooltime;
@@ -20,8 +18,7 @@ public class BossHyena : Boss
     private bool isDash;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    private void Start(){
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
@@ -36,7 +33,11 @@ public class BossHyena : Boss
         attackPatterns.Add("rush", new Rush(rushDamage, rushCooltime, this));
         attackPatterns.Add("backAttack", new BackAttack(0, backAttackCooltime, this));
         state = phase.first;
+        isAttack = false;
         GetSpriteSize();
+    }
+    private void OnEnable() {
+        
         StartCoroutine(Attack());
     }
 
@@ -62,26 +63,43 @@ public class BossHyena : Boss
                 yield return new WaitForSeconds(1f);
                 if(CheckPhase())
                     anim.SetTrigger("changePhase");
-                else if (state >= phase.third && attackPatterns["backAttack"].Can())
+                else if (state >= phase.third && attackPatterns["backAttack"].Can()){
                     attackPatterns["backAttack"].Excute();
-                else if (state >= phase.second && attackPatterns["rush"].Can())
+                }
+                else if (state >= phase.second && attackPatterns["rush"].Can()){
                     attackPatterns["rush"].Excute();
-                else if (attackPatterns["summon"].Can())
+                }
+                else if (attackPatterns["summon"].Can()){
                     attackPatterns["summon"].Excute();
-                else if (attackPatterns["bite"].Can() && !Far())
+                }
+                else if (attackPatterns["bite"].Can() && !Far()){
                     attackPatterns["bite"].Excute();
-                else if (Far())
+                }
+                else if (Far()){
                     anim.SetBool("isWalk", true);
+                }
                 yield return new WaitForSeconds(attackCooltime - 1f);
             }
-            else
+            else{
                 yield return new WaitForSeconds(1f);
+            }
         }
     }
 
+    public  Vector3 leftSummon;
+    public  Vector3 rightSummon;
     public void Summon(){
-        Vector3 left = new Vector3(-10, 0, 0);
-        Vector3 right = new Vector3(10, 0, 0);
+        Vector3 left, right;
+        RaycastHit2D hit1 = Physics2D.Raycast(transform.position, leftSummon, Vector2.Distance(Vector2.zero, leftSummon), obstacleLayer);
+        RaycastHit2D hit2 = Physics2D.Raycast(transform.position, rightSummon, Vector2.Distance(Vector2.zero, rightSummon), obstacleLayer);
+        if(hit1)
+            left = new Vector3(-hit1.distance + 1f, 0, 0);
+        else
+            left = leftSummon;
+        if(hit2)
+            right = new Vector3(hit2.distance - 1f, 0, 0);
+        else
+            right = rightSummon;
         prfHyena.SetActive(true);
         Instantiate(prfHyena, transform.position + left, Quaternion.Euler(0,180,0)).transform.parent = summons;
         Instantiate(prfHyena, transform.position + right, Quaternion.Euler(0,0,0)).transform.parent = summons;
@@ -162,17 +180,6 @@ public class BossHyena : Boss
     }
     public bool InRange(){
         return Mathf.Abs(playerVector.x) <= 6f;
-    }
-    public bool CheckPhase(){
-        if((float) curHp/hp <= 0.2 && state != phase.third){
-            state = phase.third;
-            return true;
-        }
-        else if((float) curHp/hp <= 0.5 && state == phase.first){
-            state = phase.second;
-            return true;
-        }
-        return false;
     }
     public void KnockbackToPlayer(){
         Vector2 v = new Vector2(100, 20);

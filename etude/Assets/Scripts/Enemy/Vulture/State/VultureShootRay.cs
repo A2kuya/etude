@@ -9,6 +9,7 @@ public class VultureShootRay : StateMachineBehaviour
     {
         vulture = animator.GetComponent<Vulture>();
         vulture.isAttack = true;
+        Debug.Log("shootray");
         vulture.ShootRayStart();
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

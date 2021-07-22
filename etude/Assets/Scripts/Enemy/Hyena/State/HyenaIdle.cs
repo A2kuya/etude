@@ -18,11 +18,11 @@ public class HyenaIdle : StateMachineBehaviour
         }
         else{
             hyena.Flip();
-            if(hyena.KeepDistance() == 1 && hyena.canAttack && hyena.canDash){
+            if(hyena.canAttack && hyena.canDash){
                 //플레이어 앞으로 대쉬
                 animator.SetTrigger("isDash");
             }
-            else if(hyena.KeepDistance() == 0 && hyena.canDash){
+            else if(hyena.KeepDistance() == 0){
                 //뒤로 걷기
                 animator.SetBool("isBackWalk", true);
             }   

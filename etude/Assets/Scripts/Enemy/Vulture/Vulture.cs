@@ -7,15 +7,11 @@ public class Vulture : Boss
     public GameObject prfStone;
     public GameObject prfRay;
     public GameObject prfWarningLine;
-    public phase state;
-    public enum phase{ first, second, third }
-
+ 
     public float fallingSotnesCooltime;
-    public int fallingStonesDamage;
     public float cutAirCooltime;
     public int cutAirDamage;
     public float shootRayCooltime;
-    public int shootRayDamage;
     
     public float attackCooltime;
     public bool isAttack;
@@ -30,9 +26,9 @@ public class Vulture : Boss
         obstacleLayer = LayerMask.GetMask("Obstacle");
         hpBar = Instantiate(prfHpBar, canvas.transform);
         attackPatterns = new Dictionary<string, AttackPattern>();
-        attackPatterns.Add("fallStones", new FallStones(fallingStonesDamage, fallingSotnesCooltime, this));
+        attackPatterns.Add("fallStones", new FallStones(0, fallingSotnesCooltime, this));
         attackPatterns.Add("cutAir", new CutAir(cutAirDamage, cutAirCooltime, this));
-        attackPatterns.Add("shootRay", new ShootRay(shootRayDamage, shootRayCooltime, this));
+        attackPatterns.Add("shootRay", new ShootRay(0, shootRayCooltime, this));
         state = phase.first;
         GetSpriteSize();
         attack = Attack();
@@ -66,6 +62,7 @@ public class Vulture : Boss
                 }
                 else if (attackPatterns["shootRay"].Can())
                 {
+                    Debug.Log("shootray");
                     isAttack = true;
                     attackPatterns["shootRay"].Excute();
                 }
@@ -143,7 +140,6 @@ public class Vulture : Boss
         Flip();
     }
     public void FallStone(){
-        
         if(!isMoving){
             if(count > roundTripCount)
                 FallStoneEnd();
@@ -437,35 +433,12 @@ public class Vulture : Boss
             yield return wait;
         }
         yield return wait;
+        yield return wait;
         Trigger("fly");
     }
 
-
-
-
-    public bool CheckPhase(){
-        if((float) curHp/hp <= 0.2 && state != phase.third){
-            state = phase.third;
-            return true;
-        }
-        else if((float) curHp/hp <= 0.5 && state == phase.first){
-            state = phase.second;
-            return true;
-        }
-        return false;
-    }
-    public int GetPhase(){
-        switch (state)
-        {
-            case phase.first:
-                return 1;
-            case phase.second:
-                return 2;
-            case phase.third:
-                return 3;
-        }
-        return 0;
-    }
+  
+    
     public override void Death()
     {
         rigid.bodyType = RigidbodyType2D.Dynamic;
