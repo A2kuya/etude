@@ -7,12 +7,17 @@ public class Player : MonoBehaviour
 {
 	public GameManager manager;
 
+	// Sound
+	public AudioClip clip;
+	public AudioClip[] audioClips;
+
 	// State()
 	private Collider2D col;
 	public Collider2D attackPos;
 	private Controller2D controller;
 	private Rigidbody2D rb;
 	private Animator animator;
+	public HealthBar healthBar;
 
 	// Key
 	private bool canGetKey = true;
@@ -120,6 +125,8 @@ public class Player : MonoBehaviour
 		controller = GetComponent<Controller2D>();
 		col = GetComponent<Collider2D>();
 		rb = GetComponent<Rigidbody2D>();
+
+		healthBar.SetMaxHealth(maxHp);
 
 		originGravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
 		gravity = originGravity;
@@ -738,6 +745,7 @@ public class Player : MonoBehaviour
 		if (!isUnBeat)
 		{
 			hp -= damage;
+			healthBar.SetHealth(hp);
 			this.stiffness -= stiffness;
 			StartCoroutine("hurtEffector");
 		}
@@ -774,6 +782,7 @@ public class Player : MonoBehaviour
 		animator.SetBool("isHurt", true);
 		state = State.idle;
 		InitAttack();
+		canMove = true;
 		canGetKey = false;
 		StartCoroutine("UnBeatable", unBeatTime);
 
@@ -846,5 +855,15 @@ public class Player : MonoBehaviour
 			bottomLadder = false;
 			controller.bottomLadder = bottomLadder;
 		}
+	}
+
+	public void PlayAttack1Sound()
+    {
+		SoundManager.instance.SFXPlay("Attack1", audioClips[0]);
+    }
+
+	public void PlayAttack2Sound()
+	{
+		SoundManager.instance.SFXPlay("Attack2", audioClips[1]);
 	}
 }

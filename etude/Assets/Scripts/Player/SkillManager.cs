@@ -17,6 +17,7 @@ public class SkillManager : MonoBehaviour
                     instance = instanceContainer.AddComponent<SkillManager>();
                 }
             }
+            DontDestroyOnLoad(instance);
             return instance;
         }
     }
