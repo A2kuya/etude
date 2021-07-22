@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 	private Animator animator;
 
 	// Key
+	private bool canGetKey = true;
 	private float hAxis;
 	private float vAxis;
 	private bool jumpKeyDown;
@@ -147,7 +148,6 @@ public class Player : MonoBehaviour
 		Heal();
 
 		StateManager();
-		print(state);
 		animator.SetInteger("state", (int)state);
 
 		CalculateVelocity();
@@ -155,16 +155,33 @@ public class Player : MonoBehaviour
 
 	void InputManager()
 	{
-		hAxis = Input.GetAxisRaw("Horizontal");
-		vAxis = Input.GetAxisRaw("Vertical");
-		attackKeyDown = Input.GetKeyDown(KeyCode.Z);
-		attackKeyUp = Input.GetKeyUp(KeyCode.Z);
-		attackKey = Input.GetKey(KeyCode.Z);
-		jumpKeyDown = Input.GetKeyDown(KeyCode.X);
-		jumpKeyUp = Input.GetKeyUp(KeyCode.X);
-		dashKey = Input.GetKeyDown(KeyCode.C);
-		interactKey = Input.GetKeyDown(KeyCode.F);
-		HealKey = Input.GetKeyDown(KeyCode.A);
+		if (canGetKey)
+		{
+			hAxis = Input.GetAxisRaw("Horizontal");
+			vAxis = Input.GetAxisRaw("Vertical");
+			attackKeyDown = Input.GetKeyDown(KeyCode.Z);
+			attackKeyUp = Input.GetKeyUp(KeyCode.Z);
+			attackKey = Input.GetKey(KeyCode.Z);
+			jumpKeyDown = Input.GetKeyDown(KeyCode.X);
+			jumpKeyUp = Input.GetKeyUp(KeyCode.X);
+			dashKey = Input.GetKeyDown(KeyCode.C);
+			interactKey = Input.GetKeyDown(KeyCode.F);
+			HealKey = Input.GetKeyDown(KeyCode.A);
+		}
+
+		else
+		{
+			hAxis = 0;
+			vAxis = 0;
+			attackKeyDown = false;
+			attackKeyUp = false;
+			attackKey = false;
+			jumpKeyDown = false;
+			jumpKeyUp = false;
+			dashKey = false;
+			interactKey = false;
+			HealKey = false;
+		}
 
 		directionalInput = new Vector2(hAxis, vAxis);
 	}
@@ -757,8 +774,7 @@ public class Player : MonoBehaviour
 		animator.SetBool("isHurt", true);
 		state = State.idle;
 		InitAttack();
-		canMove = false;
-
+		canGetKey = false;
 		StartCoroutine("UnBeatable", unBeatTime);
 
 		yield return new WaitForSeconds(hurtTime);
@@ -770,7 +786,7 @@ public class Player : MonoBehaviour
 		yield return new WaitForSeconds(time);
 		animator.SetBool("isHurt", false);
 		isUnBeat = false;
-		canMove = true;
+		canGetKey = true;
 	}
 
 	private void Heal()
@@ -785,15 +801,12 @@ public class Player : MonoBehaviour
 		}
     }
 
-	public void BuyItem(int amount)
+	public void SpendMoney(int amount)
     {
-		if (money < amount)
-			return;
-		else
-			money -= amount;
+		money -= amount;
     }
 
-	public void GetCoin(int amount)
+	public void GetMoney(int amount)
     {
 		money += amount;
     }
