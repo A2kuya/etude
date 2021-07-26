@@ -8,6 +8,7 @@ public class ShopManager : MonoBehaviour
     public RectTransform uiGroup;
     public GameObject Popup;
     public Player enterPlayer;
+    public PotionUI potionUI;
     bool flag;
     float PopupDelay=0.8f;
 
@@ -50,7 +51,7 @@ public class ShopManager : MonoBehaviour
                 if(enterPlayer.money>=10)
                 {
                     enterPlayer.SpendMoney(10);
-                    enterPlayer.skillpoint++;
+                    enterPlayer.skillPoint++;
                 }
                 else
                 {
@@ -62,7 +63,7 @@ public class ShopManager : MonoBehaviour
                 if(enterPlayer.money>=100)
                 {
                     enterPlayer.SpendMoney(100);
-                    enterPlayer.skillpoint+=10;
+                    enterPlayer.skillPoint+=10;
                 }
                 else
                 {
@@ -75,6 +76,7 @@ public class ShopManager : MonoBehaviour
                 {
                     enterPlayer.SpendMoney(10);
                     enterPlayer.potions++;
+                    potionUI.SetPotion();
                 }
                 else
                 {

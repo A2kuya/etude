@@ -148,7 +148,7 @@ public class Player : MonoBehaviour
 		speicalAttackDelay = speicalAttackCoolTime;
 		attackDelay = attackCoolTime;
 
-        //StartCoroutine("RecoverStamina");
+        StartCoroutine("RecoverStamina");
 
 		potionUI.SetPotion();
 	}
@@ -783,7 +783,8 @@ public class Player : MonoBehaviour
 	{
 		if (!isUnBeat)
 		{
-			hp -= damage;
+            hp -= damage;
+			healthBar.SetHealth(hp);
 			int knockbackDir = 0;
 			if (transform.position.x - enemyPos.x <= 0)
 			{
