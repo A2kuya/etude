@@ -5,8 +5,11 @@ using UnityEngine;
 public class Vulture : Boss
 {
     public GameObject prfStone;
+    public Queue<Stone> stonePool = new Queue<Stone>();
     public GameObject prfRay;
+    public List<Ray> rayPool = new List<Ray>();
     public GameObject prfWarningLine;
+    public List<GameObject> warningLinePool = new List<GameObject>();
  
     public float fallingSotnesCooltime;
     public float cutAirCooltime;
@@ -16,7 +19,7 @@ public class Vulture : Boss
     public float attackCooltime;
     public bool isAttack;
     private Vector2 transportVector;
-    void Start()
+    private void Awake()
     {
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -33,6 +36,17 @@ public class Vulture : Boss
         GetSpriteSize();
         attack = Attack();
         creatStones = CreatStones();
+
+        for (int i = 0; i < 6; i++){
+            warningLinePool.Add(Instantiate(prfWarningLine, atkCollider[1].transform));
+            warningLinePool[i].SetActive(false);
+            warningLinePool[i].transform.localScale /= 20;
+            rayPool.Add(Instantiate(prfRay, atkCollider[1].transform).GetComponent<Ray>());
+            rayPool[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void OnEnable() {
         StartCoroutine(attack);
     }
     IEnumerator attack;
@@ -165,7 +179,8 @@ public class Vulture : Boss
     }
     IEnumerator CreatStones(){
         while(true){
-            Instantiate(prfStone, transform.position, transform.rotation);
+            var stone = StonePool.GetObject();
+            stone.transform.position = transform.position;
             yield return new WaitForSeconds(Random.Range(stoneCycleMin, stoneCycleMax));
         }
     }
@@ -212,29 +227,27 @@ public class Vulture : Boss
         float q = Vector2.SignedAngle(Vector2.right, playerVector + new Vector2(0, 0.5f));
         atkCollider[1].transform.localRotation = Quaternion.Euler(0, 0, q);
         for (int i = 0; i < raynum; i++){
-            warningLines[i] = Instantiate(prfWarningLine, atkCollider[1].transform);
-            warningLines[i].transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4 * 10.5f;
-            warningLines[i].transform.localRotation = Quaternion.Euler(0, 0, angle * i);
-            warningLines[i].GetComponent<SpriteRenderer>().spriteSortPoint = SpriteSortPoint.Pivot;
-            warningLines[i].transform.localScale /= 20;
-
+            warningLinePool[i].transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4 * 10.5f;
+            warningLinePool[i].transform.localRotation = Quaternion.Euler(0, 0, angle * i);
+            warningLinePool[i].GetComponent<SpriteRenderer>().spriteSortPoint = SpriteSortPoint.Pivot;
+            warningLinePool[i].SetActive(true);
         }
         yield return wait;
         for(int i=0;i<raynum;i++){
-            warningLines[i].SetActive(false);
+            warningLinePool[i].SetActive(false);
         }
         yield return wait;
         for(int i=0;i<raynum;i++){
-            warningLines[i].SetActive(true);
+            warningLinePool[i].SetActive(true);
         }
         yield return wait;
         for(int i=0;i<raynum;i++){
-            Destroy(warningLines[i]);
+            warningLinePool[i].SetActive(false);
         }
         for (int i = 0; i < raynum; i++){
-            var tmp = Instantiate(prfRay, atkCollider[1].transform);
-            tmp.transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4;
-            tmp.transform.localRotation = Quaternion.Euler(0, 0, angle * i);
+            rayPool[i].transform.localPosition = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad * i), Mathf.Sin(angle * Mathf.Deg2Rad * i), 0) / 4;
+            rayPool[i].transform.localRotation = Quaternion.Euler(0, 0, angle * i);
+            rayPool[i].gameObject.SetActive(true);
         }
         iTween.RotateAdd(transform.GetChild(1).gameObject, iTween.Hash(
             "amount", new Vector3(0,0, angle * rayRotateAmount),
@@ -245,9 +258,8 @@ public class Vulture : Boss
             ));
     }
     public void ShootRayEnd(){
-        int num = transform.GetChild(1).childCount;
-        for(int i=0;i<num;i++){
-            Destroy(atkCollider[1].transform.GetChild(i).gameObject);
+        for(int i=0;i<raynum;i++){
+            rayPool[i].gameObject.SetActive(false);
         }
         isAttack = false;
         anim.SetTrigger("attackEnd");
@@ -334,15 +346,20 @@ public class Vulture : Boss
     IEnumerator CutWarning(){
         WaitForSeconds wait = new WaitForSeconds(cutAirDelay / 3);
         float q = Vector2.SignedAngle(Vector2.right, nextAttackDir);
-        transform.position = nextAttackLocation + nextAttackDir * -40;
-        GameObject warningLine = Instantiate(prfWarningLine, nextAttackLocation, Quaternion.Euler(0, 0, q));
+        transform.position = nextAttackLocation + nextAttackDir * -50;
         transform.rotation = Quaternion.Euler(0, 0, q - 180);
+        atkCollider[1].transform.rotation = Quaternion.Euler(0,0,0);
+
+        warningLinePool[1].SetActive(true);
+        warningLinePool[1].transform.position = nextAttackLocation;
+        warningLinePool[1].transform.rotation = Quaternion.Euler(0, 0, q - 180);
+        
         yield return wait;
-        warningLine.SetActive(false);
+        warningLinePool[1].SetActive(false);
         yield return wait;
-        warningLine.SetActive(true);
+        warningLinePool[1].SetActive(true);
         yield return wait;
-        Destroy(warningLine);
+        warningLinePool[1].SetActive(false);
         Cut();
     }
     private void Cut(){

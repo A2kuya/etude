@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d43f46fb1fa1db64eb127119c522f9a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: f17a24c8c82d5234a9f5d6b1fa935035, type: 3}
   damage: 10
   knockback: {x: 10, y: 10}
 --- !u!58 &6753341323359428922
