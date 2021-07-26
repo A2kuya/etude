@@ -33,6 +33,7 @@ public class Vulture : Boss
         attackPatterns.Add("cutAir", new CutAir(cutAirDamage, cutAirCooltime, this));
         attackPatterns.Add("shootRay", new ShootRay(0, shootRayCooltime, this));
         state = phase.first;
+        Flip();
         GetSpriteSize();
         attack = Attack();
         creatStones = CreatStones();
@@ -67,27 +68,37 @@ public class Vulture : Boss
                 yield return new WaitForSeconds(1f);
                 if (CheckPhase()){
                     anim.SetTrigger("changePhase");
+                    UpdateDirection();
+                    Flip();
                 }
                 else if (attackPatterns["fallStones"].Can())
                 {
                     Debug.Log("fallstone");
+                    UpdateDirection();
+                    Flip();
                     isAttack = true;
                     attackPatterns["fallStones"].Excute();
                 }
                 else if (attackPatterns["shootRay"].Can())
                 {
                     Debug.Log("shootray");
+                    UpdateDirection();
+                    Flip();
                     isAttack = true;
                     attackPatterns["shootRay"].Excute();
                 }
                 else if (attackPatterns["cutAir"].Can()){
                     Debug.Log("cutair");
+                    UpdateDirection();
+                    Flip();
                     isAttack = true;
                     attackPatterns["cutAir"].Excute();
                 }
                 else
                 {
                     Debug.Log("Move");
+                    UpdateDirection();
+                    Flip();
                     Move();
                     yield return new WaitForSeconds(attackCooltime - 1f);
                 }
@@ -158,16 +169,20 @@ public class Vulture : Boss
             if(count > roundTripCount)
                 FallStoneEnd();
             else if(count == roundTripCount){
+                isMoving = true;
                 count++;
+                Flip();
                 iTween.MoveTo(gameObject, iTween.Hash(
                     "position", startPosition,
                     "easeType", iTween.EaseType.linear,
-                    "speed", roundTripSpeed
+                    "speed", roundTripSpeed,
+                    "oncomplete", "Turn"
                 ));
             }
             else{
                 isMoving = true;
                 count++;
+                Flip();
                 iTween.MoveTo(gameObject, iTween.Hash(
                     "position", (isLeft ? left : right),
                     "easeType", iTween.EaseType.linear,
@@ -187,12 +202,12 @@ public class Vulture : Boss
     public void Turn(){
         isLeft = !isLeft;
         isMoving = !isMoving;
-        Flip();
     }
     public void FallStoneEnd(){
         count = 0;
         anim.speed = 1;
         isMoving = false;
+        transport = false;
         StopCoroutine(creatStones);
         anim.SetTrigger("attackEnd");
     }
@@ -404,9 +419,11 @@ public class Vulture : Boss
     }
     IEnumerator RestFall(){
         WaitForSeconds wait = new WaitForSeconds(1f);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position - new Vector3(0, spriteSize.y, 0), Vector2.down, 25, obstacleLayer);
+        Vector2 origin = transform.position - new Vector3(0, spriteSize.y, 0);
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, 25, obstacleLayer);
         downCount = (int)(hit.distance / fallDistance);
         for(int i = downCount;i > 0; i--){
+            Debug.Log(i);
             iTween.MoveBy(gameObject, iTween.Hash(
                 "y", -fallDistance,
                 "time", 0.9f,
@@ -461,7 +478,7 @@ public class Vulture : Boss
         rigid.bodyType = RigidbodyType2D.Dynamic;
         base.Death();
     }
-    override public void CaculateDistance() {  //거리계산 및 방향계산
+    override protected void CaculateDistance() {  //거리계산 및 방향계산
         playerVector.x = player.transform.position.x - transform.position.x;
         playerVector.y = player.transform.position.y - transform.position.y;
         playerDistance = Vector2.Distance(transform.position, player.transform.position);
@@ -469,7 +486,7 @@ public class Vulture : Boss
     public void UpdateDirection(){
         isLeft = playerVector.x < 0;
     }
-    override public void CheckObstacle(){
+    override protected void CheckObstacle(){
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position - new Vector3(0, spriteSize.y / -2, 0), 0.2f, obstacleLayer);
     }

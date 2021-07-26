@@ -20,7 +20,7 @@ public class Hyena : GroundEnemy
     public bool isDash;
     public bool isClose;
     public float startTime;
-    void Start()
+    void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
@@ -31,10 +31,10 @@ public class Hyena : GroundEnemy
         obstacleLayer = LayerMask.GetMask("Obstacle");
         hpBar = Instantiate(prfHpBar, canvas.transform);
         atkCollider.SetActive(false);
-        dir = Vector2.left;
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임
         attackPattern.Add(new AttackPattern(0, dashCooltime));  //대쉬 쿨타임
+        Flip();
         CaculateDistance();
     }
 
@@ -84,7 +84,7 @@ public class Hyena : GroundEnemy
         //끝까지 추격
         return false;
     }
-    override public void CheckObstacle(){
+    override protected void CheckObstacle(){
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position, 0.2f, obstacleLayer);
         //경사 체크
