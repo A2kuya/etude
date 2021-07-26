@@ -11,7 +11,7 @@ public class Ray : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) {
         if(other.CompareTag("Player")){
-            other.GetComponent<Player>().TakeDamage(damage, 0, transform.position, knockback);
+            other.GetComponent<Player>().TakeDamage(damage, transform.position, knockback);
         }
     }
     

@@ -12,7 +12,7 @@ public class VultureCutAirAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player")){
-            other.GetComponent<Player>().TakeDamage(parent.attackPatterns["cutAir"].damage, 0, parent.transform.position, new Vector2(20, 20));
+            other.GetComponent<Player>().TakeDamage(parent.attackPatterns["cutAir"].damage, parent.transform.position, new Vector2(20, 20));
         }
     }
 }

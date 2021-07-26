@@ -19,7 +19,7 @@ public class Spine : MonoBehaviour
     {
         if (col.gameObject.layer == 6)
         {
-                col.gameObject.GetComponent<Player>().TakeDamage(10, 0, this.transform.position,Vector2.right);
+                col.gameObject.GetComponent<Player>().TakeDamage(10, this.transform.position,Vector2.right);
         }
 
 

@@ -183,7 +183,7 @@ public class BossHyena : Boss
     }
     public void KnockbackToPlayer(){
         Vector2 v = new Vector2(100, 20);
-        player.GetComponent<Player>().TakeDamage(0, 100, transform.position, v);
+        player.GetComponent<Player>().TakeDamage(0, transform.position, v);
     }
     public override void CheckDead(bool death = false)
     {

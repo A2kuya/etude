@@ -275,13 +275,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manager: {fileID: 0}
+  clip: {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
+  audioClips:
+  - {fileID: 8300000, guid: fe0b1f9aeb45b41b089175aeeabd5d95, type: 3}
+  - {fileID: 8300000, guid: d46323e22e74e46baa241cbf48c85671, type: 3}
   attackPos: {fileID: 1919837712919254296}
+  healthBar: {fileID: 0}
+  staminaBar: {fileID: 0}
   maxHp: 100
   hp: 100
   damage: 10
   specialDamage: 30
   chargeDamage: 50
+  stamina: 100
   money: 0
+  skillPoint: 100
   velocity: {x: 0, y: 0, z: 0}
   moveSpeed: 8
   maxJumpHeight: 5
@@ -291,8 +299,11 @@ MonoBehaviour:
   dashCoolTime: 1
   attackCoolTime: 1
   speicalAttackCoolTime: 0.5
+  hurtTime: 0
+  potionUI: {fileID: 0}
+  potions: 5
   healAmount: 10
-  unBeatTime: 1
+  unBeatTime: 0.25
 --- !u!1 &1919837712919254300
 GameObject:
   m_ObjectHideFlags: 0

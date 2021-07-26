@@ -458,7 +458,7 @@ public class Vulture : Boss
     }
     public void KnockbackToPlayer(){
         Vector2 v = new Vector2(100, 20);
-        player.GetComponent<Player>().TakeDamage(0, 100, transform.position, v);
+        player.GetComponent<Player>().TakeDamage(0, transform.position, v);
     }
     override public void Flip(bool reverse = false){
         bool dir = (reverse ? !isLeft : isLeft);

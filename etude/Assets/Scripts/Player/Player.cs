@@ -6,7 +6,6 @@ using System;
 public class Player : MonoBehaviour
 {
 	public GameManager manager;
-	public SkillManager skillManager;
 
 	// Sound
 	public AudioClip clip;
@@ -19,6 +18,7 @@ public class Player : MonoBehaviour
 	private Rigidbody2D rb;
 	private Animator animator;
 	public HealthBar healthBar;
+	public StaminaBar staminaBar;
 
 	// Key
 	private bool canGetKey = true;
@@ -44,11 +44,11 @@ public class Player : MonoBehaviour
 	public int damage = 10;
 	public int specialDamage = 30;
 	public int chargeDamage = 50;
-	private int stiffness = 0;
+	public float stamina = 100;
 
 	//inventory
 	public int money = 0;
-	public int skillpoint=0;
+	public int skillPoint = 0;
 
 	// Move
 	bool canMove = true;
@@ -118,7 +118,8 @@ public class Player : MonoBehaviour
 	GameObject interactObj;
 
 	// Heal
-	private int potions = 5;
+	public PotionUI potionUI;
+	public int potions = 5;
 	public int healAmount;
 
 	// UnBeat
@@ -146,6 +147,10 @@ public class Player : MonoBehaviour
 		dashDelay = dashCoolTime;
 		speicalAttackDelay = speicalAttackCoolTime;
 		attackDelay = attackCoolTime;
+
+        //StartCoroutine("RecoverStamina");
+
+		potionUI.SetPotion();
 	}
 
 	void Update()
@@ -165,6 +170,7 @@ public class Player : MonoBehaviour
 		animator.SetInteger("state", (int)state);
 
 		CalculateVelocity();
+		staminaBar.SetStamina(stamina);
 	}
 
 	void InputManager()
@@ -525,6 +531,7 @@ public class Player : MonoBehaviour
 						startTime = Time.time;
 						dashDelay = 0;
 						attackPos.gameObject.SetActive(false);
+						StartCoroutine("SpendStamina", 20f);
 					}
 				}
 			}
@@ -586,6 +593,7 @@ public class Player : MonoBehaviour
 							state = State.specialAttack;
 							speicalAttackDelay = 0f;
 							isSpecialAttackReady = false;
+							StartCoroutine("SpendStamina", 40f);
 						}
 					}
 				}
@@ -738,7 +746,11 @@ public class Player : MonoBehaviour
 	{
 		if(SkilltreeKey)
 		{
-			skillManager.Enter();
+			SkillManager.Instance.Enter();
+		}
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			SkillManager.Instance.UpgradeSkill(SkillManager.SkillType.Dash2, ref skillPoint);
 		}
 	}
 
@@ -757,23 +769,21 @@ public class Player : MonoBehaviour
         }
     }
 
-	public void TakeDamage(int damage, int stiffness)
+	public void TakeDamage(int damage)
     {
 		if (!isUnBeat)
 		{
 			hp -= damage;
 			healthBar.SetHealth(hp);
-			this.stiffness -= stiffness;
 			StartCoroutine("hurtEffector");
 		}
 	}
 
-	public void TakeDamage(int damage, int stiffness, Vector2 enemyPos, Vector2 knockback)
+	public void TakeDamage(int damage, Vector2 enemyPos, Vector2 knockback)
 	{
 		if (!isUnBeat)
 		{
 			hp -= damage;
-			this.stiffness -= stiffness;
 			int knockbackDir = 0;
 			if (transform.position.x - enemyPos.x <= 0)
 			{
@@ -789,7 +799,7 @@ public class Player : MonoBehaviour
 			state = State.idle;
 			InitAttack();
 			canMove = false;
-			StartCoroutine("UnBeatable");
+			StartCoroutine("hurtEffector");
 		}
 	}
 
@@ -822,6 +832,7 @@ public class Player : MonoBehaviour
 			if (potions > 0)
 			{
 				potions -= 1;
+				potionUI.SetPotion();
 				hp += healAmount;
 			}
 		}
@@ -882,5 +893,28 @@ public class Player : MonoBehaviour
 	public void PlayAttack2Sound()
 	{
 		SoundManager.instance.SFXPlay("Attack2", audioClips[1]);
+	}
+
+	private IEnumerator SpendStamina(float staminaCost)
+	{
+		float MaxStamina = 0f;
+		while (MaxStamina < staminaCost)
+		{
+			stamina -= 1f;
+			MaxStamina += 1f;
+			yield return new WaitForSeconds(0.01f);
+		}
+	}
+
+	private IEnumerator RecoverStamina()
+    {
+		while (stamina < 100)
+		{
+			stamina = Mathf.Clamp(stamina + 1f, 0, 100);
+			//staminaBar.SetStamina(stamina);
+			yield return new WaitForSeconds(0.1f);
+		}
+		yield return null;
+		yield return StartCoroutine("RecoverStamina");
 	}
 }

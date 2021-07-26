@@ -18,7 +18,6 @@ public class SkillManager : MonoBehaviour
                     instance = instanceContainer.AddComponent<SkillManager>();
                 }
             }
-            DontDestroyOnLoad(instance);
             return instance;
         }
     }
@@ -28,6 +27,9 @@ public class SkillManager : MonoBehaviour
     {
         Dash1, Dash2, SpecialAttack1,
     }
+
+    static private int skillTypeSize = System.Enum.GetValues(typeof(SkillType)).Length;
+    public int[] skillLevel = new int[skillTypeSize];
 
     public List<SkillType> unlockedSkillsList = new List<SkillType>();
 
@@ -41,8 +43,17 @@ public class SkillManager : MonoBehaviour
         return unlockedSkillsList.Contains(skillType);
     }
 
+    public void UpgradeSkill(SkillType skillType, ref int skillPoint)
+    {
+        int pointRequirement = (int)Mathf.Pow(2, skillLevel[(int)skillType]);
+        if (skillPoint >= pointRequirement)
+        {
+            skillPoint -= pointRequirement;
+            skillLevel[(int)skillType]++;
+        }
+    }
 
-        //Ui
+    //Ui
 
     public void Enter()
     {

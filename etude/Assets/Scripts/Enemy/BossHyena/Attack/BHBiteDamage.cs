@@ -12,7 +12,7 @@ public class BHBiteDamage : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player")){
-            other.GetComponent<Player>().TakeDamage(parent.attackPatterns["bite"].damage, 0);
+            other.GetComponent<Player>().TakeDamage(parent.attackPatterns["bite"].damage);
         }
     }
 }
