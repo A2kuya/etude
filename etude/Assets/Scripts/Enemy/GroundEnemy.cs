@@ -8,7 +8,6 @@ abstract public class GroundEnemy : Enemy
     public GameObject atkCollider;
 
 
-    public int damage; //데미지
     public int speed = 1;               //속도
     public Vector2 dir = Vector2.zero;  //방향 벡터
     public float detectDistance;    //감지 거리
@@ -63,7 +62,7 @@ abstract public class GroundEnemy : Enemy
     }
     
 
-    override public void CheckObstacle(){
+    override protected void CheckObstacle(){
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position, 0.2f, obstacleLayer);
         //경사 체크
@@ -89,7 +88,7 @@ abstract public class GroundEnemy : Enemy
         else
             rigid.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
-    override public void CaculateDistance() {  //거리계산 및 방향계산
+    override protected void CaculateDistance() {  //거리계산 및 방향계산
         playerVector.x = player.transform.position.x - transform.position.x;
         playerVector.y = player.transform.position.y - transform.position.y;
         playerDistance = Vector2.Distance(transform.position, player.transform.position);

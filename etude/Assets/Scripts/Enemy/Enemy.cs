@@ -13,9 +13,12 @@ public abstract class Enemy : MonoBehaviour
     public GameObject prfHpBar;
     public GameObject canvas;
     protected GameObject hpBar;
+
+
     public int hp;
     public int curHp;
     public int stiffness;
+    public int damage;
     public LayerMask playerLayer;   //플레이어 레이어
     public LayerMask obstacleLayer; //지형 레이어
     protected Vector2 playerVector;    //플레이어와의 거리
@@ -25,7 +28,15 @@ public abstract class Enemy : MonoBehaviour
     protected bool isJump;
     public bool isMoving;
     protected Vector2 spriteSize;
-
+    
+    public void ConstructSet(bool isLeft){
+        this.isLeft = isLeft;
+    }
+    public void ConstructSet(bool isLeft, int hp, int damage){
+        this.isLeft = isLeft;
+        this.hp = hp;
+        this.damage = damage;
+    }
     public void Trigger(string s){
         anim.SetTrigger(s);
     }
@@ -33,11 +44,11 @@ public abstract class Enemy : MonoBehaviour
         rigid.velocity = new Vector2(0, rigid.velocity.y);
         isMoving = false;
     }
-    virtual public void CheckObstacle(){
+    virtual protected void CheckObstacle(){
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position, 0.2f, obstacleLayer);
     }
-    virtual public void CaculateDistance() {  //거리계산 및 방향계산
+    virtual protected void CaculateDistance() {  //거리계산 및 방향계산
         playerVector.x = player.transform.position.x - transform.position.x;
         playerVector.y = player.transform.position.y - transform.position.y;
         playerDistance = Vector2.Distance(transform.position, player.transform.position);
@@ -84,7 +95,7 @@ public abstract class Enemy : MonoBehaviour
 	    rigid.AddForce(new Vector2(knockbackDir * knockback.x, knockback.y));
 		anim.SetTrigger("isHurt");
 	}
-    public void GetSpriteSize(){
+    protected void GetSpriteSize(){
         Vector2 worldSize = Vector3.zero;
         spriteSize = spriteRenderer.sprite.rect.size;
         Vector2 localSpriteSize = spriteSize / spriteRenderer.sprite.pixelsPerUnit;
@@ -93,7 +104,7 @@ public abstract class Enemy : MonoBehaviour
         worldSize.y *= transform.lossyScale.y;
         spriteSize = worldSize;
     }
-    public void UpdateHpBar(){
+    protected void UpdateHpBar(){
         hpBar.SetActive(curHp != hp);
         hpBar.GetComponentInChildren<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, spriteSize.y + 0.5f, 0));
         hpBar.GetComponentInChildren<Slider>().value = (float) curHp / (float) hp;

@@ -19,6 +19,7 @@ public class Snake : GroundEnemy
         dir = Vector2.left;
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, cooltime));
+        Flip();
     }
 
     // Update is called once per frame
@@ -70,7 +71,7 @@ public class Snake : GroundEnemy
     {
         return playerDistance < range;
     }
-    public override void CheckObstacle(){
+    protected override void CheckObstacle(){
         //바닥 체크
         isGround = Physics2D.OverlapCircle(transform.position, 0.1f, obstacleLayer);
         //경사 체크

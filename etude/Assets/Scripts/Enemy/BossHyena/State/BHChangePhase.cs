@@ -15,7 +15,7 @@ public class BHChangePhase : StateMachineBehaviour
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.2f && !isChange){
+        if(stateInfo.normalizedTime >= 0.2f && !isChange){
             bh.KnockbackToPlayer();
             isChange = true;
         }        

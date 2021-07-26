@@ -34,10 +34,10 @@ public class BossHyena : Boss
         attackPatterns.Add("backAttack", new BackAttack(0, backAttackCooltime, this));
         state = phase.first;
         isAttack = false;
+        Flip();
         GetSpriteSize();
     }
     private void OnEnable() {
-        
         StartCoroutine(Attack());
     }
 
