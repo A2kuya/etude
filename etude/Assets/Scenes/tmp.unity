@@ -47919,6 +47919,7 @@ MonoBehaviour:
   uiGroup: {fileID: 1731699316}
   enterPlayer: {fileID: 1233053252}
   itemObj: []
+  itemPrice: 
 --- !u!1 &987167429
 GameObject:
   m_ObjectHideFlags: 0

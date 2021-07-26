@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
 	GameObject interactObj;
 
 	// Heal
-	private int potions = 5;
+	public int potions = 5;
 	public int healAmount;
 
 	// UnBeat
