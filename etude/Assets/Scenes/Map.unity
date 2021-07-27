@@ -47837,7 +47837,7 @@ MonoBehaviour:
   talkText: {fileID: 1738451721}
   talkIndex: 0
   isAction: 0
-  shop: {fileID: 0}
+  shop: {fileID: 1758890913}
   scanObject: {fileID: 0}
   talkPanel: {fileID: 1777373353}
 --- !u!4 &784324187
@@ -60353,6 +60353,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1763806344}
     m_Modifications:
+    - target: {fileID: 385054916, guid: 14d42f3ce92db2243bfa90b6545ef4f3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 5043281314472583370, guid: 14d42f3ce92db2243bfa90b6545ef4f3, type: 3}
       propertyPath: m_RootOrder
       value: 2
