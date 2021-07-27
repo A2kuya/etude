@@ -746,12 +746,10 @@ public class Player : MonoBehaviour
 	{
 		if(SkilltreeKey)
 		{
-			SkillManager.Instance.Enter();
+			SkillManager.Instance.Active();
 		}
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			SkillManager.Instance.UpgradeSkill(SkillManager.SkillType.Dash2, ref skillPoint);
-		}
+
+
 	}
 
 	private void FixedUpdate()
@@ -835,6 +833,7 @@ public class Player : MonoBehaviour
 				potions -= 1;
 				potionUI.SetPotion();
 				hp += healAmount;
+				healthBar.SetHealth(hp);
 			}
 		}
     }
