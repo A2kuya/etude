@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BHRush : StateMachineBehaviour
+public class VultureStiff : StateMachineBehaviour
 {
-    BossHyena bh;
+    Vulture vulture;
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        bh = animator.GetComponent<BossHyena>();
-        bh.SetRushCollider(true);
-    }    
+        vulture = animator.GetComponent<Vulture>();
+        vulture.StopAllCoroutines();
+        vulture.StiffStart();
+    }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(!bh.Rush()){
-            animator.SetTrigger("rushend");
-        }
-    }    
+        vulture.CheckFall();
+    }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        vulture.StiffEnd();
     }
 }

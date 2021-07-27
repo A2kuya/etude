@@ -26,7 +26,6 @@ public class BossHyena : Boss
         summons = GameObject.Find("Summons").transform;
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
-        hpBar = Instantiate(prfHpBar, canvas.transform);
         attackPatterns = new Dictionary<string, AttackPattern>();
         attackPatterns.Add("bite", new Bite(biteDamage, biteCooltime, this));
         attackPatterns.Add("summon", new Summon(0, summonCooltime, this));
@@ -46,6 +45,7 @@ public class BossHyena : Boss
     {
         UpdateHpBar();
         CheckDead();
+        CheckStiffness();
         CaculateDistance();
         CheckObstacle();
     }
@@ -64,15 +64,19 @@ public class BossHyena : Boss
                 if(CheckPhase())
                     anim.SetTrigger("changePhase");
                 else if (state >= phase.third && attackPatterns["backAttack"].Can()){
+                    isAttack = true;
                     attackPatterns["backAttack"].Excute();
                 }
                 else if (state >= phase.second && attackPatterns["rush"].Can()){
+                    isAttack = true;
                     attackPatterns["rush"].Excute();
                 }
                 else if (attackPatterns["summon"].Can()){
+                    isAttack = true;
                     attackPatterns["summon"].Excute();
                 }
                 else if (attackPatterns["bite"].Can() && !Far()){
+                    isAttack = true;
                     attackPatterns["bite"].Excute();
                 }
                 else if (Far()){
@@ -104,6 +108,7 @@ public class BossHyena : Boss
         Instantiate(prfHyena, transform.position + left, Quaternion.Euler(0,180,0)).transform.parent = summons;
         Instantiate(prfHyena, transform.position + right, Quaternion.Euler(0,0,0)).transform.parent = summons;
         prfHyena.SetActive(false);
+        isAttack = false;
     }
     public void Dash(){
         isDash = true;
@@ -126,16 +131,16 @@ public class BossHyena : Boss
     private float rushtime;
     private bool isTurn = false;
     private bool beforeLeft;
+    public float rushReadyTime;
     public void rushStart(){
         rushspeed = maxRushspeed;
         rushtime = maxRushtime;
         beforeLeft = isLeft;
         isTurn = false;
         InAttack(true);
-        atkCollider[1].SetActive(true);
     }
     public void rushEnd(){
-        atkCollider[1].SetActive(false);
+        SetRushCollider(false);
         isTurn = true;
         rushtime = 0;
         InAttack(false);
@@ -169,7 +174,7 @@ public class BossHyena : Boss
         }
     }
     public void SetRushCollider(bool set){
-        transform.GetChild(0).GetChild(1).gameObject.SetActive(set);
+        atkCollider[1].SetActive(set);
     }
     public void BackAttack(){
         Vector3 v = new Vector3((isLeft ? -5 : 5), 0, 0);
@@ -177,6 +182,7 @@ public class BossHyena : Boss
         prfHyena.SetActive(true);
         Instantiate(prfHyena, player.transform.position + v, q).transform.parent = summons;
         prfHyena.SetActive(false);
+        isAttack = false;
     }
     public bool InRange(){
         return Mathf.Abs(playerVector.x) <= 6f;
@@ -184,6 +190,11 @@ public class BossHyena : Boss
     public void KnockbackToPlayer(){
         Vector2 v = new Vector2(100, 20);
         player.GetComponent<Player>().TakeDamage(0, transform.position, v);
+    }
+    public override void StiffEnd()
+    {
+        base.StiffEnd();
+        StartCoroutine(Attack());
     }
     public override void CheckDead(bool death = false)
     {

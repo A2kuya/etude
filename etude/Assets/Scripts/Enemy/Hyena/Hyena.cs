@@ -29,7 +29,6 @@ public class Hyena : GroundEnemy
         player = GameObject.Find("Player");
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
-        hpBar = Instantiate(prfHpBar, canvas.transform);
         atkCollider.SetActive(false);
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임

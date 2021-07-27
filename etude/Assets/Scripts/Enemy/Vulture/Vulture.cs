@@ -27,12 +27,13 @@ public class Vulture : Boss
         player = GameObject.Find("Player");
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
-        hpBar = Instantiate(prfHpBar, canvas.transform);
         attackPatterns = new Dictionary<string, AttackPattern>();
         attackPatterns.Add("fallStones", new FallStones(0, fallingSotnesCooltime, this));
         attackPatterns.Add("cutAir", new CutAir(cutAirDamage, cutAirCooltime, this));
         attackPatterns.Add("shootRay", new ShootRay(0, shootRayCooltime, this));
+        isGround = false;
         state = phase.first;
+        stiffness = 100;
         Flip();
         GetSpriteSize();
         attack = Attack();
@@ -57,6 +58,7 @@ public class Vulture : Boss
     {
         UpdateHpBar();
         CheckDead();
+        CheckStiffness();
         CaculateDistance();
         CheckObstacle();
     }
@@ -210,6 +212,7 @@ public class Vulture : Boss
         transport = false;
         StopCoroutine(creatStones);
         anim.SetTrigger("attackEnd");
+
     }
 
 
@@ -423,7 +426,6 @@ public class Vulture : Boss
         RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, 25, obstacleLayer);
         downCount = (int)(hit.distance / fallDistance);
         for(int i = downCount;i > 0; i--){
-            Debug.Log(i);
             iTween.MoveBy(gameObject, iTween.Hash(
                 "y", -fallDistance,
                 "time", 0.9f,
@@ -471,11 +473,27 @@ public class Vulture : Boss
         Trigger("fly");
     }
 
-  
-    
+    override public void StiffStart(){
+        rigid.bodyType = RigidbodyType2D.Dynamic;
+        rigid.AddForce(new Vector2(0, 10));
+        base.StiffStart();
+    }
+    public void CheckFall(){
+        if(rigid.velocity.y == 0 || isGround){
+            Trigger("rest");
+        }
+    }
+    override public void StiffEnd(){
+        base.StiffEnd();
+        StartCoroutine(attack);
+    }
     public override void Death()
     {
         rigid.bodyType = RigidbodyType2D.Dynamic;
+        GetComponent<BoxCollider2D>().size = new Vector2(0.37f, 0.1f);
+        for(int i=0;i<transform.childCount;i++){
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
         base.Death();
     }
     override protected void CaculateDistance() {  //거리계산 및 방향계산
@@ -488,7 +506,7 @@ public class Vulture : Boss
     }
     override protected void CheckObstacle(){
         //바닥 체크
-        isGround = Physics2D.OverlapCircle(transform.position - new Vector3(0, spriteSize.y / -2, 0), 0.2f, obstacleLayer);
+        isGround = Physics2D.OverlapCircle(transform.position - new Vector3(0, spriteSize.y / 2, 0), 0.2f, obstacleLayer);
     }
     public void KnockbackToPlayer(){
         Vector2 v = new Vector2(100, 20);

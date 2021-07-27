@@ -9,6 +9,7 @@ public class VultureChangePhase : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         vulture = animator.GetComponent<Vulture>();
+        animator.speed = 0.5f;
         vulture.tag = "EnemyUnbeatable";
 
     }
@@ -21,6 +22,7 @@ public class VultureChangePhase : StateMachineBehaviour
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        animator.speed = 1;
         vulture.tag = "Enemy";
     }
 }

@@ -14,7 +14,6 @@ public class Snake : GroundEnemy
         player = GameObject.Find("Player");
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
-        hpBar = Instantiate(prfHpBar, canvas.transform);
         atkCollider.SetActive(false);
         dir = Vector2.left;
         attackPattern = new List<AttackPattern>();

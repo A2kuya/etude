@@ -10,9 +10,8 @@ public abstract class Enemy : MonoBehaviour
     protected Rigidbody2D rigid;
     protected GameObject player;
     public GameObject coin;
-    public GameObject prfHpBar;
     public GameObject canvas;
-    protected GameObject hpBar;
+    public GameObject hpBar;
 
 
     public int hp;
@@ -24,8 +23,9 @@ public abstract class Enemy : MonoBehaviour
     protected Vector2 playerVector;    //플레이어와의 거리
     protected float playerDistance;
     protected bool isLeft;
-    protected bool isGround;
+    public bool isGround;
     protected bool isJump;
+    protected bool isDead = false;
     public bool isMoving;
     protected Vector2 spriteSize;
     
@@ -109,8 +109,29 @@ public abstract class Enemy : MonoBehaviour
         hpBar.GetComponentInChildren<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, spriteSize.y + 0.5f, 0));
         hpBar.GetComponentInChildren<Slider>().value = (float) curHp / (float) hp;
     }
+    protected bool isStiff = false;
+    public float stiffTime;
+    protected float curStiffTime;
+    virtual public void CheckStiffness(bool stiff = false){
+        if(!isStiff && (stiffness <= 0f || stiff)){
+            Trigger("isStiff");
+        }
+    }
+    virtual public void StiffStart(){
+        isStiff = true;
+        curStiffTime = stiffTime;
+    }
+    public bool CheckStiffTime(){
+        curStiffTime -= Time.deltaTime;
+        return curStiffTime <= 0f;        
+    }
+    virtual public void StiffEnd(){
+        stiffness = 100;
+        isStiff = false;
+    }
     virtual public void CheckDead(bool death = false){
-        if(curHp <= 0f || death){
+        if(!isDead && (curHp <= 0f || death)){
+            isDead = true;
             anim.SetTrigger("isDead");
         }
     }
