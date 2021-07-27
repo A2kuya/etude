@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 385054916}
   - component: {fileID: 385054917}
-  m_Layer: 13
+  m_Layer: 17
   m_Name: BottomLadder
   m_TagString: BottomLadder
   m_Icon: {fileID: 0}
@@ -67,7 +67,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1099822496}
   - component: {fileID: 1099822497}
-  m_Layer: 13
+  m_Layer: 17
   m_Name: TopLadder
   m_TagString: TopLadder
   m_Icon: {fileID: 0}
