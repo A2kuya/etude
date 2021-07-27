@@ -61,6 +61,7 @@ public class Player : MonoBehaviour
 	float leftCheckRun = 0.2f;
 	bool rightCanRun = false;
 	float rightCheckRun = 0.2f;
+	bool isCoroutineRunnung = false;
 
 	// Jump
 	public float maxJumpHeight = 4;
@@ -326,6 +327,7 @@ public class Player : MonoBehaviour
 				else if (chargeAttackTime > .3f)
 				{
 					state = State.charge;
+					StartCoroutine("SpendStaminaGradually", 30);
 				}
 
 				else
@@ -355,7 +357,14 @@ public class Player : MonoBehaviour
 		else if (Mathf.Abs(hAxis) > 0f)
 		{
 			if (Mathf.Abs(velocity.x) > 8f)
+			{
 				state = State.run;
+				if (!isCoroutineRunnung)
+				{
+					isCoroutineRunnung = true;
+					StartCoroutine("SpendStaminaGradually", 15f);
+				}
+			}
 			else
 				state = State.walk;
 		}
@@ -456,7 +465,6 @@ public class Player : MonoBehaviour
 				{
 					isClimbReady = false;
 					climbDelay = 0;
-					velocity.x += 1;
 					velocity.y = maxJumpVelocity;
 					state = State.jump;
 					return;
@@ -465,9 +473,13 @@ public class Player : MonoBehaviour
 				if (vAxis == -1)
 				{
 					downJump = true;
+					state = State.fall;
 				}
-				OnJumpInputDown();
-				state = State.jump;
+                else
+                {
+					OnJumpInputDown();
+					state = State.jump;
+				}
 			}
 			if (jumpKeyUp)
 			{
@@ -746,12 +758,10 @@ public class Player : MonoBehaviour
 	{
 		if(SkilltreeKey)
 		{
-			SkillManager.Instance.Enter();
+			SkillManager.Instance.Active();
 		}
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			SkillManager.Instance.UpgradeSkill(SkillManager.SkillType.Dash2, ref skillPoint);
-		}
+
+
 	}
 
 	private void FixedUpdate()
@@ -835,6 +845,7 @@ public class Player : MonoBehaviour
 				potions -= 1;
 				potionUI.SetPotion();
 				hp += healAmount;
+				healthBar.SetHealth(hp);
 			}
 		}
     }
@@ -907,12 +918,21 @@ public class Player : MonoBehaviour
 		}
 	}
 
+	private IEnumerator SpendStaminaGradually(float staminaCostPerSec)
+	{
+		while (state == State.charge || state == State.run)
+		{
+			stamina -= staminaCostPerSec / 100;
+			yield return new WaitForSeconds(0.01f);
+		}
+		isCoroutineRunnung = false;
+	}
+
 	private IEnumerator RecoverStamina()
     {
 		while (stamina < 100)
 		{
 			stamina = Mathf.Clamp(stamina + 1f, 0, 100);
-			//staminaBar.SetStamina(stamina);
 			yield return new WaitForSeconds(0.1f);
 		}
 		yield return null;

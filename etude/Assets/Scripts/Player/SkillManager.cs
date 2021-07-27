@@ -55,23 +55,20 @@ public class SkillManager : MonoBehaviour
 
     //Ui
 
-    public void Enter()
+    public void Active()
     {
-        uiGroup.anchoredPosition = Vector2.zero;
+        if(uiGroup.anchoredPosition!=Vector2.zero)
+        {
+            uiGroup.anchoredPosition=Vector2.zero;
+        }
+        else
+        {
+            uiGroup.anchoredPosition=Vector2.up*1000;
+        }
     }
 
     public void Exit()
     { 
         uiGroup.anchoredPosition=Vector2.up*1000;
-    }
-
-    public void LearnDash()
-    {
-
-    }
-
-    public void LearnSpecialAttack()
-    {
-        
     }
 }
