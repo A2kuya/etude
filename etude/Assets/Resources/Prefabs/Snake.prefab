@@ -441,14 +441,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd08e2605af1074495946af3a43d891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 0}
-  prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
-  canvas: {fileID: 8264794794085317799}
+  prfCoin: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
   hpBar: {fileID: 5406810596023904605}
-  hp: 30
-  curHp: 30
-  stiffness: 100
+  maxHp: 100
   damage: 10
+  price: 3
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -456,6 +453,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   isGround: 0
+  isDead: 0
   isMoving: 0
   stiffTime: 0
   atkCollider: {fileID: 8743946464066966583}
@@ -478,15 +476,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1223575022320590417, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1223575022320590417, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_Name
       value: HpBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8343123089691724444, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_Pivot.x

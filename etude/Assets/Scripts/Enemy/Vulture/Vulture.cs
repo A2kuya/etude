@@ -11,10 +11,12 @@ public class Vulture : Boss
     public GameObject prfWarningLine;
     public List<GameObject> warningLinePool = new List<GameObject>();
  
-    public float fallingSotnesCooltime;
+    public float fallSotnesCooltime;
+    public int fallStonesDamageMultiple;
     public float cutAirCooltime;
-    public int cutAirDamage;
+    public int cutAirDamageMultiple;
     public float shootRayCooltime;
+    public int shootRayDamageMultiple;
     
     public float attackCooltime;
     public bool isAttack;
@@ -28,12 +30,12 @@ public class Vulture : Boss
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
         attackPatterns = new Dictionary<string, AttackPattern>();
-        attackPatterns.Add("fallStones", new FallStones(0, fallingSotnesCooltime, this));
-        attackPatterns.Add("cutAir", new CutAir(cutAirDamage, cutAirCooltime, this));
-        attackPatterns.Add("shootRay", new ShootRay(0, shootRayCooltime, this));
+        attackPatterns.Add("fallStones", new FallStones(fallStonesDamageMultiple * damage, fallSotnesCooltime, this));
+        attackPatterns.Add("cutAir", new CutAir(cutAirDamageMultiple * damage, cutAirCooltime, this));
+        attackPatterns.Add("shootRay", new ShootRay(shootRayDamageMultiple * damage, shootRayCooltime, this));
         isGround = false;
         state = phase.first;
-        stiffness = 100;
+        curHp = maxHp;
         Flip();
         GetSpriteSize();
         attack = Attack();

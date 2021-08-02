@@ -9,15 +9,15 @@ public abstract class Enemy : MonoBehaviour
     protected Animator anim;
     protected Rigidbody2D rigid;
     protected GameObject player;
-    public GameObject coin;
-    public GameObject canvas;
+    public GameObject prfCoin;
     public GameObject hpBar;
 
-
-    public int hp;
-    public int curHp;
-    public int stiffness;
+    
+    [SerializeField] protected int maxHp;
+    protected int curHp;
+    private int stiffness = 100;
     public int damage;
+    [SerializeField] protected int price;
     public LayerMask playerLayer;   //플레이어 레이어
     public LayerMask obstacleLayer; //지형 레이어
     protected Vector2 playerVector;    //플레이어와의 거리
@@ -25,17 +25,18 @@ public abstract class Enemy : MonoBehaviour
     protected bool isLeft;
     public bool isGround;
     protected bool isJump;
-    protected bool isDead = false;
+    public bool isDead = false;
     public bool isMoving;
     protected Vector2 spriteSize;
     
     public void ConstructSet(bool isLeft){
         this.isLeft = isLeft;
     }
-    public void ConstructSet(bool isLeft, int hp, int damage){
+    public void ConstructSet(bool isLeft, int hp, int damage, int price){
         this.isLeft = isLeft;
-        this.hp = hp;
+        this.maxHp = hp;
         this.damage = damage;
+        this.price = price;
     }
     public void Trigger(string s){
         anim.SetTrigger(s);
@@ -78,7 +79,7 @@ public abstract class Enemy : MonoBehaviour
     }
     public void TakeDamage(int damage, int stiffness, Vector2 enemyPos, Vector2 knockback)
     {
-		hp -= damage;
+		maxHp -= damage;
         if(curHp < 0)
             curHp = 0;
 		this.stiffness -= stiffness;
@@ -105,9 +106,9 @@ public abstract class Enemy : MonoBehaviour
         spriteSize = worldSize;
     }
     protected void UpdateHpBar(){
-        hpBar.SetActive(curHp != hp);
+        hpBar.SetActive(curHp != maxHp);
         hpBar.GetComponentInChildren<RectTransform>().position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, spriteSize.y + 0.5f, 0));
-        hpBar.GetComponentInChildren<Slider>().value = (float) curHp / (float) hp;
+        hpBar.GetComponentInChildren<Slider>().value = (float) curHp / (float) maxHp;
     }
     protected bool isStiff = false;
     public float stiffTime;
@@ -141,15 +142,11 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void SpawnCoins()
+    protected void SpawnCoins()
     {
-        if(coin == null)
-            return;
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < price; i++)
         {
-            int random = Random.Range(-500, 500);
-            var instance = Instantiate(coin, new Vector3(transform.position.x, transform.position.y + 2), Quaternion.identity);
-            instance.GetComponent<Rigidbody2D>().AddForce(new Vector2(random, 800));
+            CoinPool.GetObject(transform.position, new Vector2(Random.Range(-500, 500), 800));
         }
     }
 }

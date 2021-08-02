@@ -10,7 +10,7 @@ public class Coin : MonoBehaviour
         {
             Player player = collision.gameObject.GetComponent<Player>();
             player.GetMoney(1);
-            Destroy(gameObject);
+            CoinPool.ReturnObject(this);
         }
     }
 }

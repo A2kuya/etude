@@ -12,11 +12,11 @@ public class SnakeDeath : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-            snake.gameObject.SetActive(false);
+            snake.Death();
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-       snake.gameObject.SetActive(false);
+        snake.Death();
     }
 
 }

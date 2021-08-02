@@ -21,6 +21,7 @@ abstract public class Boss : Enemy
     }
     
     override public void Death(){
+        SpawnCoins();
         Destroy(hpBar);
         StopAllCoroutines();
         gameObject.tag = "Untagged";
@@ -28,11 +29,11 @@ abstract public class Boss : Enemy
         this.enabled = false;
     }
     public bool CheckPhase(){
-        if((float) curHp/hp <= 0.2 && state != phase.third){
+        if((float) curHp/maxHp <= 0.2 && state != phase.third){
             state = phase.third;
             return true;
         }
-        else if((float) curHp/hp <= 0.5 && state == phase.first){
+        else if((float) curHp/maxHp <= 0.5 && state == phase.first){
             state = phase.second;
             return true;
         }

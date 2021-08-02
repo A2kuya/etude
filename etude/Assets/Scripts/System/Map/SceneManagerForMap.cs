@@ -24,7 +24,7 @@ public class SceneManagerForMap : MonoBehaviour
     {
         barri.Active();
 
-        if(Boss.GetComponent<BossHyena>().curHp==0&&flag)
+        if(Boss.GetComponent<BossHyena>().isDead&&flag)
         {
             barri.SwitchFlag();
             Ground.GetComponent<BrokeGround>().SwitchBossDie();

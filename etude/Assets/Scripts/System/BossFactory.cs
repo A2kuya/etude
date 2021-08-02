@@ -31,24 +31,70 @@ public class BossFactory : EnemyFactory
     public override GameObject CreateEnemy(string s)
     {
         GameObject enemy = PrefabSet(s);
+        if(enemy == null){
+            Debug.Log(s + "생성 실패");
+            return null;
+        }
         MonoBehaviour.Instantiate(enemy);
         return enemy;
     }
     public override GameObject CreateEnemy(string s, Vector3 position, bool isLeft = true)
     {
         GameObject enemy = PrefabSet(s);
+        if(enemy == null){
+            Debug.Log(s + "생성 실패");
+            return null;
+        }
         enemy.GetComponent<Enemy>().ConstructSet(isLeft);
         enemy.transform.position = position;
         MonoBehaviour.Instantiate(enemy);
         return enemy;
     }
-    public override GameObject CreateEnemy(string s, Vector3 position, bool isLeft, int hp, int damage)
+    public override GameObject CreateEnemy(string s, Vector3 position, bool isLeft, int hp, int damage, int price)
     {
         GameObject enemy = PrefabSet(s);
-        enemy = Resources.Load<GameObject>("Prefabs/Hyena");
-        enemy.GetComponent<Enemy>().ConstructSet(isLeft, hp, damage);
+        if(enemy == null){
+            Debug.Log(s + "생성 실패");
+            return null;
+        }
+        enemy.GetComponent<Enemy>().ConstructSet(isLeft, hp, damage, price);
         enemy.transform.position = position;
         MonoBehaviour.Instantiate(enemy);
+        return enemy;
+    }
+    public override GameObject CreateEnemy(string s, Transform transform){
+        GameObject enemy = PrefabSet(s);
+        if(enemy == null){
+            Debug.Log(s + "생성 실패");
+            return null;
+        }
+        var obj = MonoBehaviour.Instantiate(enemy);
+        obj.transform.SetParent(transform);
+        return enemy;
+    }
+    public override GameObject CreateEnemy(string s, Transform transform, Vector3 position, bool isLeft){
+        GameObject enemy = PrefabSet(s);
+        if(enemy == null){
+            Debug.Log(s + "생성 실패");
+            return null;
+        }
+        enemy.GetComponent<Enemy>().ConstructSet(isLeft);
+        enemy.transform.position = position;
+        var obj = MonoBehaviour.Instantiate(enemy);
+        obj.transform.SetParent(transform);
+        return enemy;
+    }
+    public override GameObject CreateEnemy(string s, Transform transform, Vector3 position, bool isLeft, int hp, int damage, int price){
+        GameObject enemy = PrefabSet(s);
+        if(enemy == null){
+            Debug.Log(s + "생성 실패");
+            return null;
+        }
+        enemy = Resources.Load<GameObject>("Prefabs/Hyena");
+        enemy.GetComponent<Enemy>().ConstructSet(isLeft, hp, damage, price);
+        enemy.transform.position = position;
+        var obj = MonoBehaviour.Instantiate(enemy);
+        obj.transform.SetParent(transform);
         return enemy;
     }
 }

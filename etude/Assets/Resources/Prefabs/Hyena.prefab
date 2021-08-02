@@ -222,7 +222,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7316770140547282167}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 25, y: 0, z: 0}
+  m_LocalPosition: {x: 125, y: 34.105003, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 7316770140068744471}
@@ -360,14 +360,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 621a313e2d79949488c55cb370b82d15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coin: {fileID: 0}
-  prfHpBar: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
-  canvas: {fileID: 5365725228914321532}
+  prfCoin: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
   hpBar: {fileID: 5464476255566765899}
-  hp: 30
-  curHp: 30
-  stiffness: 100
-  damage: 20
+  maxHp: 100
+  damage: 10
+  price: 0
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -375,6 +372,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   isGround: 0
+  isDead: 0
   isMoving: 0
   stiffTime: 0
   atkCollider: {fileID: 7316770140068744468}
@@ -589,15 +587,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1223575022320590417, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1223575022320590417, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_Name
       value: HpBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7008089952431319336, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8343123089691724444, guid: 49494c6471b180e43a0fabf9ac96681f, type: 3}
       propertyPath: m_Pivot.x

@@ -32,7 +32,8 @@ public class Hyena : GroundEnemy
         atkCollider.SetActive(false);
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임
-        attackPattern.Add(new AttackPattern(0, dashCooltime));  //대쉬 쿨타임
+        attackPattern.Add(new AttackPattern(0, dashCooltime));
+        curHp = maxHp;  //대쉬 쿨타임
         Flip();
         CaculateDistance();
     }
@@ -134,5 +135,8 @@ public class Hyena : GroundEnemy
             dashCurtime -= Time.deltaTime;
         else
             canDash = true;
+    }
+    public void SetAttack(){
+        isChase = true;
     }
 }

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Stone : MonoBehaviour
 {
-    
-    
     private RaycastHit2D hit;
     private LayerMask obstacleLayer;
     [SerializeField]

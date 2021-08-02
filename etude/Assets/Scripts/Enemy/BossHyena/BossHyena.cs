@@ -7,18 +7,17 @@ public class BossHyena : Boss
 {
     public GameObject prfHyena;
     Transform summons;
-    public float dashDistance;
-    public int biteDamage;
+    public int biteMultiplyer;
     public float biteCooltime;
     public float summonCooltime;
-    public int rushDamage;
+    public int rushMultiplyer;
     public float rushCooltime;
     public float backAttackCooltime;
     public float attackCooltime;
     private bool isDash;
 
     // Start is called before the first frame update
-    private void Start(){
+    private void Awake(){
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rigid = GetComponent<Rigidbody2D>();
@@ -27,12 +26,13 @@ public class BossHyena : Boss
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
         attackPatterns = new Dictionary<string, AttackPattern>();
-        attackPatterns.Add("bite", new Bite(biteDamage, biteCooltime, this));
+        attackPatterns.Add("bite", new Bite(biteMultiplyer * damage, biteCooltime, this));
         attackPatterns.Add("summon", new Summon(0, summonCooltime, this));
-        attackPatterns.Add("rush", new Rush(rushDamage, rushCooltime, this));
+        attackPatterns.Add("rush", new Rush(rushMultiplyer * damage, rushCooltime, this));
         attackPatterns.Add("backAttack", new BackAttack(0, backAttackCooltime, this));
         state = phase.first;
         isAttack = false;
+        curHp = maxHp;
         Flip();
         GetSpriteSize();
     }
@@ -105,8 +105,9 @@ public class BossHyena : Boss
         else
             right = rightSummon;
         prfHyena.SetActive(true);
-        Instantiate(prfHyena, transform.position + left, Quaternion.Euler(0,180,0)).transform.parent = summons;
-        Instantiate(prfHyena, transform.position + right, Quaternion.Euler(0,0,0)).transform.parent = summons;
+        MonsterFactory mf = new MonsterFactory();
+        mf.CreateEnemy("hyena", summons, transform.position + left, false, 100, damage, 0).GetComponent<Hyena>().SetAttack();
+        mf.CreateEnemy("hyena", summons, transform.position + right, true, 100, damage, 0).GetComponent<Hyena>().SetAttack();
         prfHyena.SetActive(false);
         isAttack = false;
     }
