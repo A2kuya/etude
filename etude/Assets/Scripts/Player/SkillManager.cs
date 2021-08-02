@@ -110,7 +110,7 @@ public class SkillManager : MonoBehaviour
     public void Complete()
     {
         UpgradeSkill(SkillType.Dash,ref player.skillPoint,tmp[0]);
-        UpgradeSkill(SkillType.SpecialAttack1, ref player.skillPoint,tmp[1]);
+        UpgradeSkill(SkillType.SpecialAttack, ref player.skillPoint,tmp[1]);
         UpgradeSkill(SkillType.DoubleJump, ref player.skillPoint, tmp[2]);
 
         Exit();
