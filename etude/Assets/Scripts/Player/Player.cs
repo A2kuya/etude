@@ -525,15 +525,14 @@ public class Player : MonoBehaviour
 
 	private void Dash()
 	{
-		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash1) ||
-			SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash))
 		{
 			if (dashKey)
 			{
 				if (isDashReady)
 				{
 					{
-						if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+						if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash))
                         {
 							animator.SetFloat("dashNum", 1);
                         }
@@ -558,7 +557,7 @@ public class Player : MonoBehaviour
 				progress = Mathf.Clamp(progress, 0, 1);
 				moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
 				controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
-				if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+				if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash))
                 {
 					StartCoroutine("UnBeatable", dashTime);
 				}
@@ -758,7 +757,7 @@ public class Player : MonoBehaviour
 	{
 		if(SkilltreeKey)
 		{
-			SkillManager.Instance.Active();
+			SkillManager.Instance.Active(ref skillPoint);
 		}
 
 
