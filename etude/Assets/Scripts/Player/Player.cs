@@ -127,6 +127,9 @@ public class Player : MonoBehaviour
 	private bool isUnBeat = false;
 	public float unBeatTime;
 
+	// DoubleJump
+	private bool canDoubleJump = true;
+
 	void Start()
 	{
 		animator = GetComponent<Animator>();
@@ -270,7 +273,6 @@ public class Player : MonoBehaviour
 					animator.SetTrigger("exitJumpAttack");
 				}
 			}
-
 		}
 
 		else if (state == State.specialAttack)
@@ -493,6 +495,7 @@ public class Player : MonoBehaviour
 	{
 		if (controller.collisions.below)
 		{
+			canDoubleJump = true;
 			if (controller.collisions.slidingDownMaxSlope)
 			{
 				if (directionalInput.x != -Mathf.Sign(controller.collisions.slopeNormal.x))
@@ -512,6 +515,14 @@ public class Player : MonoBehaviour
 				velocity.y = maxJumpVelocity;
 			}
 		}
+		else if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.DoubleJump) && canDoubleJump)
+        {
+			canDoubleJump = false;
+			state = State.jump;
+			animator.Play("player_idle");
+			animator.Play("player_jump");
+			velocity.y = maxJumpVelocity;
+		}
 	}
 
 	// JumpKey Up
@@ -525,18 +536,17 @@ public class Player : MonoBehaviour
 
 	private void Dash()
 	{
-		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash1) ||
-			SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash))
 		{
 			if (dashKey)
 			{
 				if (isDashReady)
 				{
 					{
-						if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
-                        {
-							animator.SetFloat("dashNum", 1);
-                        }
+						//if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+      //                  {
+						//	animator.SetFloat("dashNum", 1);
+      //                  }
 						state = State.dash;
 						canMove = false;
 						dashDir = playerDir;
@@ -558,10 +568,10 @@ public class Player : MonoBehaviour
 				progress = Mathf.Clamp(progress, 0, 1);
 				moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
 				controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
-				if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
-                {
-					StartCoroutine("UnBeatable", dashTime);
-				}
+				//if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
+    //            {
+				//	StartCoroutine("UnBeatable", dashTime);
+				//}
 				if (progress >= 1)
 				{
 					canMove = true;
@@ -598,7 +608,7 @@ public class Player : MonoBehaviour
 			{
 				if (vAxis == -1)
 				{
-					if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.SpecialAttack1))
+					if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.SpecialAttack))
 					{
 						if (isSpecialAttackReady && state == State.idle)
 						{
@@ -626,7 +636,7 @@ public class Player : MonoBehaviour
 					}
 				}
 			}
-			else if (state != State.climb)
+			else if (state != State.climb && bottomLadder == false && topLadder == false)
 			{
 				state = State.jumpAttack;
 				velocity.y = 0;
@@ -758,7 +768,7 @@ public class Player : MonoBehaviour
 	{
 		if(SkilltreeKey)
 		{
-			SkillManager.Instance.Active();
+			SkillManager.Instance.Active(ref skillPoint);
 		}
 
 
