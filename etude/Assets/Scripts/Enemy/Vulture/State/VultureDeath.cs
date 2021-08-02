@@ -9,15 +9,16 @@ public class VultureDeath : StateMachineBehaviour
     {
         vulture = animator.GetComponent<Vulture>();
         vulture.StopAllCoroutines();
+        animator.speed = 1;
     }
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(stateInfo.normalizedTime >= 1f){
-            vulture.Death();
-        }
+
     }
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        Debug.Log("test");
+        animator.speed = 0;
+        vulture.Death();
     }
 }

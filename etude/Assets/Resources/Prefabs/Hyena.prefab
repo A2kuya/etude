@@ -382,7 +382,7 @@ MonoBehaviour:
   chaseDistance: 30
   range: 10
   isSlope: 0
-  isChase: 0
+  isChase: 1
   maxangle: 70
   angle: 0
   atkCooltime: 5

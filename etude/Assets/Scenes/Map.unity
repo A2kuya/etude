@@ -47965,6 +47965,7 @@ Transform:
   - {fileID: 1404770718}
   - {fileID: 1794293819}
   - {fileID: 1758890912}
+  - {fileID: 1016067120}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -50989,7 +50990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prfCoin: {fileID: 7820362582654940510, guid: 7e386b5a3ac3f6549818d79063ea7eb7, type: 3}
-  price: 30
+  price: 50
 --- !u!4 &1016067120
 Transform:
   m_ObjectHideFlags: 0
@@ -50997,12 +50998,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1016067118}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.4853777, y: -4.1913114, z: -3.6811125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 692987972}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1026898462
 GameObject:

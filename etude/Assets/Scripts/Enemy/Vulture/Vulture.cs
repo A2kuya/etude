@@ -489,15 +489,7 @@ public class Vulture : Boss
         base.StiffEnd();
         StartCoroutine(attack);
     }
-    public override void Death()
-    {
-        rigid.bodyType = RigidbodyType2D.Dynamic;
-        GetComponent<BoxCollider2D>().size = new Vector2(0.37f, 0.1f);
-        for(int i=0;i<transform.childCount;i++){
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-        base.Death();
-    }
+    
     override protected void CaculateDistance() {  //거리계산 및 방향계산
         playerVector.x = player.transform.position.x - transform.position.x;
         playerVector.y = player.transform.position.y - transform.position.y;
@@ -520,5 +512,15 @@ public class Vulture : Boss
             transform.rotation = Quaternion.Euler(0, 0, 0);
         else
             transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    public override void Death()
+    {
+        rigid.bodyType = RigidbodyType2D.Dynamic;
+        GetComponent<BoxCollider2D>().size = new Vector2(0.37f, 0.1f);
+        for(int i=0;i<transform.childCount;i++){
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+        base.Death();
     }
 }
