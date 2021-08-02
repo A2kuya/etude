@@ -21,6 +21,7 @@ abstract public class Boss : Enemy
     }
     
     override public void Death(){
+        isDead = true;
         SpawnCoins();
         Destroy(hpBar);
         StopAllCoroutines();
