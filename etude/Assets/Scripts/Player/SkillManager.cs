@@ -25,7 +25,7 @@ public class SkillManager : MonoBehaviour
 
     public enum SkillType
     {
-        Dash1, Dash2, SpecialAttack1,
+        Dash, SpecialAttack, DoubleJump
     }
 
     static private int skillTypeSize = System.Enum.GetValues(typeof(SkillType)).Length;
