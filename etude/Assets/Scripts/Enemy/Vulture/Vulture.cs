@@ -450,8 +450,8 @@ public class Vulture : Boss
         rigid.bodyType = RigidbodyType2D.Dynamic;
         float curtime = resttime;
         while(curtime > 0f){
-            yield return new WaitForEndOfFrame();
-            curtime -= Time.deltaTime;
+            yield return new WaitForSeconds(0.1f);
+            curtime -= 0.1f;
         }
         rigid.bodyType = RigidbodyType2D.Kinematic;
         isAttack = false;

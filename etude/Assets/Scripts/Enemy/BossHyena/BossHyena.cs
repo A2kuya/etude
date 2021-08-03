@@ -15,6 +15,7 @@ public class BossHyena : Boss
     public float backAttackCooltime;
     public float attackCooltime;
     private bool isDash;
+    MonsterFactory mf;
 
     // Start is called before the first frame update
     private void Awake(){
@@ -30,6 +31,7 @@ public class BossHyena : Boss
         attackPatterns.Add("summon", new Summon(0, summonCooltime, this));
         attackPatterns.Add("rush", new Rush(rushMultiplyer * damage, rushCooltime, this));
         attackPatterns.Add("backAttack", new BackAttack(0, backAttackCooltime, this));
+        mf = new MonsterFactory();
         state = phase.first;
         isAttack = false;
         curHp = maxHp;
@@ -104,8 +106,7 @@ public class BossHyena : Boss
             right = new Vector3(hit2.distance - 1f, 0, 0);
         else
             right = rightSummon;
-        prfHyena.SetActive(true);
-        MonsterFactory mf = new MonsterFactory();
+        prfHyena.SetActive(true);        
         mf.CreateEnemy("hyena", summons, transform.position + left, false, 100, damage, 0).GetComponent<Hyena>().SetAttack();
         mf.CreateEnemy("hyena", summons, transform.position + right, true, 100, damage, 0).GetComponent<Hyena>().SetAttack();
         prfHyena.SetActive(false);
@@ -179,11 +180,7 @@ public class BossHyena : Boss
     }
     public void BackAttack(){
         Vector3 v = new Vector3((isLeft ? -5 : 5), 0, 0);
-        Quaternion q = Quaternion.Euler(0, (isLeft ? 180 : 0), 0);
-        prfHyena.SetActive(true);
-        Instantiate(prfHyena, player.transform.position + v, q).transform.parent = summons;
-        prfHyena.SetActive(false);
-        isAttack = false;
+        mf.CreateEnemy("hyena", summons, player.transform.position + v, !isLeft, 100, damage, 0).GetComponent<Hyena>().SetAttack();        isAttack = false;
     }
     public bool InRange(){
         return Mathf.Abs(playerVector.x) <= 6f;
