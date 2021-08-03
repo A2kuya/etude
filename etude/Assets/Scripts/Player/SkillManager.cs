@@ -10,8 +10,9 @@ public class SkillManager : MonoBehaviour
     public Text TextSkillPoint;
     public RectTransform uiGroup;
     int PlayerSkillPoint=0;
-    int[] tmp= new int[10];
-    int sumtmp=0;
+    int[] tmpSkillPoint= new int[10];
+    int[] tmpSkillLevel=new int[10];
+    int sumtmp=0; 
     public static SkillManager Instance
     {
         get
@@ -52,8 +53,11 @@ public class SkillManager : MonoBehaviour
 
     public void UpgradeSkill(SkillType skillType, ref int skillPoint, int upgradeskilllevel)
     {
+        for(int i=skillLevel[(int)skillType];i<skillLevel[(int)skillType]+upgradeskilllevel;i++)
+        {
+            skillPoint-=NeedPoint(i+1);
+        }
         skillLevel[(int)skillType]+=upgradeskilllevel;
-        skillPoint-=upgradeskilllevel;
     }
 
     //Ui
@@ -66,7 +70,8 @@ public class SkillManager : MonoBehaviour
             TextSkillTree[i].text=skillLevel[i].ToString();
         for(int i=0;i<3;i++)
         {
-            tmp[i]=0;
+            tmpSkillLevel[i]=0;
+            tmpSkillPoint[i]=0;
         }
 
         if(uiGroup.anchoredPosition!=Vector2.zero)
@@ -86,37 +91,51 @@ public class SkillManager : MonoBehaviour
 
     public void PlusSkillLevel(int i)
     {
-        if(PlayerSkillPoint-sumtmp>0)
+        if(i==0 && skillLevel[i]+tmpSkillLevel[i]==10)
         {
-            tmp[i]++;
-            sumtmp=tmp[0]+tmp[1]+tmp[2];
+            return;
+        }
+        if(PlayerSkillPoint-sumtmp>=NeedPoint(skillLevel[i]+tmpSkillLevel[i]))
+        {
+            tmpSkillLevel[i]++;
+            tmpSkillPoint[i]+=NeedPoint(skillLevel[i]+tmpSkillLevel[i]);
+            sumtmp=tmpSkillPoint[0]+tmpSkillPoint[1]+tmpSkillPoint[2];
         }
         TextSkillPoint.text=(PlayerSkillPoint-sumtmp).ToString();
-        TextSkillTree[i].text=(skillLevel[i]+tmp[i]).ToString();
+        TextSkillTree[i].text=(skillLevel[i]+tmpSkillLevel[i]).ToString();
     }
 
     public void MinusSkillLevel(int i)
     {
-        if(skillLevel[i]+tmp[i]>0)
+        if(skillLevel[i]+tmpSkillLevel[i]>0)
         {
-            tmp[i]--;
-            sumtmp=tmp[0]+tmp[1]+tmp[2];
+            tmpSkillPoint[i]-=NeedPoint(skillLevel[i]+tmpSkillLevel[i]);
+            tmpSkillLevel[i]--;
+            sumtmp=tmpSkillPoint[0]+tmpSkillPoint[1]+tmpSkillPoint[2];
         }
         TextSkillPoint.text=(PlayerSkillPoint-sumtmp).ToString();
-        TextSkillTree[i].text=(skillLevel[i]+tmp[i]).ToString();
+        TextSkillTree[i].text=(skillLevel[i]+tmpSkillLevel[i]).ToString();
     }
 
 
     public void Complete()
     {
-        UpgradeSkill(SkillType.Dash,ref player.skillPoint,tmp[0]);
-        UpgradeSkill(SkillType.SpecialAttack, ref player.skillPoint,tmp[1]);
-        UpgradeSkill(SkillType.DoubleJump, ref player.skillPoint, tmp[2]);
+        UpgradeSkill(SkillType.Dash,ref player.skillPoint,tmpSkillLevel[0]);
+        UpgradeSkill(SkillType.SpecialAttack, ref player.skillPoint,tmpSkillLevel[1]);
+        UpgradeSkill(SkillType.DoubleJump, ref player.skillPoint, tmpSkillLevel[2]);
 
         Exit();
     }
 
 
+    int NeedPoint(int i)
+    {
+        int tmp=i*i;
+        return tmp;
+    }
 
-
+    public void PointON()
+    {
+        print("마우스가 위에 있군요.");
+    }
 }

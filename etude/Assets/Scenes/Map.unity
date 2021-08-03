@@ -61693,6 +61693,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1393595274}
     - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: skillPoint
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 760793974}
@@ -61746,11 +61750,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 70.09
+      value: -6.4
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19.62
+      value: -4.88
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.z
