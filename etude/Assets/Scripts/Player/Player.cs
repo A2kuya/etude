@@ -84,6 +84,7 @@ public class Player : MonoBehaviour
 	float dashTime = 0.2f;
 	float startTime = 0f;
 	Vector2 moveAmount;
+	public float dashStaminaCost = 20f;
 
 	// Combo Attack
 	private bool[] attacks = new bool[2];
@@ -94,11 +95,13 @@ public class Player : MonoBehaviour
 	// Charge Attack
 	private float chargeAttackTime = 0;
 	private float chargeAttackMinTime = 1;
+	public float chargeAttackStaminaCostPerSec = 30f;
 
 	// Special Attack
 	public float speicalAttackCoolTime;
 	float speicalAttackDelay;
 	private bool isSpecialAttackReady = true;
+	public float speicalAttackStaminaCost = 40f;
 
 	// Ladder Climb
 	bool isLadder = false;
@@ -160,6 +163,10 @@ public class Player : MonoBehaviour
 	void Update()
 	{
 		InputManager();
+		if (stamina <= 0)
+        {
+			StartCoroutine("Exhaust");
+		}
 
 		Move();
 		Jump();
@@ -328,8 +335,11 @@ public class Player : MonoBehaviour
 
 				else if (chargeAttackTime > .3f)
 				{
-					state = State.charge;
-					StartCoroutine("SpendStaminaGradually", 30);
+					if (stamina > chargeAttackStaminaCostPerSec / 100)
+					{
+						state = State.charge;
+						StartCoroutine("SpendStaminaGradually", chargeAttackStaminaCostPerSec);
+					}
 				}
 
 				else
@@ -542,24 +552,25 @@ public class Player : MonoBehaviour
 			{
 				if (isDashReady)
 				{
+					if (stamina > 0)
 					{
 						//if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
-      //                  {
+						//                  {
 						//	animator.SetFloat("dashNum", 1);
-      //                  }
+						//                  }
 						state = State.dash;
-						canMove = false;
+						canGetKey = false;
 						dashDir = playerDir;
 						startTime = Time.time;
 						dashDelay = 0;
 						attackPos.gameObject.SetActive(false);
-						StartCoroutine("SpendStamina", 20f);
+						StartCoroutine("SpendStamina", dashStaminaCost);
 					}
 				}
 			}
 
 			CoolTimer(ref dashDelay, ref isDashReady, dashCoolTime);
-
+			
 			if (state == State.dash)
 			{
 				velocity = Vector3.zero;
@@ -569,12 +580,13 @@ public class Player : MonoBehaviour
 				moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
 				controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
 				//if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
-    //            {
+				//            {
 				//	StartCoroutine("UnBeatable", dashTime);
 				//}
+				print(progress);
 				if (progress >= 1)
 				{
-					canMove = true;
+					canGetKey = true;
 					state = State.idle;
 					transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
 				}
@@ -612,10 +624,13 @@ public class Player : MonoBehaviour
 					{
 						if (isSpecialAttackReady && state == State.idle)
 						{
-							state = State.specialAttack;
-							speicalAttackDelay = 0f;
-							isSpecialAttackReady = false;
-							StartCoroutine("SpendStamina", 40f);
+							if (stamina > 0)
+							{
+								state = State.specialAttack;
+								speicalAttackDelay = 0f;
+								isSpecialAttackReady = false;
+								StartCoroutine("SpendStamina", speicalAttackStaminaCost);
+							}
 						}
 					}
 				}
@@ -920,11 +935,18 @@ public class Player : MonoBehaviour
 	private IEnumerator SpendStamina(float staminaCost)
 	{
 		float MaxStamina = 0f;
-		while (MaxStamina < staminaCost)
+		if (stamina <= 0)
 		{
-			stamina -= 1f;
-			MaxStamina += 1f;
-			yield return new WaitForSeconds(0.01f);
+			StopCoroutine("SpendStamina");
+		}
+		else
+		{
+			while (MaxStamina < staminaCost)
+			{
+				stamina -= 1f;
+				MaxStamina += 1f;
+				yield return new WaitForSeconds(0.01f);
+			}
 		}
 	}
 
@@ -932,6 +954,12 @@ public class Player : MonoBehaviour
 	{
 		while (state == State.charge || state == State.run)
 		{
+			if (stamina <= 0)
+            {
+				state = State.idle;
+				StopCoroutine("SpendStaminaGradually");
+				break;
+            }
 			stamina -= staminaCostPerSec / 100;
 			yield return new WaitForSeconds(0.01f);
 		}
@@ -947,5 +975,12 @@ public class Player : MonoBehaviour
 		}
 		yield return null;
 		yield return StartCoroutine("RecoverStamina");
+	}
+
+	private IEnumerator Exhaust()
+    {
+		canGetKey = false;
+		yield return new WaitForSeconds(1f);
+		canGetKey = true;
 	}
 }

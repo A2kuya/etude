@@ -153,7 +153,7 @@ public class Controller2D : RaycastController
 					{
 						playerDownJump = false;
 						collisions.fallingThroughPlatform = true;
-						Invoke("ResetFallingThroughPlatform", .5f);
+						Invoke("ResetFallingThroughPlatform", .1f);
 						continue;
 					}
 					if (isClimbing && !bottomLadder)
