@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using System;
 
 [RequireComponent(typeof(Controller2D))]
@@ -21,7 +22,7 @@ public class Player : MonoBehaviour
 	public StaminaBar staminaBar;
 
 	// Key
-	private bool canGetKey = true;
+	public bool canGetKey = true;
 	private float hAxis;
 	private float vAxis;
 	private bool jumpKeyDown;
@@ -947,5 +948,24 @@ public class Player : MonoBehaviour
 		}
 		yield return null;
 		yield return StartCoroutine("RecoverStamina");
+	}
+
+	public void SavePlayer(){
+		SaveData save = new SaveData();
+		save.hp = hp;
+		save.money = money;
+		save.skillPoint = skillPoint;
+		save.position = transform.position;
+		save.scene = SceneManager.GetActiveScene().name;
+		SaveManager.Save(save);
+	}
+
+	public void LoadPlayer(){
+		SaveData save = SaveManager.Load();
+		SceneManager.LoadScene(save.scene);
+		hp = save.hp;
+		money = save.money;
+		skillPoint = save.skillPoint;
+		transform.position = save.position;
 	}
 }

@@ -93,8 +93,8 @@ public abstract class Enemy : MonoBehaviour
 			knockbackDir = 1;
         }
         Stop();
-	    rigid.AddForce(new Vector2(knockbackDir * knockback.x, knockback.y));
 		anim.SetTrigger("isHurt");
+	    rigid.AddForce(new Vector2(knockbackDir * knockback.x, knockback.y));
 	}
     protected void GetSpriteSize(){
         Vector2 worldSize = Vector3.zero;
