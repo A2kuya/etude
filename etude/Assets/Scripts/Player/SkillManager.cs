@@ -39,16 +39,9 @@ public class SkillManager : MonoBehaviour
     static private int skillTypeSize = System.Enum.GetValues(typeof(SkillType)).Length;
     public int[] skillLevel = new int[skillTypeSize];
 
-    public List<SkillType> unlockedSkillsList = new List<SkillType>();
-
-    public void UnlockSkill(SkillType skillType)
+    public bool IsSkillUnlocked(SkillType skillType, int num)
     {
-        unlockedSkillsList.Add(skillType);
-    }
-
-    public bool IsSkillUnlocked(SkillType skillType)
-    {
-        return unlockedSkillsList.Contains(skillType);
+        return skillLevel[(int)skillType] >= num;
     }
 
     public void UpgradeSkill(SkillType skillType, ref int skillPoint, int upgradeskilllevel)
