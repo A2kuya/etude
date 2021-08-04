@@ -862,7 +862,7 @@ public class Player : MonoBehaviour
 		canGetKey = true;
 	}
 
-	private void Heal()
+	private void UsePotion()
     {
 		if (HealKey)
 		{
@@ -875,6 +875,11 @@ public class Player : MonoBehaviour
 			}
 		}
     }
+
+	public void Heal()
+	{
+		
+	}
 
 	public void SpendMoney(int amount)
     {
