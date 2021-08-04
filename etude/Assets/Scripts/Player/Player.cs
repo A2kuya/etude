@@ -870,7 +870,7 @@ public class Player : MonoBehaviour
 			{
 				potions -= 1;
 				potionUI.SetPotion();
-				Heal(30);
+				Heal(healAmount);
 			}
 		}
     }
