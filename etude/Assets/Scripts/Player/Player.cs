@@ -175,7 +175,7 @@ public class Player : MonoBehaviour
 		Attack();
 		LadderClimb();
 		Interact();
-		Heal();
+		UsePotion();
 		SkillTree();
 
 		StateManager();
@@ -526,7 +526,7 @@ public class Player : MonoBehaviour
 				velocity.y = maxJumpVelocity;
 			}
 		}
-		else if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.DoubleJump) && canDoubleJump)
+		else if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.DoubleJump, 1) && canDoubleJump)
         {
 			canDoubleJump = false;
 			state = State.jump;
@@ -547,7 +547,7 @@ public class Player : MonoBehaviour
 
 	private void Dash()
 	{
-		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash))
+		if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash, 1))
 		{
 			if (dashKey)
 			{
@@ -555,11 +555,11 @@ public class Player : MonoBehaviour
 				{
 					if (stamina > 0)
 					{
-						//if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
-						//                  {
-						//	animator.SetFloat("dashNum", 1);
-						//                  }
-						state = State.dash;
+                        if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash, 5))
+                        {
+                            animator.SetFloat("dashNum", 1);
+                        }
+                        state = State.dash;
 						canGetKey = false;
 						dashDir = playerDir;
 						startTime = Time.time;
@@ -570,8 +570,8 @@ public class Player : MonoBehaviour
 				}
 			}
 
-			CoolTimer(ref dashDelay, ref isDashReady, dashCoolTime);
-			
+			CoolTimer(ref dashDelay, ref isDashReady, dashCoolTime - 0.5f * SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.Dash]);
+
 			if (state == State.dash)
 			{
 				velocity = Vector3.zero;
@@ -580,12 +580,11 @@ public class Player : MonoBehaviour
 				progress = Mathf.Clamp(progress, 0, 1);
 				moveAmount = new Vector3(dashDistance, 0, 0) * progress * dashDir.x;
 				controller.Move(moveAmount * 10 * Time.deltaTime, directionalInput);
-				//if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash2))
-				//            {
-				//	StartCoroutine("UnBeatable", dashTime);
-				//}
-				print(progress);
-				if (progress >= 1)
+                if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.Dash, 5))
+                {
+                    StartCoroutine("UnBeatable", dashTime);
+                }
+                if (progress >= 1)
 				{
 					canGetKey = true;
 					state = State.idle;
@@ -621,13 +620,14 @@ public class Player : MonoBehaviour
 			{
 				if (vAxis == -1)
 				{
-					if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.SpecialAttack))
+					if (SkillManager.Instance.IsSkillUnlocked(SkillManager.SkillType.SpecialAttack, 1))
 					{
 						if (isSpecialAttackReady && state == State.idle)
 						{
 							if (stamina > 0)
 							{
 								state = State.specialAttack;
+								specialDamage = 10 * SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
 								speicalAttackDelay = 0f;
 								isSpecialAttackReady = false;
 								StartCoroutine("SpendStamina", speicalAttackStaminaCost);
@@ -870,15 +870,17 @@ public class Player : MonoBehaviour
 			{
 				potions -= 1;
 				potionUI.SetPotion();
-				hp += healAmount;
-				healthBar.SetHealth(hp);
+				Heal(30);
 			}
 		}
     }
 
-	public void Heal()
-	{
-		
+	public void Heal(int healAmount)
+    {
+		hp += healAmount;
+		if (hp > 100)
+			hp = 100;
+		healthBar.SetHealth(hp);
 	}
 
 	public void SpendMoney(int amount)
