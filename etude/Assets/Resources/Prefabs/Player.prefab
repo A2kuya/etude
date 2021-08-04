@@ -282,23 +282,27 @@ MonoBehaviour:
   attackPos: {fileID: 1919837712919254296}
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
+  canGetKey: 1
   maxHp: 100
   hp: 100
   damage: 10
   specialDamage: 30
   chargeDamage: 50
   stamina: 100
-  money: 0
-  skillPoint: 100
+  money: 100
+  skillPoint: 1000
   velocity: {x: 0, y: 0, z: 0}
   moveSpeed: 8
   maxJumpHeight: 5
   minJumpHeight: 1
   timeToJumpApex: 0.4
   downJump: 0
-  dashCoolTime: 1
+  dashCoolTime: 5.5
+  dashStaminaCost: 20
   attackCoolTime: 1
-  speicalAttackCoolTime: 0.5
+  chargeAttackStaminaCostPerSec: 30
+  speicalAttackCoolTime: 2.5
+  speicalAttackStaminaCost: 40
   hurtTime: 0
   potionUI: {fileID: 0}
   potions: 5

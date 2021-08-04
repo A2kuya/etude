@@ -15,6 +15,7 @@ public class InteractManager : MonoBehaviour
     public ShopManager shop;
      public GameObject scanObject;
      public GameObject talkPanel;
+     public Player player;
 
 
     
@@ -81,6 +82,10 @@ public class InteractManager : MonoBehaviour
                 break;
             case 101:
                 shop.Action();
+                break;
+            case 102:
+                talkPanel.SetActive(isAction);
+                player.Heal(100);
                 break;
         }
     }
