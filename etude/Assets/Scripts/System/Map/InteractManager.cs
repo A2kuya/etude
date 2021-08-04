@@ -85,7 +85,7 @@ public class InteractManager : MonoBehaviour
                 break;
             case 102:
                 talkPanel.SetActive(isAction);
-                player.Heal();
+                player.Heal(100);
                 break;
         }
     }

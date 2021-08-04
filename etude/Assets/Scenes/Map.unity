@@ -64358,7 +64358,6 @@ MonoBehaviour:
   uiGroup: {fileID: 2096757852}
   Information: {fileID: 935334569}
   skillLevel: 000000000000000000000000
-  unlockedSkillsList: 
 --- !u!1 &1795374232 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1466441821369302, guid: 573f2969d3071a44fa563048fb3422d8, type: 3}
