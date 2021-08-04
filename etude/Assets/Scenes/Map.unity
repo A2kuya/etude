@@ -62231,12 +62231,16 @@ PrefabInstance:
       objectReference: {fileID: 995025521}
     - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: dashCoolTime
-      value: 1
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: skillManager
       value: 
       objectReference: {fileID: 1794293820}
+    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: attackCoolTime
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: audioClips.Array.size
       value: 2
@@ -62309,7 +62313,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1919837712919254297, guid: f32460f1c17607744bc69510003bf01e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f32460f1c17607744bc69510003bf01e, type: 3}
 --- !u!1 &1531331770
 GameObject:

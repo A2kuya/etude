@@ -118,7 +118,7 @@ public class SkillManager : MonoBehaviour
 
     public void MinusSkillLevel(int i)
     {
-        if(skillLevel[i]+tmpSkillLevel[i]>0)
+        if(tmpSkillLevel[i]>0)
         {
             tmpSkillPoint[i]-=NeedPoint(skillLevel[i]+tmpSkillLevel[i]);
             tmpSkillLevel[i]--;
