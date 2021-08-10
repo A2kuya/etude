@@ -7,9 +7,13 @@ public class GameManager : MonoBehaviour
 {
     public InteractManager interactManager;
     public RectTransform option;
+    public RectTransform setting;
+    public bool isFullScreen;
+
     bool isPause = true;
     public Player player;
     public static GameManager Instance;
+
     void Awake()
     {
         count = 1;
@@ -113,7 +117,41 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(s);
         
     }
-    
-    
 
+    public void Setting()
+    {
+        option.anchoredPosition = new Vector3(0, 1000, 0);
+        setting.anchoredPosition = new Vector3(0, 0, 0);
+    }
+
+    public void Back()
+    {
+        option.anchoredPosition = new Vector3(0, 0, 0);
+        setting.anchoredPosition = new Vector3(0, 1000, 0);
+    }
+
+    public void SetFullScreen(bool toggle)
+    {
+        isFullScreen = toggle;
+        Screen.fullScreen = toggle;
+    }
+
+    public void SetRatio(int num)
+    {
+        switch(num)
+        {
+            case 0:
+                Screen.SetResolution(800, 600, isFullScreen);
+                break;
+            case 1:
+                Screen.SetResolution(1280, 720, isFullScreen);
+                break;
+            case 2:
+                Screen.SetResolution(1920, 1080, isFullScreen);
+                break;
+            case 3:
+                Screen.SetResolution(3840, 2160, isFullScreen);
+                break;
+        }
+    }
 }
