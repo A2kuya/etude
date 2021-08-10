@@ -10,12 +10,15 @@ public class GameManager : MonoBehaviour
     bool isPause = true;
     public Player player;
     public static GameManager Instance;
+    public SaveData save;
     void Awake()
     {
         count = 1;
         if(Instance == null){
             Instance = this;
+            save = new SaveData();
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnLoadScene;
             player = GameObject.Find("Player").GetComponent<Player>();
             interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();          
         }else{
@@ -31,6 +34,10 @@ public class GameManager : MonoBehaviour
                 Resume();
             }
         }
+    }
+    private void OnLoadScene(Scene scene, LoadSceneMode mode){
+        player = GameObject.Find("Player").GetComponent<Player>();
+            interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
     }
     public void Action(GameObject scanObj)
     {
@@ -67,7 +74,6 @@ public class GameManager : MonoBehaviour
         option.anchoredPosition = new Vector3(0, 1000, 0);
     }
     public void Save(){
-		SaveData save = new SaveData();
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -81,23 +87,13 @@ public class GameManager : MonoBehaviour
         SaveManager.Save(save, "auto");
 	}
     public void Load(string s){
-		SaveData save = SaveManager.Load(s);
+		save = SaveManager.Load(s);
 		SceneManager.LoadScene(save.scene);
         Resume();
-		player.hp = save.hp;
-        player.healthBar.SetHealth(player.hp);
-		player.money = save.money;
-		player.skillPoint = save.skillPoint;
-		player.transform.position = new Vector2(save.positionX, save.positionY);
-        SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.Dash] = save.skillLevel[(int)SkillManager.SkillType.Dash];
-        SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump] = save.skillLevel[(int)SkillManager.SkillType.DoubleJump];
-        SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = save.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
 		save.scene = SceneManager.GetActiveScene().name;
-        
 	}
 
     public void AutoSave(){
-        SaveData save = new SaveData();
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -105,13 +101,17 @@ public class GameManager : MonoBehaviour
 		save.positionY = player.transform.position.y;
 		save.scene = SceneManager.GetActiveScene().name;
         save.skillLevel[(int)SkillManager.SkillType.Dash] = 0;
+        save.skillLevel[(int)SkillManager.SkillType.Dash] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.Dash];
+        save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
+        save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
 		SaveManager.Save(save, "auto");
     }
 
-    public void LoadScene(string s){
+    public void LoadScene(string s, Vector2 position){
         AutoSave();
-        SceneManager.LoadScene(s);
-        
+        save.positionX = position.x;
+        save.positionY = position.y;
+        SceneManager.LoadScene(s);        
     }
     
     

@@ -164,6 +164,18 @@ public class Player : MonoBehaviour
 		potionUI.SetPotion();
 	}
 
+	void OnEnable() {
+		if (GameManager.Instance.save != null)
+        {
+            SaveData save = GameManager.Instance.save;
+            hp = save.hp;
+            healthBar.SetHealth(hp);
+            money = save.money;
+            skillPoint = save.skillPoint;
+            transform.position = new Vector2(save.positionX, save.positionY);
+        }
+	}
+
 	void Update()
 	{
 		InputManager();
@@ -1032,4 +1044,5 @@ public class Player : MonoBehaviour
 		canGetKey = false;
 		gameOver.SetActive(true);
     }
+
 }

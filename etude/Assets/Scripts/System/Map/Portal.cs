@@ -16,7 +16,7 @@ public class Portal : MonoBehaviour
     void Update()
     {
         if (flag)
-            SceneManager.LoadScene("Boss");
+            GameManager.Instance.LoadScene("Boss", new Vector2(-7, -3));
     }
 
 

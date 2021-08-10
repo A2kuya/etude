@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,8 +40,18 @@ public class SkillManager : MonoBehaviour
     {
         Dash, SpecialAttack, DoubleJump
     }
+    private void OnEnable() {
+        SceneManager.sceneLoaded += LoadData;
+    }
 
-    
+    void LoadData(Scene scene, LoadSceneMode mode){
+        if(GameManager.Instance.save != null){
+            SaveData save = GameManager.Instance.save;
+            skillLevel[(int)SkillType.Dash] = save.skillLevel[(int)SkillType.Dash];
+            skillLevel[(int)SkillType.DoubleJump] = save.skillLevel[(int)SkillType.DoubleJump];
+            skillLevel[(int)SkillType.SpecialAttack] = save.skillLevel[(int)SkillType.SpecialAttack];
+        }
+    }
 
     public bool IsSkillUnlocked(SkillType skillType, int num)
     {
