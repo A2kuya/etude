@@ -985,24 +985,6 @@ public class Player : MonoBehaviour
 		yield return StartCoroutine("RecoverStamina");
 	}
 
-	public void SavePlayer(){
-		SaveData save = new SaveData();
-		save.hp = hp;
-		save.money = money;
-		save.skillPoint = skillPoint;
-		save.position = transform.position;
-		save.scene = SceneManager.GetActiveScene().name;
-		SaveManager.Save(save);
-	}
-
-	public void LoadPlayer(){
-		SaveData save = SaveManager.Load();
-		SceneManager.LoadScene(save.scene);
-		hp = save.hp;
-		money = save.money;
-		skillPoint = save.skillPoint;
-		transform.position = save.position;
-	}
 
 	private IEnumerator Exhaust()
     {

@@ -7,19 +7,19 @@ using UnityEngine;
 
 public static class SaveManager
 {
-    public static void Save(SaveData data){
+    public static void Save(SaveData data, string s){
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Path.Combine(Application.dataPath, "test.bin");
+        string path = Path.Combine(Application.dataPath, s + ".bin");
         FileStream stream = File.Create(path);
 
         formatter.Serialize(stream, data);
         stream.Close();
     }
 
-    public static SaveData Load(){
+    public static SaveData Load(string s){
         try{
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Path.Combine(Application.dataPath, "test.bin");
+        string path = Path.Combine(Application.dataPath, s + ".bin");
         FileStream stream = File.OpenRead(path);
         SaveData data = (SaveData) formatter.Deserialize(stream);
         stream.Close();
