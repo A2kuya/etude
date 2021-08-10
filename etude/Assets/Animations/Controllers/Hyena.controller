@@ -31,6 +31,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99d383849cfc33947a3036f0c95a2605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: d0ba371f2d33f734692d79dd559e8ebc, type: 3}
 --- !u!1101 &-8515707399849633001
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

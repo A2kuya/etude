@@ -5,6 +5,8 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
+    public float sfxVolume;
+
     private void Awake()
     {
         if (instance == null)
@@ -17,14 +19,24 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        sfxVolume = 0.3f;
+    }
+
     public void SFXPlay(string sfxName, AudioClip clip)
     {
         GameObject obj = new GameObject(sfxName + "Sound");
         AudioSource audioSource = obj.AddComponent<AudioSource>();
-        audioSource.volume = .3f;
+        audioSource.volume = sfxVolume;
         audioSource.clip = clip;
         audioSource.Play();
 
         Destroy(obj, clip.length);
+    }
+
+    public void SetSfxVolume(float volume)
+    {
+        sfxVolume = volume;
     }
 }

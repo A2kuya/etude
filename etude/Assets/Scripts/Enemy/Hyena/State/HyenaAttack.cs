@@ -5,12 +5,14 @@ using UnityEngine;
 public class HyenaAttack : StateMachineBehaviour
 {
     Hyena hyena;
+    public AudioClip clip;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         hyena = animator.GetComponent<Hyena>();
         hyena.atkCurtime = hyena.atkCooltime;
         hyena.canAttack = false;
+        SoundManager.instance.SFXPlay("Bark", clip);
         hyena.Stop();
     }
 

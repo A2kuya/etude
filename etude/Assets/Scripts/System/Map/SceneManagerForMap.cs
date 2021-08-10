@@ -7,6 +7,7 @@ public class SceneManagerForMap : MonoBehaviour
 
     public GameObject Boss;
     public GameObject Ground;
+    public GameObject Shop;
     public ActiveBarricade barri;
     bool firstmeet;
     // Start is called before the first frame update
@@ -28,6 +29,7 @@ public class SceneManagerForMap : MonoBehaviour
         {
             barri.SwitchFlag();
             Ground.GetComponent<BrokeGround>().SwitchBossDie();
+            Shop.SetActive(true);
 
             flag=false;
         }
@@ -42,6 +44,7 @@ public class SceneManagerForMap : MonoBehaviour
             {
                 barri.SwitchFlag();
                 Boss.SetActive(true);
+                Shop.SetActive(false);
                 firstmeet=true;
             }   
         }
