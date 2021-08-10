@@ -83,7 +83,6 @@ public class GameManager : MonoBehaviour
     public void Load(string s){
 		SaveData save = SaveManager.Load(s);
 		SceneManager.LoadScene(save.scene);
-        player = GameObject.Find("Plyaer").GetComponent<Player>();
         Resume();
 		player.hp = save.hp;
         player.healthBar.SetHealth(player.hp);
