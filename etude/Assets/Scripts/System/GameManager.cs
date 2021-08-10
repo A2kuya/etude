@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour
     public InteractManager interactManager;
     bool isPause = true;
     Player player;
-    private void Start() {
-        
+    private void Start() 
+    {
+        count=1;
         player = GameObject.Find("Player").GetComponent<Player>();
     }
     private void Update() {
@@ -24,26 +25,27 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-
-    //Endless System
-    private int count;
-    
-    
-    void addCount()
-    {
-        count++;
-    }
-
-    int getCount()
-    {
-        return count;
-    }
-    
     public void Action(GameObject scanObj)
     {
         interactManager.Action(scanObj);
     }
+
+    //Endless System
+    private int count;
+    public void addCount()
+    {
+        count++;
+    }
+    public int getCount()
+    {
+        return count;
+    }
+
+    public void setCount(int a)
+    {
+        count=a;
+    }
+    
     
 
 }

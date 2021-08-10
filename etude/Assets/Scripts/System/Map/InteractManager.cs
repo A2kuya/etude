@@ -7,18 +7,12 @@ public class InteractManager : MonoBehaviour
 {
 
     public Text talkText;
-
     public int talkIndex;
     Dictionary<int, string[]> talkData;
-    
     public bool isAction;
     public ShopManager shop;
-     public GameObject scanObject;
-     public GameObject talkPanel;
-     public Player player;
-
-
-    
+    public GameObject scanObject;
+     
 
 
     void Awake()
@@ -30,7 +24,7 @@ public class InteractManager : MonoBehaviour
 
     void GenerateData()
     {
-        talkData.Add(101, new string[] {"저는 상인입니다.","스킬포인트도 팔고 있습니다."});
+        talkData.Add(101, new string[] {"안녕하세요. 저는 몽둥이를 들고 있지만 상인입니다.","스킬포인트와 포션을 팔고 있습니다.","스킬포인트는 구매 후 S버튼을 이용해 사용이 가능합니다."});
         talkData.Add(102, new string[] {"가기전에 회복 받고 가라."});
     }
 
@@ -56,15 +50,7 @@ public class InteractManager : MonoBehaviour
             talkIndex=0;
             return;
         }
-
-        if(isNpc) 
-        {
-            talkText.text=talkData;
-        }
-        else
-        {
-            talkText.text=talkData;
-        }
+        talkText.text=talkData;
 
         isAction=true;
         talkIndex++;
@@ -74,20 +60,7 @@ public class InteractManager : MonoBehaviour
         scanObject = scanObj;
         ObjData objData = scanObject.GetComponent<ObjData>();
         Talk(objData.id,objData.isNpc);
-
-        switch(objData.id)
-        {
-            default:
-                talkPanel.SetActive(isAction);
-                break;
-            case 101:
-                shop.Action();
-                break;
-            case 102:
-                talkPanel.SetActive(isAction);
-                player.Heal(100);
-                break;
-        }
+        objData.Action(isAction);
     }
 
     

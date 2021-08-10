@@ -6,8 +6,6 @@ using System;
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
 {
-	public GameManager manager;
-
 	// Sound
 	public AudioClip clip;
 	public AudioClip[] audioClips;
@@ -121,6 +119,7 @@ public class Player : MonoBehaviour
 
 	// Interact
 	GameObject interactObj;
+	public InteractManager manager;
 
 	// Heal
 	public PotionUI potionUI;
