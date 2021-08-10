@@ -13,6 +13,8 @@ public class SkillManager : MonoBehaviour
     int PlayerSkillPoint=0;
     int[] tmpSkillPoint= new int[10];
     int[] tmpSkillLevel=new int[10];
+    static private int skillTypeSize = System.Enum.GetValues(typeof(SkillType)).Length;
+    public int[] skillLevel = new int[skillTypeSize];
     int sumtmp=0; 
     public GameObject Information;
     public static SkillManager Instance
@@ -38,8 +40,7 @@ public class SkillManager : MonoBehaviour
         Dash, SpecialAttack, DoubleJump
     }
 
-    static private int skillTypeSize = System.Enum.GetValues(typeof(SkillType)).Length;
-    public int[] skillLevel = new int[skillTypeSize];
+    
 
     public bool IsSkillUnlocked(SkillType skillType, int num)
     {

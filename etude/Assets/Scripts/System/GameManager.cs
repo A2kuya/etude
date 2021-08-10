@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     void Awake()
     {
+        count = 1;
         if(Instance == null){
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -31,25 +32,25 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-
-    //Endless System
-    private int count;
-    
-    
-    void addCount()
-    {
-        count++;
-    }
-
-    int getCount()
-    {
-        return count;
-    }
-    
     public void Action(GameObject scanObj)
     {
         interactManager.Action(scanObj);
+    }
+
+    //Endless System
+    private int count;
+    public void addCount()
+    {
+        count++;
+    }
+    public int getCount()
+    {
+        return count;
+    }
+
+    public void setCount(int a)
+    {
+        count=a;
     }
 
     public void Pause(){
@@ -113,6 +114,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(s);
         
     }
+    
     
 
 }
