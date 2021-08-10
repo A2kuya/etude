@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 	Vector2 directionalInput;
 
 	// State
-	private enum State { idle, walk, run, jump, fall, dash, attack, jumpAttack, specialAttack, charge, chargeAttack, climb }
+	private enum State { idle, walk, run, jump, fall, dash, attack, jumpAttack, specialAttack, charge, chargeAttack, climb, dead }
 	private State state = State.idle;
 	public int maxHp = 100;
 	public int hp = 100;
@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
 	public int specialDamage = 30;
 	public int chargeDamage = 50;
 	public float stamina = 100;
+	private bool isExhaust = false;
 
 	//inventory
 	public int money = 0;
@@ -132,6 +133,9 @@ public class Player : MonoBehaviour
 
 	// DoubleJump
 	private bool canDoubleJump = true;
+
+	// GameOver
+	public GameObject gameOver;
 
 	void Start()
 	{
@@ -222,7 +226,12 @@ public class Player : MonoBehaviour
 	void StateManager()
 	{
 		// Priority = dash -> climb -> fall -> attack -> jump -> run -> walk -> idle
-		if (state == State.dash)
+		if (state == State.dead)
+        {
+			return;
+        }
+
+		else if (state == State.dash)
 		{
 			InitAttack();
 			animator.Play("player_dash_blend_tree");
@@ -233,7 +242,7 @@ public class Player : MonoBehaviour
 			return;
 		}
 
-		else if (velocity.y < -0.2f)
+		else if (velocity.y < -1f)
 		{
 			if (state == State.jumpAttack)
 			{
@@ -432,7 +441,8 @@ public class Player : MonoBehaviour
 		}
 		if (canRun)
 		{
-			checkRun -= Time.deltaTime;
+			if (state != State.dash)
+				checkRun -= Time.deltaTime;
 			if (checkRun <= 0)
 			{
 				canRun = false;
@@ -585,7 +595,10 @@ public class Player : MonoBehaviour
                 }
                 if (progress >= 1)
 				{
-					canGetKey = true;
+					if (!isExhaust)
+					{
+						canGetKey = true;
+					}
 					state = State.idle;
 					transform.position = new Vector2(transform.position.x - (0.1f * dashDir.x), transform.position.y);
 				}
@@ -698,18 +711,20 @@ public class Player : MonoBehaviour
 		{
 			if (vAxis != 0 && isClimbReady)
 			{
+				if (directionalInput.y < 0 && bottomLadder || directionalInput.y > 0 && topLadder)
+				{
+					if (state == State.climb)
+					{
+						state = State.idle;
+					}
+					return;
+				}
 				state = State.climb;
 				canMove = true;
 			}
 
 			if (state == State.climb)
 			{
-				if (directionalInput.y < 0 && bottomLadder || directionalInput.y > 0 && topLadder)
-				{
-					state = State.idle;
-					return;
-				}
-
 				transform.position = new Vector3(ladderCol.transform.position.x, transform.position.y);
 				velocity.x = 0;
 				velocity.y = 0;
@@ -811,6 +826,10 @@ public class Player : MonoBehaviour
 			hp -= damage;
 			healthBar.SetHealth(hp);
 			StartCoroutine("hurtEffector");
+			if (hp <= 0)
+			{
+				Dead();
+			}
 		}
 	}
 
@@ -836,6 +855,10 @@ public class Player : MonoBehaviour
 			InitAttack();
 			canMove = false;
 			StartCoroutine("hurtEffector");
+			if (hp <= 0)
+			{
+				Dead();
+			}
 		}
 	}
 
@@ -858,7 +881,10 @@ public class Player : MonoBehaviour
 		yield return new WaitForSeconds(time);
 		animator.SetBool("isHurt", false);
 		isUnBeat = false;
-		canGetKey = true;
+		if (state != State.dead && !isExhaust)
+		{
+			canGetKey = true;
+		}
 	}
 
 	private void UsePotion()
@@ -1004,9 +1030,24 @@ public class Player : MonoBehaviour
 	}
 
 	private IEnumerator Exhaust()
-    {
-		canGetKey = false;
-		yield return new WaitForSeconds(1f);
-		canGetKey = true;
+	{
+		if (!isExhaust)
+		{
+			canGetKey = false;
+			isExhaust = true;
+			yield return new WaitForSeconds(1f);
+
+			canGetKey = true;
+			isExhaust = false;
+		}
 	}
+
+	private void Dead()
+    {
+		animator.Play("player_dead");
+		state = State.dead;
+		col.enabled = false;
+		canGetKey = false;
+		gameOver.SetActive(true);
+    }
 }
