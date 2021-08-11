@@ -14936,7 +14936,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56c88a27d5d38cb45819d2b31c5b0ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfxVolume: 0
 --- !u!1 &932446454
 GameObject:
   m_ObjectHideFlags: 0
@@ -15959,6 +15958,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 86517928}
     - target: {fileID: 1919837712281944193, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: potionUI
       value: 
