@@ -10,7 +10,7 @@ public class ChangeMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Tab.gameObject.SetActive(false);
+        Tab.SetActive(false);
     }
 
     // Update is called once per frame
