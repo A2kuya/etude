@@ -50950,6 +50950,14 @@ MonoBehaviour:
   setting: {fileID: 756551177}
   isFullScreen: 0
   player: {fileID: 0}
+  save:
+    hp: 0
+    positionX: 0
+    positionY: 0
+    money: 0
+    skillPoint: 0
+    scene: 
+    skillLevel: 000000000000000000000000
 --- !u!1 &955277441
 GameObject:
   m_ObjectHideFlags: 3
@@ -63894,11 +63902,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 110
+      value: -9.5
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.1
+      value: -3.9
       objectReference: {fileID: 0}
     - target: {fileID: 1919837713288754316, guid: f32460f1c17607744bc69510003bf01e, type: 3}
       propertyPath: m_LocalPosition.z
