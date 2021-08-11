@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
 	}
 
 	void OnEnable() {
-		if (GameManager.Instance.save != null)
+        /*if (GameManager.Instance.save != null)
         {
             SaveData save = GameManager.Instance.save;
             hp = save.hp;
@@ -173,8 +173,8 @@ public class Player : MonoBehaviour
             money = save.money;
             skillPoint = save.skillPoint;
             transform.position = new Vector2(save.positionX, save.positionY);
-        }
-	}
+        }*/
+    }
 
 	void Update()
 	{
