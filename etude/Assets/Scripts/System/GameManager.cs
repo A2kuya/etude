@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     bool isPause = true;
     public Player player;
+    public MonsterFactory monsterFactory;
+    public BossFactory bossFactory;
     public static GameManager Instance;
     public SaveData save;
     void Awake()
@@ -19,6 +21,8 @@ public class GameManager : MonoBehaviour
         count = 1;
         if(Instance == null){
             Instance = this;
+            monsterFactory = new MonsterFactory();
+            bossFactory = new BossFactory();
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnLoadScene;
             player = GameObject.Find("Player").GetComponent<Player>();
@@ -108,7 +112,6 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
 		SaveManager.Save(save, "auto");
-        Debug.Log(save.hp);
     }
 
     public void LoadScene(string s, Vector2 position){

@@ -346,7 +346,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8034375001182517200}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 107.95, y: 34.17, z: 0}
+  m_LocalPosition: {x: 115, y: 34, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 1}
   m_Children:
   - {fileID: 8034374999690939203}
@@ -494,7 +494,7 @@ MonoBehaviour:
   hpBar: {fileID: 3241280389741831316}
   maxHp: 100
   damage: 10
-  price: 30
+  price: 5
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
