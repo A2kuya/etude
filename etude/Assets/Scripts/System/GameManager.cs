@@ -19,11 +19,12 @@ public class GameManager : MonoBehaviour
         count = 1;
         if(Instance == null){
             Instance = this;
-            save = new SaveData();
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnLoadScene;
             player = GameObject.Find("Player").GetComponent<Player>();
             interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();          
+            if(player)
+                AutoSave();
         }else{
             Destroy(gameObject);
             return;
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnLoadScene(Scene scene, LoadSceneMode mode){
         player = GameObject.Find("Player").GetComponent<Player>();
-            interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
+        interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
     }
     public void Action(GameObject scanObj)
     {
@@ -86,7 +87,6 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.Dash] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.Dash];
         save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
-		SaveManager.Save(save, "test");
         SaveManager.Save(save, "auto");
 	}
     public void Load(string s){
@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
 		SaveManager.Save(save, "auto");
+        Debug.Log(save.hp);
     }
 
     public void LoadScene(string s, Vector2 position){
