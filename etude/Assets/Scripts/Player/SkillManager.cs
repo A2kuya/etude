@@ -79,7 +79,6 @@ public class SkillManager : MonoBehaviour
     {
         PlayerSkillPoint=skillPoint;
         TextSkillPoint.text=PlayerSkillPoint.ToString();
-        print("스킬포인트는"+TextSkillPoint.text);
         for(int i=0;i<3;i++)
             TextSkillTree[i].text=skillLevel[i].ToString();
         for(int i=0;i<3;i++)
