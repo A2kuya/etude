@@ -1042,6 +1042,7 @@ public class Player : MonoBehaviour
 		state = State.dead;
 		col.enabled = false;
 		canGetKey = false;
+		gameObject.tag = "Untagged";
 		gameOver.SetActive(true);
     }
 

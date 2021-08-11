@@ -108,7 +108,6 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
 		SaveManager.Save(save, "auto");
-        Debug.Log(save.hp);
     }
 
     public void LoadScene(string s, Vector2 position){
