@@ -16,10 +16,12 @@ public class GameManager : MonoBehaviour
     public BossFactory bossFactory;
     public static GameManager Instance;
     public SaveData save;
+    public bool newRound;
     void Awake()
     {
         count = 1;
         if(Instance == null){
+            save = null;
             Instance = this;
             monsterFactory = new MonsterFactory();
             bossFactory = new BossFactory();
@@ -54,7 +56,7 @@ public class GameManager : MonoBehaviour
 
     //Endless System
     private int count;
-    public void addCount()
+    public void AddCount()
     {
         count++;
     }
@@ -82,6 +84,8 @@ public class GameManager : MonoBehaviour
         option.anchoredPosition = new Vector3(0, 1000, 0);
     }
     public void Save(){
+        save = new SaveData();
+        save.count = count;
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -92,15 +96,23 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
         SaveManager.Save(save, "auto");
+        SaveManager.Save(save, "test");
 	}
-    public void Load(string s){
+    public bool Load(string s){
 		save = SaveManager.Load(s);
+        if(save == null){
+            return false;
+        }
+        count = save.count;
 		SceneManager.LoadScene(save.scene);
         Resume();
 		save.scene = SceneManager.GetActiveScene().name;
+        return true;
 	}
 
     public void AutoSave(){
+        save = new SaveData();
+        save.count = count;
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -114,11 +126,26 @@ public class GameManager : MonoBehaviour
 		SaveManager.Save(save, "auto");
     }
 
-    public void LoadScene(string s, Vector2 position){
+    public void LoadScene(string s, Vector2 position, bool newRound = false){
         AutoSave();
         save.positionX = position.x;
         save.positionY = position.y;
         SceneManager.LoadScene(s);        
+    }
+
+    public void NextRound(){
+        AddCount();
+        AutoSave();
+        save.positionX = -11;
+        save.positionY = -5;
+        newRound = true;
+        SceneManager.LoadScene("Map");
+    }
+    public bool GetNewRound(){
+        return newRound;
+    }
+    public void SetNewRoundFalse(){
+        newRound = false;
     }
 
     public void Setting()

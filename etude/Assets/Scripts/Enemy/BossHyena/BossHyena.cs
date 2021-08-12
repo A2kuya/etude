@@ -34,12 +34,12 @@ public class BossHyena : Boss
         mf = new MonsterFactory();
         state = phase.first;
         isAttack = false;
-        curHp = maxHp;
-        Flip();
         GetSpriteSize();
     }
     private void OnEnable() {
         StartCoroutine(Attack());
+        curHp = maxHp;
+        Flip();
     }
 
     // Update is called once per frame

@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
 	}
 
 	void OnEnable() {
-        /*if (GameManager.Instance.save != null)
+        if (GameManager.Instance.save != null)
         {
             SaveData save = GameManager.Instance.save;
             hp = save.hp;
@@ -173,7 +173,7 @@ public class Player : MonoBehaviour
             money = save.money;
             skillPoint = save.skillPoint;
             transform.position = new Vector2(save.positionX, save.positionY);
-        }*/
+        }
     }
 
 	void Update()
@@ -801,6 +801,10 @@ public class Player : MonoBehaviour
 				if (interactObj.tag == "NPC")
 				{
 					manager.Action(interactObj);
+				}
+
+				if(interactObj.name == "Exit"){
+					interactObj.GetComponent<Exit>().Action();
 				}
 			}
 		}
