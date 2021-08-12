@@ -35,7 +35,6 @@ public class Vulture : Boss
         attackPatterns.Add("shootRay", new ShootRay(shootRayDamageMultiple * damage, shootRayCooltime, this));
         isGround = false;
         state = phase.first;
-        curHp = maxHp;
         Flip();
         GetSpriteSize();
         attack = Attack();
@@ -51,6 +50,9 @@ public class Vulture : Boss
     }
 
     private void OnEnable() {
+        isLeft = true;
+        curHp = maxHp;
+        Flip();
         StartCoroutine(attack);
     }
     IEnumerator attack;

@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
+    public int count;
     public int hp;
     public float positionX;
     public float positionY;

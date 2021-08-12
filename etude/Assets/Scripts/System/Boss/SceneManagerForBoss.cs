@@ -7,6 +7,7 @@ public class SceneManagerForBoss : MonoBehaviour
     public Vulture Boss;
     public GameObject Spine;
     public GameObject Platform;
+    public GameObject exit;
 
     float StartPosition;
     Transform[] platform;
@@ -16,23 +17,29 @@ public class SceneManagerForBoss : MonoBehaviour
 
     void Start()
     {
+        int count = GameManager.Instance.getCount();
         StartPosition=Spine.transform.position.y;
         platform=Platform.GetComponentsInChildren<Transform>();
         ran=Random.Range(1,10);
+        Boss = GameManager.Instance.bossFactory.CreateEnemy("Vulture", new Vector3(34, 16, 0), false, 100 * count, 10 * count, 30 * count).GetComponent<Vulture>();
+        exit.SetActive(false);
     }
     void Update()
     {
+        switch((int)Boss.state)//보스 체력이 50 이하
+        {
+            case 2:
+            ActiveSpin();
+            break;
 
-        // switch(Boss.state)//보스 체력이 50 이하
-        // {
-        //     case Boss.state.:
-        //     ActiveSpin();
-        //     break;
+            case 3:
+            DeleteRandomPlatfrom();
+            break;
+        }
 
-        //     case 3:
-        //     DeleteRandomPlatfrom();
-        //     break;
-        // }
+        if(Boss.CompareTag("Untagged")){
+            exit.SetActive(true);
+        }
     }
 
 

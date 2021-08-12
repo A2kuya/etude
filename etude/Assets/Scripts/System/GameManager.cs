@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public BossFactory bossFactory;
     public static GameManager Instance;
     public SaveData save;
+    public bool newRound;
     void Awake()
     {
         count = 1;
@@ -65,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     //Endless System
     private int count;
-    public void addCount()
+    public void AddCount()
     {
         count++;
     }
@@ -95,6 +96,7 @@ public class GameManager : MonoBehaviour
     }
     public void Save(){
         save = new SaveData();
+        save.count = count;
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -109,6 +111,7 @@ public class GameManager : MonoBehaviour
     }
     public void Load(string s){
 		save = SaveManager.Load(s);
+        count = save.count;
 		SceneManager.LoadScene(save.scene);
         Resume();
 		save.scene = SceneManager.GetActiveScene().name;
@@ -116,7 +119,8 @@ public class GameManager : MonoBehaviour
 
     public void AutoSave(){
         save = new SaveData();
-        save.hp = player.hp;
+        save.count = count;
+		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
 		save.positionX = player.transform.position.x;
@@ -129,11 +133,26 @@ public class GameManager : MonoBehaviour
 		SaveManager.Save(save, "auto");
     }
 
-    public void LoadScene(string s, Vector2 position){
+    public void LoadScene(string s, Vector2 position, bool newRound = false){
         AutoSave();
         save.positionX = position.x;
         save.positionY = position.y;
         SceneManager.LoadScene(s);        
+    }
+
+    public void NextRound(){
+        AddCount();
+        AutoSave();
+        save.positionX = -11;
+        save.positionY = -5;
+        newRound = true;
+        SceneManager.LoadScene("Map");
+    }
+    public bool GetNewRound(){
+        return newRound;
+    }
+    public void SetNewRoundFalse(){
+        newRound = false;
     }
 
     public void Setting()

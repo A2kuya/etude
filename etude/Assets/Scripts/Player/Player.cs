@@ -803,6 +803,10 @@ public class Player : MonoBehaviour
 				{
 					manager.Action(interactObj);
 				}
+
+				if(interactObj.name == "Exit"){
+					interactObj.GetComponent<Exit>().Action();
+				}
 			}
 		}
 	}
