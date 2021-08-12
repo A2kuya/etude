@@ -21,7 +21,7 @@ public class MonsterFactory : EnemyFactory
     private GameObject PrefabSet(string s){
         switch(s){
             case "Snake":
-            case "sanke":
+            case "snake":
                 return prfSnake;
             case "Hyena":
             case "hyena":
