@@ -145,6 +145,7 @@ public class Player : MonoBehaviour
 		rb = GetComponent<Rigidbody2D>();
 
 		healthBar.SetMaxHealth(maxHp);
+		healthBar.SetHealth(hp);
 
 		originGravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
 		gravity = originGravity;
@@ -171,12 +172,12 @@ public class Player : MonoBehaviour
             hp = save.hp;
             healthBar.SetHealth(hp);
             money = save.money;
-            skillPoint = save.skillPoint;
+			skillPoint = save.skillPoint;
             transform.position = new Vector2(save.positionX, save.positionY);
         }
     }
 
-	void Update()
+    void Update()
 	{
 		InputManager();
 		if (stamina <= 0)

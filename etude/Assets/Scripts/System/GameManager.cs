@@ -27,8 +27,10 @@ public class GameManager : MonoBehaviour
             bossFactory = new BossFactory();
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnLoadScene;
-            player = GameObject.Find("Player").GetComponent<Player>();
-            interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();          
+            if (GameObject.Find("Player"))
+                player = GameObject.Find("Player").GetComponent<Player>();
+            if (GameObject.Find("InteractManager"))
+                interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();          
             if(player)
                 AutoSave();
         }else{
@@ -38,16 +40,24 @@ public class GameManager : MonoBehaviour
     }
     private void Update() {
         if(Input.GetKeyDown(KeyCode.Escape)){
-            if(isPause){
-                Pause();
-            }else{
-                Resume();
+            if (GameObject.Find("Player"))
+            {
+                if (isPause)
+                {
+                    Pause();
+                }
+                else
+                {
+                    Resume();
+                }
             }
         }
     }
     private void OnLoadScene(Scene scene, LoadSceneMode mode){
-        player = GameObject.Find("Player").GetComponent<Player>();
-        interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
+        if (GameObject.Find("Player"))
+            player = GameObject.Find("Player").GetComponent<Player>();
+        if (GameObject.Find("InteractManager"))
+            interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
     }
     public void Action(GameObject scanObj)
     {
@@ -80,7 +90,8 @@ public class GameManager : MonoBehaviour
     public void Resume(){ 
         Time.timeScale = 1;
         isPause = true;
-        player.canGetKey = true;
+        if (GameObject.Find("Player"))
+            player.canGetKey = true;
         option.anchoredPosition = new Vector3(0, 1000, 0);
     }
     public void Save(){
@@ -97,17 +108,13 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
         SaveManager.Save(save, "auto");
         SaveManager.Save(save, "test");
-	}
-    public bool Load(string s){
+    }
+    public void Load(string s){
 		save = SaveManager.Load(s);
-        if(save == null){
-            return false;
-        }
         count = save.count;
 		SceneManager.LoadScene(save.scene);
         Resume();
 		save.scene = SceneManager.GetActiveScene().name;
-        return true;
 	}
 
     public void AutoSave(){
@@ -183,5 +190,10 @@ public class GameManager : MonoBehaviour
                 Screen.SetResolution(3840, 2160, isFullScreen);
                 break;
         }
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }
