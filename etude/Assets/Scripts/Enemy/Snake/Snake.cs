@@ -16,6 +16,8 @@ public class Snake : GroundEnemy
         obstacleLayer = LayerMask.GetMask("Obstacle");
         atkCollider.SetActive(false);
         dir = Vector2.left;
+        curHp = maxHp;
+        Flip();
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, cooltime));
         Flip();
