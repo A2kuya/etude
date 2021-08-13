@@ -35,8 +35,10 @@ public abstract class Enemy : MonoBehaviour
     public void ConstructSet(bool isLeft, int hp, int damage, int price){
         this.isLeft = isLeft;
         this.maxHp = hp;
+        this.curHp = hp;
         this.damage = damage;
         this.price = price;
+        Flip();
     }
     public void Trigger(string s){
         anim.SetTrigger(s);

@@ -20,10 +20,8 @@ public class Snake : GroundEnemy
         Flip();
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, cooltime));
-        Flip();
     }
     private void OnEnable() {
-        
         curHp = maxHp;
         Flip();
     }

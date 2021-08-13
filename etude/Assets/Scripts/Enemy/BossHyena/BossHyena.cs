@@ -15,7 +15,6 @@ public class BossHyena : Boss
     public float backAttackCooltime;
     public float attackCooltime;
     private bool isDash;
-    MonsterFactory mf;
 
     // Start is called before the first frame update
     private void Awake(){
@@ -31,7 +30,6 @@ public class BossHyena : Boss
         attackPatterns.Add("summon", new Summon(0, summonCooltime, this));
         attackPatterns.Add("rush", new Rush(rushMultiplyer * damage, rushCooltime, this));
         attackPatterns.Add("backAttack", new BackAttack(0, backAttackCooltime, this));
-        mf = new MonsterFactory();
         state = phase.first;
         isAttack = false;
         GetSpriteSize();
@@ -106,10 +104,8 @@ public class BossHyena : Boss
             right = new Vector3(hit2.distance - 1f, 0, 0);
         else
             right = rightSummon;
-        prfHyena.SetActive(true);        
-        mf.CreateEnemy("hyena", summons, transform.position + left, false, 100, damage, 0).GetComponent<Hyena>().SetAttack();
-        mf.CreateEnemy("hyena", summons, transform.position + right, true, 100, damage, 0).GetComponent<Hyena>().SetAttack();
-        prfHyena.SetActive(false);
+        GameManager.Instance.monsterFactory.CreateEnemy("hyena", summons, transform.position + left, false, 100, damage, 0).GetComponent<Hyena>().SetAttack();
+        GameManager.Instance.monsterFactory.CreateEnemy("hyena", summons, transform.position + right, true, 100, damage, 0).GetComponent<Hyena>().SetAttack();
         isAttack = false;
     }
     public void Dash(){
@@ -180,7 +176,7 @@ public class BossHyena : Boss
     }
     public void BackAttack(){
         Vector3 v = new Vector3((isLeft ? -5 : 5), 0, 0);
-        mf.CreateEnemy("hyena", summons, player.transform.position + v, !isLeft, 100, damage, 0).GetComponent<Hyena>().SetAttack();        isAttack = false;
+        GameManager.Instance.monsterFactory.CreateEnemy("hyena", summons, player.transform.position + v, !isLeft, 100, damage, 0).GetComponent<Hyena>().SetAttack();        isAttack = false;
     }
     public bool InRange(){
         return Mathf.Abs(playerVector.x) <= 6f;

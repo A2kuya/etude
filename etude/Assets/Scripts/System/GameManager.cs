@@ -154,6 +154,14 @@ public class GameManager : MonoBehaviour
     public void SetNewRoundFalse(){
         newRound = false;
     }
+    public void NewGameLoad(){
+        count = 1;
+        save = new SaveData();
+        save.positionX = -11;
+        save.positionY = -5;     
+        save.hp = 100;
+        SceneManager.LoadScene("Map");
+    }
 
     public void Setting()
     {

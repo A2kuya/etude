@@ -7,7 +7,7 @@ public class SceneManagerForTitle : MonoBehaviour
 {
     public void NewGame()
     {
-        SceneManager.LoadScene("Map");
+        GameManager.Instance.NewGameLoad();
     }
 
     public void LoadGame()
