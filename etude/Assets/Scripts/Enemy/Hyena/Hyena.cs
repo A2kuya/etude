@@ -28,14 +28,17 @@ public class Hyena : GroundEnemy
         playerLayer = LayerMask.GetMask("Player");
         obstacleLayer = LayerMask.GetMask("Obstacle");
         atkCollider.SetActive(false);
+        curHp = maxHp;
+        Flip();
         attackPattern = new List<AttackPattern>();
         attackPattern.Add(new AttackPattern(0, atkCooltime));   //공격 쿨타임
         attackPattern.Add(new AttackPattern(0, dashCooltime));
-        curHp = maxHp;  //대쉬 쿨타임
-        Flip();
         CaculateDistance();
     }
-
+    private void OnEnable() {
+        curHp = maxHp;
+        Flip();
+    }
     void FixedUpdate() {
         if(isMoving){
             Movement();

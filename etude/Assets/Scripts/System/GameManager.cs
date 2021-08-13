@@ -16,17 +16,21 @@ public class GameManager : MonoBehaviour
     public BossFactory bossFactory;
     public static GameManager Instance;
     public SaveData save;
+    public bool newRound;
     void Awake()
     {
         count = 1;
         if(Instance == null){
+            save = null;
             Instance = this;
             monsterFactory = new MonsterFactory();
             bossFactory = new BossFactory();
             DontDestroyOnLoad(gameObject);
             SceneManager.sceneLoaded += OnLoadScene;
-            player = GameObject.Find("Player").GetComponent<Player>();
-            interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();          
+            if (GameObject.Find("Player"))
+                player = GameObject.Find("Player").GetComponent<Player>();
+            if (GameObject.Find("InteractManager"))
+                interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();          
             if(player)
                 AutoSave();
         }else{
@@ -36,16 +40,24 @@ public class GameManager : MonoBehaviour
     }
     private void Update() {
         if(Input.GetKeyDown(KeyCode.Escape)){
-            if(isPause){
-                Pause();
-            }else{
-                Resume();
+            if (GameObject.Find("Player"))
+            {
+                if (isPause)
+                {
+                    Pause();
+                }
+                else
+                {
+                    Resume();
+                }
             }
         }
     }
     private void OnLoadScene(Scene scene, LoadSceneMode mode){
-        player = GameObject.Find("Player").GetComponent<Player>();
-        interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
+        if (GameObject.Find("Player"))
+            player = GameObject.Find("Player").GetComponent<Player>();
+        if (GameObject.Find("InteractManager"))
+            interactManager = GameObject.Find("InteractManager").GetComponent<InteractManager>();
     }
     public void Action(GameObject scanObj)
     {
@@ -54,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     //Endless System
     private int count;
-    public void addCount()
+    public void AddCount()
     {
         count++;
     }
@@ -78,10 +90,13 @@ public class GameManager : MonoBehaviour
     public void Resume(){ 
         Time.timeScale = 1;
         isPause = true;
-        player.canGetKey = true;
+        if (GameObject.Find("Player"))
+            player.canGetKey = true;
         option.anchoredPosition = new Vector3(0, 1000, 0);
     }
     public void Save(){
+        save = new SaveData();
+        save.count = count;
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -92,15 +107,19 @@ public class GameManager : MonoBehaviour
         save.skillLevel[(int)SkillManager.SkillType.DoubleJump] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.DoubleJump];
         save.skillLevel[(int)SkillManager.SkillType.SpecialAttack] = SkillManager.Instance.skillLevel[(int)SkillManager.SkillType.SpecialAttack];
         SaveManager.Save(save, "auto");
-	}
+        SaveManager.Save(save, "test");
+    }
     public void Load(string s){
 		save = SaveManager.Load(s);
+        count = save.count;
 		SceneManager.LoadScene(save.scene);
         Resume();
 		save.scene = SceneManager.GetActiveScene().name;
 	}
 
     public void AutoSave(){
+        save = new SaveData();
+        save.count = count;
 		save.hp = player.hp;
         save.money = player.money;
 		save.skillPoint = player.skillPoint;
@@ -114,11 +133,34 @@ public class GameManager : MonoBehaviour
 		SaveManager.Save(save, "auto");
     }
 
-    public void LoadScene(string s, Vector2 position){
+    public void LoadScene(string s, Vector2 position, bool newRound = false){
         AutoSave();
         save.positionX = position.x;
         save.positionY = position.y;
         SceneManager.LoadScene(s);        
+    }
+
+    public void NextRound(){
+        AddCount();
+        AutoSave();
+        save.positionX = -11;
+        save.positionY = -5;
+        newRound = true;
+        SceneManager.LoadScene("Map");
+    }
+    public bool GetNewRound(){
+        return newRound;
+    }
+    public void SetNewRoundFalse(){
+        newRound = false;
+    }
+    public void NewGameLoad(){
+        count = 1;
+        save = new SaveData();
+        save.positionX = -11;
+        save.positionY = -5;     
+        save.hp = 100;
+        SceneManager.LoadScene("Map");
     }
 
     public void Setting()
@@ -156,5 +198,10 @@ public class GameManager : MonoBehaviour
                 Screen.SetResolution(3840, 2160, isFullScreen);
                 break;
         }
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }

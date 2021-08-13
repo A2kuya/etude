@@ -19,7 +19,6 @@ public class SceneManagerForMap : MonoBehaviour
     {
         int count = GameManager.Instance.getCount();
         firstmeet=false;
-        Boss.SetActive(false);
         flag=true;
         GameManager.Instance.monsterFactory.CreateEnemy("snake", new Vector3(45, 3, 0), false, 100 * count, 10 * count, 3 * count);
         GameManager.Instance.monsterFactory.CreateEnemy("snake", new Vector3(70, 11, 0), true, 100 * count, 10 * count, 3 * count);
