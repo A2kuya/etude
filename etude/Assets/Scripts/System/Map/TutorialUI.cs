@@ -13,6 +13,11 @@ public class TutorialUI : MonoBehaviour
 
     void Start()
     {
+        if(GameManager.Instance.getCount()!=1)
+        {
+            gameObject.SetActive(false);
+
+        }
         image=gameObject.transform.GetComponentsInChildren<Image>();
         text=gameObject.transform.GetChild(image.Length-1).GetComponent<Text>();
         colorarray= new Color[image.Length];

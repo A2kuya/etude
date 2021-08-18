@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour
@@ -163,6 +164,7 @@ public class Player : MonoBehaviour
         StartCoroutine("RecoverStamina");
 
 		potionUI.SetPotion();
+		gameOver.SetActive(false);
 	}
 
 	void OnEnable() {

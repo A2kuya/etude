@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SkillManager : MonoBehaviour
 {
     public Player player;
+    public Text Money;
     public Text[] TextSkillTree;
     public Text TextSkillPoint;
     public Text TextInformation;
@@ -95,6 +96,8 @@ public class SkillManager : MonoBehaviour
         {
             uiGroup.anchoredPosition=Vector2.up*1000;
         }
+
+        Money.text=player.money.ToString();
     }
 
     public void Exit()
